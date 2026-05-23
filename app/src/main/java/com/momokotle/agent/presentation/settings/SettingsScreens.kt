@@ -53,6 +53,8 @@ fun SettingsHomeScreen(
     onSavedContacts: () -> Unit,
     onContactSupport: () -> Unit,
     onAbout: () -> Unit,
+    onReferral: () -> Unit,
+    onMySubmissions: () -> Unit,
     viewModel: SettingsHomeViewModel = hiltViewModel()
 ) {
     val account by viewModel.account.collectAsStateWithLifecycle()
@@ -74,6 +76,7 @@ fun SettingsHomeScreen(
 
             SettingsSection(title = "Your Profile") {
                 SettingsMenuItem(title = "Account Profile", onClick = onAccountProfile)
+                SettingsMenuItem(title = "My Submissions", onClick = onMySubmissions)
             }
 
             SettingsSection(title = "Profit Calculator") {
@@ -85,6 +88,7 @@ fun SettingsHomeScreen(
             SettingsSection(title = "Options") {
                 SettingsMenuItem(title = "App Settings", onClick = onAppSettings)
                 SettingsMenuItem(title = "Saved Contacts", onClick = onSavedContacts)
+                SettingsMenuItem(title = "Referral & Wallet", onClick = onReferral)
                 SettingsMenuItem(title = "Contact Support", onClick = onContactSupport)
             }
 

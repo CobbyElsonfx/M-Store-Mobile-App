@@ -17,6 +17,8 @@ object Routes {
     const val PROFIT_CALCULATION = "profit_calculation"
     const val CASH_IN_SETTINGS = "cash_in_settings"
     const val CASH_OUT_SETTINGS = "cash_out_settings"
+    const val REFERRAL = "referral"
+    const val MY_SUBMISSIONS = "my_submissions"
 
     fun agentForm(formType: String) = "agent_form/$formType"
 }

@@ -24,15 +24,19 @@ enum class AgentFormType {
     EVD_SIM_CONVERSION,
     DYNAMIC_SIM_BULK,
     TELECEL_AGENT,
-    AIRTELTIGO_AGENT;
+    AIRTELTIGO_AGENT,
+    BUSINESS_CERTIFICATE,
+    BIRTH_CERTIFICATE;
 
     val displayName: String
         get() = when (this) {
-            AGENT_CARD_REQUEST -> "Agent Card Request"
-            EVD_SIM_CONVERSION -> "EVD Agent SIM Conversion"
-            DYNAMIC_SIM_BULK -> "Dynamic SIM Cards Bulk Purchase"
-            TELECEL_AGENT -> "Telecel Agent Details"
-            AIRTELTIGO_AGENT -> "AirtelTigo Agent Details"
+            AGENT_CARD_REQUEST   -> "Agent Card Request"
+            EVD_SIM_CONVERSION   -> "EVD Agent SIM Conversion"
+            DYNAMIC_SIM_BULK     -> "Dynamic SIM Cards Bulk Purchase"
+            TELECEL_AGENT        -> "Telecel Agent Details"
+            AIRTELTIGO_AGENT     -> "AirtelTigo Agent Details"
+            BUSINESS_CERTIFICATE -> "Business Certificate Application"
+            BIRTH_CERTIFICATE    -> "Birth Certificate Application"
         }
 }
 

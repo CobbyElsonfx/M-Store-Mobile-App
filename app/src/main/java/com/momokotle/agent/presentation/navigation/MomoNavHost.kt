@@ -16,11 +16,13 @@ import com.momokotle.agent.presentation.profit.CashOutSettingsScreen
 import com.momokotle.agent.presentation.profit.ProfitCalculationScreen
 import com.momokotle.agent.presentation.custommenu.CustomFlowListScreen
 import com.momokotle.agent.presentation.dashboard.DashboardScreen
+import com.momokotle.agent.presentation.referral.ReferralScreen
 import com.momokotle.agent.presentation.settings.AboutScreen
 import com.momokotle.agent.presentation.settings.AccountProfileScreen
 import com.momokotle.agent.presentation.settings.AppSettingsScreen
 import com.momokotle.agent.presentation.settings.ContactSupportScreen
 import com.momokotle.agent.presentation.settings.SettingsHomeScreen
+import com.momokotle.agent.presentation.submissions.MySubmissionsScreen
 import com.momokotle.agent.presentation.transactions.TransactionsScreen
 
 @Composable
@@ -70,8 +72,16 @@ fun MomoNavHost(
                 onCashOutSettings = { navController.navigate(Routes.CASH_OUT_SETTINGS) },
                 onSavedContacts = { navController.navigate(Routes.CONTACTS) },
                 onContactSupport = { navController.navigate(Routes.CONTACT_SUPPORT) },
-                onAbout = { navController.navigate(Routes.ABOUT) }
+                onAbout = { navController.navigate(Routes.ABOUT) },
+                onReferral = { navController.navigate(Routes.REFERRAL) },
+                onMySubmissions = { navController.navigate(Routes.MY_SUBMISSIONS) }
             )
+        }
+        composable(Routes.REFERRAL) {
+            ReferralScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Routes.MY_SUBMISSIONS) {
+            MySubmissionsScreen(onBack = { navController.popBackStack() })
         }
         composable(Routes.CONTACTS) {
             ContactsScreen(

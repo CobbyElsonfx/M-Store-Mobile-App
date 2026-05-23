@@ -14,8 +14,11 @@ import com.momokotle.agent.models.FormSubmission
 import com.momokotle.agent.models.FormSubmissionStatus
 import com.momokotle.agent.models.OrderStatus
 import com.momokotle.agent.models.StoreOrder
+import com.momokotle.agent.database.entity.toDomain
 import com.momokotle.agent.utils.NetworkMonitor
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -77,18 +80,25 @@ class StoreRepositoryImpl @Inject constructor(
             storeOrderDao.updateStatus(order.orderId, status.name)
             order.copy(status = status)
         }.recoverCatching { error ->
-            storeOrderDao.upda teStatus(order.orderId, OrderStatus.PENDING.name)
+            storeOrderDao.updateStatus(order.orderId, OrderStatus.PENDING.name)
             throw error
         }
     }
 }
 
+// TODO (Admin): Submission management (approve/reject) is handled server-side.
+// The backend at POST api/v1/forms and its admin dashboard controls status updates.
+// This app only reads status via FormSubmission.status from the local DB,
+// which is synced when the server responds during submission.
 @Singleton
 class FormSubmissionRepositoryImpl @Inject constructor(
     private val formSubmissionDao: FormSubmissionDao,
     private val api: MStorepayApiService,
     private val networkMonitor: NetworkMonitor
 ) : FormSubmissionRepository {
+
+    override fun observeAll(): Flow<List<FormSubmission>> =
+        formSubmissionDao.observeAll().map { entities -> entities.map { it.toDomain() } }
 
     override suspend fun createAndSubmitForm(submission: FormSubmission): Result<FormSubmission> {
         if (!networkMonitor.isOnline()) {

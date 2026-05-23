@@ -95,6 +95,9 @@ interface StoreOrderDao {
 
 @Dao
 interface FormSubmissionDao {
+    @Query("SELECT * FROM form_submissions ORDER BY createdAt DESC")
+    fun observeAll(): Flow<List<FormSubmissionEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(submission: FormSubmissionEntity)
 
