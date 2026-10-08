@@ -3,9 +3,12 @@ package com.momokotle.agent.presentation.dashboard
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.momokotle.agent.data.datastore.SettingsDataStore
+import com.momokotle.agent.domain.repository.AccessibilityRepository
+import com.momokotle.agent.domain.repository.CustomFlowRepository
 import com.momokotle.agent.domain.repository.SavedContactRepository
 import com.momokotle.agent.domain.repository.TransactionRepository
 import com.momokotle.agent.domain.usecase.RecordAttemptedTransactionUseCase
+import com.momokotle.agent.models.CustomFlow
 import com.momokotle.agent.domain.usecase.SaveContactResult
 import com.momokotle.agent.domain.usecase.SaveContactUseCase
 import com.momokotle.agent.domain.usecase.StartUssdFlowUseCase
@@ -56,11 +59,22 @@ class DashboardViewModel @Inject constructor(
     startUssdFlowUseCase: StartUssdFlowUseCase,
     automationEngine: UssdAutomationEngine,
     settingsDataStore: SettingsDataStore,
+    accessibilityRepository: AccessibilityRepository,
     private val recordAttemptedTransactionUseCase: RecordAttemptedTransactionUseCase,
     transactionRepository: TransactionRepository,
+    customFlowRepository: CustomFlowRepository,
     private val savedContactRepository: SavedContactRepository,
     private val saveContactUseCase: SaveContactUseCase
-) : BaseUssdViewModel(context, startUssdFlowUseCase, automationEngine, settingsDataStore) {
+) : BaseUssdViewModel(
+    context,
+    startUssdFlowUseCase,
+    automationEngine,
+    settingsDataStore,
+    accessibilityRepository
+) {
+
+    val customFlows: StateFlow<List<CustomFlow>> = customFlowRepository.observeAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private val _formState = MutableStateFlow(DashboardFormState())
     val formState: StateFlow<DashboardFormState> = _formState.asStateFlow()

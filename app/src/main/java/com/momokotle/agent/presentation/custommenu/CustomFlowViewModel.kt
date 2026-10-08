@@ -1,19 +1,18 @@
 package com.momokotle.agent.presentation.custommenu
 
 import android.content.Context
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.momokotle.agent.data.datastore.SettingsDataStore
+import com.momokotle.agent.domain.repository.AccessibilityRepository
 import com.momokotle.agent.domain.repository.CustomFlowRepository
 import com.momokotle.agent.domain.usecase.RecordAttemptedTransactionUseCase
 import com.momokotle.agent.domain.usecase.StartUssdFlowUseCase
 import com.momokotle.agent.models.CustomFlow
+import com.momokotle.agent.models.CustomMenuType
 import com.momokotle.agent.models.TransactionType
 import com.momokotle.agent.presentation.common.BaseUssdViewModel
-import com.momokotle.agent.ussd.CustomFlowMapper
+import com.momokotle.agent.ussd.CustomFlowExecutor
 import com.momokotle.agent.ussd.UssdAutomationEngine
-import com.momokotle.agent.data.datastore.SettingsDataStore
-import com.momokotle.agent.utils.AmountFormatter
-import com.momokotle.agent.utils.PhoneNumberFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,9 +32,17 @@ data class CustomFlowFormState(
     val step2: String = "",
     val step3: String = "",
     val useDynamicPhone: Boolean = false,
-    val useDynamicAmount: Boolean = false,
+    val useDynamicAmount: Boolean = false
+)
+
+data class CustomMenuExecutionUiState(
+    val flow: CustomFlow? = null,
+    val menuType: CustomMenuType? = null,
+    val requiresPhone: Boolean = false,
+    val requiresAmount: Boolean = false,
     val phoneNumber: String = "",
-    val amount: String = ""
+    val amount: String = "",
+    val loadError: String? = null
 )
 
 @HiltViewModel
@@ -44,9 +51,16 @@ class CustomFlowViewModel @Inject constructor(
     startUssdFlowUseCase: StartUssdFlowUseCase,
     automationEngine: UssdAutomationEngine,
     settingsDataStore: SettingsDataStore,
+    accessibilityRepository: AccessibilityRepository,
     private val customFlowRepository: CustomFlowRepository,
     private val recordAttemptedTransactionUseCase: RecordAttemptedTransactionUseCase
-) : BaseUssdViewModel(context, startUssdFlowUseCase, automationEngine, settingsDataStore) {
+) : BaseUssdViewModel(
+    context,
+    startUssdFlowUseCase,
+    automationEngine,
+    settingsDataStore,
+    accessibilityRepository
+) {
 
     val customFlows: StateFlow<List<CustomFlow>> = customFlowRepository.observeAll()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
@@ -57,13 +71,80 @@ class CustomFlowViewModel @Inject constructor(
     private val _isEditing = MutableStateFlow(false)
     val isEditing: StateFlow<Boolean> = _isEditing.asStateFlow()
 
+    private val _executionState = MutableStateFlow(CustomMenuExecutionUiState())
+    val executionState: StateFlow<CustomMenuExecutionUiState> = _executionState.asStateFlow()
+
+    fun loadForExecution(flowId: Long) {
+        if (flowId <= 0L) {
+            _executionState.update { it.copy(loadError = "Invalid custom menu") }
+            return
+        }
+        viewModelScope.launch {
+            _executionState.value = CustomMenuExecutionUiState()
+            val flow = customFlowRepository.getById(flowId)
+            if (flow == null) {
+                _executionState.update { it.copy(loadError = "Custom menu not found") }
+                return@launch
+            }
+            _executionState.update {
+                it.copy(
+                    flow = flow,
+                    menuType = CustomFlowExecutor.menuType(flow),
+                    requiresPhone = CustomFlowExecutor.requiresPhone(flow),
+                    requiresAmount = CustomFlowExecutor.requiresAmount(flow)
+                )
+            }
+        }
+    }
+
+    fun onExecutionPhoneChange(value: String) {
+        _executionState.update { it.copy(phoneNumber = value) }
+    }
+
+    fun onExecutionAmountChange(value: String) {
+        _executionState.update { it.copy(amount = value) }
+    }
+
+    fun runExecution() {
+        val flow = _executionState.value.flow ?: return
+        val exec = _executionState.value
+
+        val validationError = CustomFlowExecutor.validateForRun(
+            flow = flow,
+            rawPhone = exec.phoneNumber,
+            rawAmount = exec.amount
+        )
+        if (validationError != null) {
+            _uiState.update { it.copy(errorMessage = validationError) }
+            return
+        }
+
+        val phone = CustomFlowExecutor.phoneForLaunch(flow, exec.phoneNumber)
+        val amountStr = CustomFlowExecutor.amountForLaunch(flow, exec.amount)
+        val ussdFlow = CustomFlowExecutor.buildUssdFlow(flow, exec.phoneNumber, exec.amount)
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(errorMessage = null, infoMessage = null) }
+            val txId = recordAttemptedTransactionUseCase(
+                type = TransactionType.CUSTOM,
+                flowName = flow.name,
+                amount = CustomFlowExecutor.amountForTransaction(flow, exec.amount),
+                phoneNumber = CustomFlowExecutor.phoneForTransaction(flow, exec.phoneNumber)
+            )
+            launchUssdFlow(
+                flow = ussdFlow,
+                phoneNumber = phone,
+                amount = amountStr,
+                transactionId = txId
+            )
+        }
+    }
+
     fun onNameChange(v: String) = _formState.update { it.copy(name = v) }
     fun onUssdCodeChange(v: String) = _formState.update { it.copy(ussdCode = v) }
     fun onStep1Change(v: String) = _formState.update { it.copy(step1 = v) }
     fun onStep2Change(v: String) = _formState.update { it.copy(step2 = v) }
     fun onStep3Change(v: String) = _formState.update { it.copy(step3 = v) }
-    fun onPhoneChange(v: String) = _formState.update { it.copy(phoneNumber = v) }
-    fun onAmountChange(v: String) = _formState.update { it.copy(amount = v) }
     fun onDynamicPhoneChange(v: Boolean) = _formState.update { it.copy(useDynamicPhone = v) }
     fun onDynamicAmountChange(v: Boolean) = _formState.update { it.copy(useDynamicAmount = v) }
 
@@ -118,42 +199,6 @@ class CustomFlowViewModel @Inject constructor(
     fun deleteFlow(id: Long) {
         viewModelScope.launch {
             customFlowRepository.delete(id)
-        }
-    }
-
-    fun runFlow(flow: CustomFlow) {
-        val form = _formState.value
-        val phone = PhoneNumberFormatter.normalizeGhanaNumber(form.phoneNumber)
-        val amount = AmountFormatter.parse(form.amount)
-
-        val needsPhone = flow.useDynamicPhone || flow.step1.equals("phone", true) ||
-            flow.step2.equals("phone", true) || flow.step3.equals("phone", true)
-        val needsAmount = flow.useDynamicAmount || flow.step1.equals("amount", true) ||
-            flow.step2.equals("amount", true) || flow.step3.equals("amount", true)
-
-        if (needsPhone && !PhoneNumberFormatter.isValidGhanaNumber(phone)) {
-            _uiState.update { it.copy(errorMessage = "Enter a valid phone number to run this flow") }
-            return
-        }
-        if (needsAmount && amount == null) {
-            _uiState.update { it.copy(errorMessage = "Enter a valid amount to run this flow") }
-            return
-        }
-
-        val ussdFlow = CustomFlowMapper.toUssdFlow(flow)
-        viewModelScope.launch {
-            val txId = recordAttemptedTransactionUseCase(
-                type = TransactionType.CUSTOM,
-                flowName = flow.name,
-                amount = amount ?: 0.0,
-                phoneNumber = phone.takeIf { needsPhone }
-            )
-            launchUssdFlow(
-                flow = ussdFlow,
-                phoneNumber = if (needsPhone) phone else "",
-                amount = amount?.toInt()?.toString() ?: "",
-                transactionId = txId
-            )
         }
     }
 }

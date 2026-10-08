@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.momokotle.agent.domain.repository.AuthRepository
 import com.momokotle.agent.models.ReferralInfo
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +22,7 @@ private val Context.referralStore: DataStore<Preferences> by preferencesDataStor
 @Singleton
 class ReferralDataStore @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val userAccountDataStore: UserAccountDataStore
+    private val authRepository: AuthRepository
 ) {
     private object Keys {
         val REFERRAL_CODE     = stringPreferencesKey("referral_code")
@@ -50,7 +51,7 @@ class ReferralDataStore @Inject constructor(
     suspend fun ensureReferralCode() {
         val prefs = context.referralStore.data.first()
         if (!prefs[Keys.REFERRAL_CODE].isNullOrBlank()) return
-        val userId = userAccountDataStore.getUserId()
+        val userId = authRepository.getCurrentUserId() ?: return
         val code = "REF" + userId.take(8).uppercase()
         context.referralStore.edit { it[Keys.REFERRAL_CODE] = code }
     }

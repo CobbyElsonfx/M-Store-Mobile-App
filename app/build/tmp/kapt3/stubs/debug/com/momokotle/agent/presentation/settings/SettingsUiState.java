@@ -1,15 +1,12 @@
 package com.momokotle.agent.presentation.settings;
 
-import android.content.Context;
 import androidx.lifecycle.ViewModel;
-import com.momokotle.agent.accessibility.MomoAccessibilityService;
 import com.momokotle.agent.data.datastore.SettingsDataStore;
+import com.momokotle.agent.domain.repository.AccessibilityRepository;
 import com.momokotle.agent.models.AppSettings;
 import com.momokotle.agent.models.SimPurpose;
 import com.momokotle.agent.models.SimSlot;
-import com.momokotle.agent.utils.AccessibilityHelper;
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import dagger.hilt.android.qualifiers.ApplicationContext;
 import kotlinx.coroutines.flow.SharingStarted;
 import kotlinx.coroutines.flow.StateFlow;
 import javax.inject.Inject;

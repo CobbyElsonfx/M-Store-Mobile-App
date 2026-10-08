@@ -11,6 +11,8 @@ import com.momokotle.agent.database.dao.TransactionDao
 import com.momokotle.agent.database.entity.CustomFlowEntity
 import com.momokotle.agent.database.entity.FormSubmissionEntity
 import com.momokotle.agent.database.entity.StoreOrderEntity
+import com.momokotle.agent.database.entity.StoreProductEntity
+import com.momokotle.agent.database.dao.StoreProductDao
 import com.momokotle.agent.database.entity.ProfitRuleEntity
 import com.momokotle.agent.database.entity.SavedContactEntity
 import com.momokotle.agent.database.entity.TransactionEntity
@@ -22,9 +24,10 @@ import com.momokotle.agent.database.entity.TransactionEntity
         ProfitRuleEntity::class,
         CustomFlowEntity::class,
         StoreOrderEntity::class,
-        FormSubmissionEntity::class
+        FormSubmissionEntity::class,
+        StoreProductEntity::class
     ],
-    version = 7,
+    version = 10,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -34,4 +37,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun customFlowDao(): CustomFlowDao
     abstract fun storeOrderDao(): StoreOrderDao
     abstract fun formSubmissionDao(): FormSubmissionDao
+    abstract fun storeProductDao(): StoreProductDao
 }

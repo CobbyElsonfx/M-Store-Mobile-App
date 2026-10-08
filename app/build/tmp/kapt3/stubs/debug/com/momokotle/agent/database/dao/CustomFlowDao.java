@@ -8,6 +8,7 @@ import androidx.room.Update;
 import com.momokotle.agent.database.entity.CustomFlowEntity;
 import com.momokotle.agent.database.entity.FormSubmissionEntity;
 import com.momokotle.agent.database.entity.StoreOrderEntity;
+import com.momokotle.agent.database.entity.StoreProductEntity;
 import com.momokotle.agent.database.entity.ProfitRuleEntity;
 import com.momokotle.agent.database.entity.SavedContactEntity;
 import com.momokotle.agent.database.entity.TransactionEntity;

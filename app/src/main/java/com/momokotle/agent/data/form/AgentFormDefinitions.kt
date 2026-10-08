@@ -5,14 +5,18 @@ import com.momokotle.agent.models.AgentFormType
 data class FormTextField(
     val key: String,
     val label: String,
-    val required: Boolean = true
+    val required: Boolean = true,
+    val kind: FormFieldKind = FormFieldKind.TEXT,
+    val placeholder: String? = null,
+    val maxLength: Int? = null
 )
 
 data class FormUploadSlot(
     val key: String,
     val label: String,
     val instruction: String? = null,
-    val required: Boolean = true
+    val required: Boolean = true,
+    val kind: FormUploadKind = FormUploadKind.DOCUMENT
 )
 
 data class FormSection(
@@ -28,7 +32,13 @@ data class AgentFormDefinition(
     val sections: List<FormSection> = emptyList(),
     val standaloneFields: List<FormTextField> = emptyList(),
     val standaloneUploads: List<FormUploadSlot> = emptyList()
-)
+) {
+    fun allFields(): List<FormTextField> =
+        standaloneFields + sections.flatMap { it.fields }
+
+    fun allUploads(): List<FormUploadSlot> =
+        standaloneUploads + sections.flatMap { it.uploads }
+}
 
 object AgentFormDefinitions {
     fun get(type: AgentFormType): AgentFormDefinition = when (type) {
@@ -50,33 +60,34 @@ object AgentFormDefinitions {
             FormSection(
                 title = "Personal & Business Information",
                 fields = listOf(
-                    FormTextField("businessName", "Business Name"),
-                    FormTextField("surname", "Surname"),
-                    FormTextField("firstName", "First Name"),
-                    FormTextField("phoneNumber", "Phone Number"),
-                    FormTextField("dateOfBirth", "Date of Birth"),
-                    FormTextField("placeOfBirth", "Place of Birth"),
-                    FormTextField("ghanaCardNumber", "Ghana Card Number"),
-                    FormTextField("location", "Location / Address")
+                    FormTextField("businessName", "Business Name", kind = FormFieldKind.NAME),
+                    FormTextField("surname", "Surname", kind = FormFieldKind.NAME),
+                    FormTextField("firstName", "First Name", kind = FormFieldKind.NAME),
+                    FormTextField("phoneNumber", "Phone Number", kind = FormFieldKind.PHONE),
+                    FormTextField("dateOfBirth", "Date of Birth", kind = FormFieldKind.DATE_OF_BIRTH),
+                    FormTextField("placeOfBirth", "Place of Birth", kind = FormFieldKind.PLACE_OF_BIRTH),
+                    FormTextField("ghanaCardNumber", "Ghana Card Number", kind = FormFieldKind.GHANA_CARD),
+                    FormTextField("location", "Location / Address", kind = FormFieldKind.LOCATION)
                 )
             ),
             FormSection(
                 title = "Next of Kin Details",
                 fields = listOf(
-                    FormTextField("nextOfKinName", "Next of Kin Name"),
-                    FormTextField("nextOfKinPhone", "Next of Kin Phone Number")
+                    FormTextField("nextOfKinName", "Next of Kin Name", kind = FormFieldKind.NAME),
+                    FormTextField("nextOfKinPhone", "Next of Kin Phone Number", kind = FormFieldKind.PHONE)
                 )
             ),
             FormSection(
                 title = "Signature",
                 instruction = "Sign on a plain sheet with blue pen, then upload",
-                uploads = listOf(FormUploadSlot("signature", "Signature"))
+                uploads = listOf(
+                    FormUploadSlot("signature", "Signature", kind = FormUploadKind.SIGNATURE)
+                )
             ),
             FormSection(
                 title = "Required Document Uploads",
                 uploads = listOf(
-                    FormUploadSlot("ghanaCardFront", "Ghana Card Front Image"),
-                    FormUploadSlot("ghanaCardBack", "Ghana Card Back Image"),
+                    FormUploadSlot("ghanaCardFront", "Ghana Card"),
                     FormUploadSlot("businessCertificate", "Business Certificate"),
                     FormUploadSlot("formA", "Form A"),
                     FormUploadSlot("formB", "Form B"),
@@ -88,16 +99,15 @@ object AgentFormDefinitions {
 
     private fun evdConversion() = AgentFormDefinition(
         formType = AgentFormType.EVD_SIM_CONVERSION,
-        title = "EVD Agent SIM Conversion Form",
+        title = "EVD Agent and Sim Conversion Form",
         standaloneFields = listOf(
-            FormTextField("phoneNumber", "Phone Number"),
-            FormTextField("ghanaCardNumber", "Ghana Card Number"),
-            FormTextField("location", "Location")
+            FormTextField("phoneNumber", "Phone Number", kind = FormFieldKind.PHONE),
+            FormTextField("ghanaCardNumber", "Ghana Card Number", kind = FormFieldKind.GHANA_CARD),
+            FormTextField("location", "Location", kind = FormFieldKind.LOCATION)
         ),
         standaloneUploads = listOf(
-            FormUploadSlot("signature", "Signature"),
-            FormUploadSlot("ghanaCardFront", "Ghana Card Front Image"),
-            FormUploadSlot("ghanaCardBack", "Ghana Card Back Image")
+            FormUploadSlot("signature", "Signature", kind = FormUploadKind.SIGNATURE),
+            FormUploadSlot("ghanaCardFront", "Ghana Card Front")
         )
     )
 
@@ -105,63 +115,63 @@ object AgentFormDefinitions {
         formType = AgentFormType.DYNAMIC_SIM_BULK,
         title = "Dynamic SIM Cards Bulk Purchase Form",
         standaloneFields = listOf(
-            FormTextField("phoneNumber", "Phone Number"),
-            FormTextField("location", "Location"),
-            FormTextField("whatsappNumber", "WhatsApp Number")
+            FormTextField("phoneNumber", "Phone Number", kind = FormFieldKind.PHONE),
+            FormTextField("location", "Location", kind = FormFieldKind.LOCATION),
+            FormTextField("whatsappNumber", "WhatsApp Number", kind = FormFieldKind.PHONE)
         ),
-        standaloneUploads = listOf(FormUploadSlot("signature", "Signature"))
+        standaloneUploads = listOf(
+            FormUploadSlot("signature", "Signature", kind = FormUploadKind.SIGNATURE)
+        )
     )
 
     private fun telecelAgent() = AgentFormDefinition(
         formType = AgentFormType.TELECEL_AGENT,
         title = "Telecel Agent Details Form",
+        standaloneFields = listOf(
+            FormTextField("businessName", "Business Name", kind = FormFieldKind.NAME),
+            FormTextField("fullName", "Full Name", kind = FormFieldKind.NAME),
+            FormTextField("phoneNumber", "Phone Number", kind = FormFieldKind.PHONE),
+            FormTextField("dateOfBirth", "Date of Birth", kind = FormFieldKind.DATE_OF_BIRTH),
+            FormTextField("location", "Location / Address", kind = FormFieldKind.LOCATION),
+            FormTextField("ghanaCardNumber", "Ghana Card Number", kind = FormFieldKind.GHANA_CARD)
+        ),
         sections = listOf(
             FormSection(
                 title = "Required Documents",
                 uploads = listOf(
+                    FormUploadSlot("businessCertificate", "Business Certificate"),
+                    FormUploadSlot("formA", "Form A"),
                     FormUploadSlot("ghanaCardFront", "Ghana Card Front"),
                     FormUploadSlot("ghanaCardBack", "Ghana Card Back"),
-                    FormUploadSlot("businessCertificateFormA", "Business Certificate — Form A"),
-                    FormUploadSlot("businessCertificateFormB", "Business Certificate — Form B"),
-                    FormUploadSlot("businessCertificateFormC", "Business Certificate — Form C")
+                    FormUploadSlot("applicantHoldingFront", "Applicant Holding Front"),
+                    FormUploadSlot("applicantHoldingBack", "Applicant Holding Back")
                 )
             )
-        ),
-        standaloneFields = listOf(
-            FormTextField("businessName",    "Business Name"),
-            FormTextField("fullName",        "Full Name"),
-            FormTextField("phoneNumber",     "Phone Number"),
-            FormTextField("dateOfBirth",     "Date of Birth"),
-            FormTextField("location",        "Location / Address"),
-            FormTextField("ghanaCardNumber", "Ghana Card Number")
-        ),
-        standaloneUploads = listOf(FormUploadSlot("signature", "Signature"))
+        )
     )
 
     private fun airteltigoAgent() = AgentFormDefinition(
         formType = AgentFormType.AIRTELTIGO_AGENT,
         title = "AirtelTigo Agent Details Form",
+        standaloneFields = listOf(
+            FormTextField("businessName", "Business Name", kind = FormFieldKind.NAME),
+            FormTextField("fullName", "Full Name", kind = FormFieldKind.NAME),
+            FormTextField("phoneNumber", "Phone Number", kind = FormFieldKind.PHONE),
+            FormTextField("dateOfBirth", "Date of Birth", kind = FormFieldKind.DATE_OF_BIRTH),
+            FormTextField("location", "Location / Address", kind = FormFieldKind.LOCATION),
+            FormTextField("ghanaCardNumber", "Ghana Card Number", kind = FormFieldKind.GHANA_CARD)
+        ),
         sections = listOf(
             FormSection(
                 title = "Required Documents",
                 uploads = listOf(
+                    FormUploadSlot("businessCertificate", "Business Certificate"),
+                    FormUploadSlot("formA", "Form A"),
                     FormUploadSlot("ghanaCardFront", "Ghana Card Front"),
-                    FormUploadSlot("ghanaCardBack", "Ghana Card Back"),
-                    FormUploadSlot("businessCertificateFormA", "Business Certificate — Form A"),
-                    FormUploadSlot("businessCertificateFormB", "Business Certificate — Form B"),
-                    FormUploadSlot("businessCertificateFormC", "Business Certificate — Form C")
+                    FormUploadSlot("ghanaCardBack", "Ghana Card Back")
                 )
             )
-        ),
-        standaloneFields = listOf(
-            FormTextField("businessName",    "Business Name"),
-            FormTextField("fullName",        "Full Name"),
-            FormTextField("phoneNumber",     "Phone Number"),
-            FormTextField("dateOfBirth",     "Date of Birth"),
-            FormTextField("location",        "Location / Address"),
-            FormTextField("ghanaCardNumber", "Ghana Card Number")
-        ),
-        standaloneUploads = listOf(FormUploadSlot("signature", "Signature"))
+        )
     )
 
     private fun businessCertificate() = AgentFormDefinition(
@@ -171,72 +181,72 @@ object AgentFormDefinitions {
             FormSection(
                 title = "Business Details",
                 fields = listOf(
-                    FormTextField("businessName1",    "Business Name Option 1"),
-                    FormTextField("businessName2",    "Business Name Option 2"),
-                    FormTextField("businessName3",    "Business Name Option 3"),
+                    FormTextField("businessName1", "Business Name Option 1", kind = FormFieldKind.NAME),
+                    FormTextField("businessName2", "Business Name Option 2", kind = FormFieldKind.NAME),
+                    FormTextField("businessName3", "Business Name Option 3", kind = FormFieldKind.NAME),
                     FormTextField("natureOfBusiness", "Nature of Business")
                 )
             ),
             FormSection(
                 title = "Business Address",
                 fields = listOf(
-                    FormTextField("bizHouseNumber",    "House Number"),
-                    FormTextField("bizStreet",         "Street"),
-                    FormTextField("bizArea",           "Area"),
-                    FormTextField("bizCity",           "City"),
-                    FormTextField("bizRegion",         "Region"),
-                    FormTextField("bizNearestLandmark","Nearest Landmark"),
+                    FormTextField("bizHouseNumber", "House Number"),
+                    FormTextField("bizStreet", "Street"),
+                    FormTextField("bizArea", "Area"),
+                    FormTextField("bizCity", "City"),
+                    FormTextField("bizRegion", "Region"),
+                    FormTextField("bizNearestLandmark", "Nearest Landmark"),
                     FormTextField("bizDigitalAddress", "Digital Address")
                 )
             ),
             FormSection(
                 title = "Personal Information",
                 fields = listOf(
-                    FormTextField("firstName",     "First Name"),
-                    FormTextField("surname",       "Surname"),
-                    FormTextField("dateOfBirth",   "Date of Birth"),
-                    FormTextField("occupation",    "Occupation"),
-                    FormTextField("nationality",   "Nationality"),
-                    FormTextField("gender",        "Gender"),
+                    FormTextField("firstName", "First Name", kind = FormFieldKind.NAME),
+                    FormTextField("surname", "Surname", kind = FormFieldKind.NAME),
+                    FormTextField("dateOfBirth", "Date of Birth", kind = FormFieldKind.DATE_OF_BIRTH),
+                    FormTextField("occupation", "Occupation"),
+                    FormTextField("nationality", "Nationality"),
+                    FormTextField("gender", "Gender"),
                     FormTextField("maritalStatus", "Marital Status")
                 )
             ),
             FormSection(
                 title = "Residential Address",
                 fields = listOf(
-                    FormTextField("resHouseNumber",    "House Number"),
-                    FormTextField("resStreet",         "Street"),
-                    FormTextField("resArea",           "Area"),
-                    FormTextField("resCity",           "City"),
-                    FormTextField("resDistrict",       "District"),
-                    FormTextField("resRegion",         "Region"),
-                    FormTextField("resNearestLandmark","Nearest Landmark"),
+                    FormTextField("resHouseNumber", "House Number"),
+                    FormTextField("resStreet", "Street"),
+                    FormTextField("resArea", "Area"),
+                    FormTextField("resCity", "City"),
+                    FormTextField("resDistrict", "District"),
+                    FormTextField("resRegion", "Region"),
+                    FormTextField("resNearestLandmark", "Nearest Landmark"),
                     FormTextField("resDigitalAddress", "Digital Address Code")
                 )
             ),
             FormSection(
                 title = "Postal Address",
                 fields = listOf(
-                    FormTextField("poBox",       "P.O. Box"),
-                    FormTextField("postalCity",  "City"),
-                    FormTextField("postalRegion","Region")
+                    FormTextField("poBox", "P.O. Box"),
+                    FormTextField("postalCity", "City"),
+                    FormTextField("postalRegion", "Region")
                 )
             ),
             FormSection(
                 title = "Contact & Identity",
                 fields = listOf(
-                    FormTextField("phoneNumber",    "Phone Number"),
-                    FormTextField("emailAddress",   "Email Address"),
-                    FormTextField("tinNumber",      "TIN Number"),
-                    FormTextField("ghanaCardNumber","Ghana Card Number")
+                    FormTextField("phoneNumber", "Phone Number", kind = FormFieldKind.PHONE),
+                    FormTextField("emailAddress", "Email Address"),
+                    FormTextField("tinNumber", "TIN Number"),
+                    FormTextField("ghanaCardNumber", "Ghana Card Number", kind = FormFieldKind.GHANA_CARD)
                 )
             ),
             FormSection(
                 title = "Document Uploads",
                 instruction = "Sign on a plain A4 or white sheet, then photograph or scan it",
                 uploads = listOf(
-                    FormUploadSlot("signature",     "Signature"),
-                    FormUploadSlot("ghanaCardFront","Ghana Card Front Image"),
+                    FormUploadSlot("signature", "Signature", kind = FormUploadKind.SIGNATURE),
+                    FormUploadSlot("ghanaCardFront", "Ghana Card Front Image"),
                     FormUploadSlot("ghanaCardBack", "Ghana Card Back Image")
                 )
             )
@@ -247,15 +257,20 @@ object AgentFormDefinitions {
         formType = AgentFormType.BIRTH_CERTIFICATE,
         title = "Birth Certificate Application",
         standaloneFields = listOf(
-            FormTextField("fullName",        "Full Name"),
-            FormTextField("dateOfBirth",     "Date of Birth"),
-            FormTextField("placeOfBirth",    "Place of Birth"),
-            FormTextField("gender",          "Gender"),
-            FormTextField("motherName",      "Mother's Full Name"),
-            FormTextField("fatherName",      "Father's Full Name"),
-            FormTextField("locationOfBirth", "Location of Birth"),
-            FormTextField("phoneNumber",     "Phone Number"),
-            FormTextField("ghanaCardNumber", "Ghana Card Number (if available)", required = false)
+            FormTextField("fullName", "Full Name", kind = FormFieldKind.NAME),
+            FormTextField("dateOfBirth", "Date of Birth", kind = FormFieldKind.DATE_OF_BIRTH),
+            FormTextField("placeOfBirth", "Place of Birth", kind = FormFieldKind.PLACE_OF_BIRTH),
+            FormTextField("gender", "Gender"),
+            FormTextField("motherName", "Mother's Full Name", kind = FormFieldKind.NAME),
+            FormTextField("fatherName", "Father's Full Name", kind = FormFieldKind.NAME),
+            FormTextField("locationOfBirth", "Location of Birth", kind = FormFieldKind.LOCATION),
+            FormTextField("phoneNumber", "Phone Number", kind = FormFieldKind.PHONE),
+            FormTextField(
+                "ghanaCardNumber",
+                "Ghana Card Number (if available)",
+                required = false,
+                kind = FormFieldKind.GHANA_CARD
+            )
         ),
         standaloneUploads = listOf(
             FormUploadSlot(
@@ -265,7 +280,7 @@ object AgentFormDefinitions {
                 required = false
             ),
             FormUploadSlot("ghanaCard", "Ghana Card (if available)", required = false),
-            FormUploadSlot("signature", "Signature")
+            FormUploadSlot("signature", "Signature", kind = FormUploadKind.SIGNATURE)
         )
     )
 }

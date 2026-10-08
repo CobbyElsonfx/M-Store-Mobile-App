@@ -35,8 +35,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.momokotle.agent.models.SavedContact
+import com.momokotle.agent.ui.components.AppCard
+import com.momokotle.agent.ui.components.AppEmptyState
+import com.momokotle.agent.ui.components.AppScaffold
+import com.momokotle.agent.ui.components.AppSearchField
 import com.momokotle.agent.ui.components.AgentTextField
 import com.momokotle.agent.ui.components.SaveContactDialog
+import com.momokotle.agent.ui.theme.AppDimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,20 +73,15 @@ fun ContactsScreen(
         )
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Contacts") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        },
+    AppScaffold(
+        title = "Saved Contacts",
+        onBack = onBack,
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
-            FloatingActionButton(onClick = viewModel::openAddDialog) {
+            FloatingActionButton(
+                onClick = viewModel::openAddDialog,
+                containerColor = MaterialTheme.colorScheme.secondary
+            ) {
                 Icon(Icons.Default.Add, contentDescription = "Add contact")
             }
         }

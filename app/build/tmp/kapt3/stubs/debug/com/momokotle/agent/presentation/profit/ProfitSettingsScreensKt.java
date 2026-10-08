@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier;
 import androidx.compose.ui.text.font.FontWeight;
 import com.momokotle.agent.models.ProfitCalculationMode;
 import com.momokotle.agent.models.ProfitRule;
+import com.momokotle.agent.ui.components.AppButtonStyle;
+import com.momokotle.agent.ui.theme.AppDimens;
 import com.momokotle.agent.utils.AmountFormatter;
 import com.momokotle.agent.utils.PercentFormatter;
 

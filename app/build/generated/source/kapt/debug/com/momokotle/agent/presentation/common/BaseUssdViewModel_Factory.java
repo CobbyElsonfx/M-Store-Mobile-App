@@ -2,6 +2,7 @@ package com.momokotle.agent.presentation.common;
 
 import android.content.Context;
 import com.momokotle.agent.data.datastore.SettingsDataStore;
+import com.momokotle.agent.domain.repository.AccessibilityRepository;
 import com.momokotle.agent.domain.usecase.StartUssdFlowUseCase;
 import com.momokotle.agent.ussd.UssdAutomationEngine;
 import dagger.internal.DaggerGenerated;
@@ -34,31 +35,36 @@ public final class BaseUssdViewModel_Factory implements Factory<BaseUssdViewMode
 
   private final Provider<SettingsDataStore> settingsDataStoreProvider;
 
+  private final Provider<AccessibilityRepository> accessibilityRepositoryProvider;
+
   public BaseUssdViewModel_Factory(Provider<Context> contextProvider,
       Provider<StartUssdFlowUseCase> startUssdFlowUseCaseProvider,
       Provider<UssdAutomationEngine> automationEngineProvider,
-      Provider<SettingsDataStore> settingsDataStoreProvider) {
+      Provider<SettingsDataStore> settingsDataStoreProvider,
+      Provider<AccessibilityRepository> accessibilityRepositoryProvider) {
     this.contextProvider = contextProvider;
     this.startUssdFlowUseCaseProvider = startUssdFlowUseCaseProvider;
     this.automationEngineProvider = automationEngineProvider;
     this.settingsDataStoreProvider = settingsDataStoreProvider;
+    this.accessibilityRepositoryProvider = accessibilityRepositoryProvider;
   }
 
   @Override
   public BaseUssdViewModel get() {
-    return newInstance(contextProvider.get(), startUssdFlowUseCaseProvider.get(), automationEngineProvider.get(), settingsDataStoreProvider.get());
+    return newInstance(contextProvider.get(), startUssdFlowUseCaseProvider.get(), automationEngineProvider.get(), settingsDataStoreProvider.get(), accessibilityRepositoryProvider.get());
   }
 
   public static BaseUssdViewModel_Factory create(Provider<Context> contextProvider,
       Provider<StartUssdFlowUseCase> startUssdFlowUseCaseProvider,
       Provider<UssdAutomationEngine> automationEngineProvider,
-      Provider<SettingsDataStore> settingsDataStoreProvider) {
-    return new BaseUssdViewModel_Factory(contextProvider, startUssdFlowUseCaseProvider, automationEngineProvider, settingsDataStoreProvider);
+      Provider<SettingsDataStore> settingsDataStoreProvider,
+      Provider<AccessibilityRepository> accessibilityRepositoryProvider) {
+    return new BaseUssdViewModel_Factory(contextProvider, startUssdFlowUseCaseProvider, automationEngineProvider, settingsDataStoreProvider, accessibilityRepositoryProvider);
   }
 
   public static BaseUssdViewModel newInstance(Context context,
       StartUssdFlowUseCase startUssdFlowUseCase, UssdAutomationEngine automationEngine,
-      SettingsDataStore settingsDataStore) {
-    return new BaseUssdViewModel(context, startUssdFlowUseCase, automationEngine, settingsDataStore);
+      SettingsDataStore settingsDataStore, AccessibilityRepository accessibilityRepository) {
+    return new BaseUssdViewModel(context, startUssdFlowUseCase, automationEngine, settingsDataStore, accessibilityRepository);
   }
 }

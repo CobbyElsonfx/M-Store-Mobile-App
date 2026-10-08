@@ -32,8 +32,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.momokotle.agent.ui.components.AgentActionButton
-import com.momokotle.agent.ui.components.ScreenHeader
+import com.momokotle.agent.ui.components.AppButton
+import com.momokotle.agent.ui.components.AppButtonStyle
+import com.momokotle.agent.ui.components.AppCard
+import com.momokotle.agent.ui.components.AppScaffold
+import com.momokotle.agent.ui.components.AppSectionHeader
+import com.momokotle.agent.ui.theme.AppDimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,40 +48,26 @@ fun ReferralScreen(
     val referralInfo by viewModel.referralInfo.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Referral & Wallet") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { padding ->
+    AppScaffold(title = "Referral & Wallet", onBack = onBack) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .padding(horizontal = AppDimens.ScreenHorizontal, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.SectionSpacing)
         ) {
-            ScreenHeader(title = "Referral & Wallet")
+            AppSectionHeader(
+                title = "Share & earn",
+                subtitle = "Invite agents with your referral code"
+            )
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+            AppCard(modifier = Modifier.fillMaxWidth()) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
                         text = "Your Referral Code",
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -88,7 +78,7 @@ fun ReferralScreen(
                             text = referralInfo?.referralCode ?: "—",
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         IconButton(
                             onClick = {
@@ -103,27 +93,22 @@ fun ReferralScreen(
                             Icon(
                                 imageVector = Icons.Default.ContentCopy,
                                 contentDescription = "Copy referral code",
-                                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
                 }
             }
 
-            AgentActionButton(
+            AppButton(
                 text = "Share Link",
                 onClick = { viewModel.shareReferralLink(context) },
-                enabled = referralInfo != null
+                enabled = referralInfo != null,
+                style = AppButtonStyle.Accent
             )
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
+            AppCard(modifier = Modifier.fillMaxWidth()) {
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Text(
                         text = "Wallet Balance",
                         style = MaterialTheme.typography.titleMedium,

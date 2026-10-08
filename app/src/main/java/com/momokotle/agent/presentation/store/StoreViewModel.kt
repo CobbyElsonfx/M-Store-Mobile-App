@@ -2,14 +2,17 @@ package com.momokotle.agent.presentation.store
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.momokotle.agent.data.catalog.StoreCatalog
+import com.momokotle.agent.domain.repository.ProductRepository
+import com.momokotle.agent.domain.repository.ProductValidationResult
 import com.momokotle.agent.domain.repository.StoreRepository
-import com.momokotle.agent.domain.repository.UserIdProvider
+import com.momokotle.agent.domain.usecase.GetAuthenticatedUserUseCase
 import com.momokotle.agent.models.StoreCategory
-import com.momokotle.agent.models.StoreItem
+import com.momokotle.agent.models.StoreProduct
 import com.momokotle.agent.utils.InternetMessages
 import com.momokotle.agent.utils.NetworkMonitor
+import com.momokotle.agent.utils.PhoneNumberFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,10 +22,11 @@ import javax.inject.Inject
 
 data class StoreUiState(
     val isOnline: Boolean = false,
+    val isLoadingProducts: Boolean = true,
     val selectedCategory: StoreCategory = StoreCategory.SIM_CARDS,
-    val items: List<StoreItem> = emptyList(),
+    val products: List<StoreProduct> = emptyList(),
     val quantities: Map<String, Int> = emptyMap(),
-    val checkoutItem: StoreItem? = null,
+    val checkoutProduct: StoreProduct? = null,
     val checkoutPhone: String = "",
     val checkoutLocation: String = "",
     val isSubmitting: Boolean = false,
@@ -33,16 +37,24 @@ data class StoreUiState(
 @HiltViewModel
 class StoreViewModel @Inject constructor(
     private val networkMonitor: NetworkMonitor,
+    private val productRepository: ProductRepository,
     private val storeRepository: StoreRepository,
-    private val userIdProvider: UserIdProvider
+    private val getAuthenticatedUserUseCase: GetAuthenticatedUserUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(StoreUiState())
     val uiState: StateFlow<StoreUiState> = _uiState.asStateFlow()
 
+    private var productsJob: Job? = null
+
     init {
         refreshConnectivity()
-        selectCategory(StoreCategory.SIM_CARDS)
+        observeProductsForCategory(StoreCategory.SIM_CARDS)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        productsJob?.cancel()
     }
 
     fun refreshConnectivity() {
@@ -50,35 +62,70 @@ class StoreViewModel @Inject constructor(
     }
 
     fun selectCategory(category: StoreCategory) {
-        _uiState.update {
-            it.copy(
-                selectedCategory = category,
-                items = StoreCatalog.byCategory(category)
-            )
+        if (_uiState.value.selectedCategory == category) return
+        _uiState.update { it.copy(selectedCategory = category, isLoadingProducts = true) }
+        observeProductsForCategory(category)
+    }
+
+    private fun observeProductsForCategory(category: StoreCategory) {
+        productsJob?.cancel()
+        productsJob = viewModelScope.launch {
+            productRepository.observeProductsByCategory(category).collect { products ->
+                _uiState.update {
+                    it.copy(
+                        products = products,
+                        isLoadingProducts = false
+                    )
+                }
+            }
         }
     }
 
-    fun setQuantity(itemId: String, quantity: Int) {
-        val q = quantity.coerceIn(1, 99)
+    fun setQuantity(productId: String, quantity: Int) {
+        val product = _uiState.value.products.find { it.productId == productId } ?: return
+        val maxQty = product.stockQuantity.coerceAtLeast(1).coerceAtMost(99)
+        val q = quantity.coerceIn(1, maxQty)
         _uiState.update { state ->
-            state.copy(quantities = state.quantities + (itemId to q))
+            state.copy(quantities = state.quantities + (productId to q))
         }
     }
 
-    fun quantityFor(itemId: String): Int = _uiState.value.quantities[itemId] ?: 1
+    fun quantityFor(productId: String): Int = _uiState.value.quantities[productId] ?: 1
 
-    fun openCheckout(item: StoreItem) {
+    fun openCheckout(product: StoreProduct) {
         if (!networkMonitor.isOnline()) {
             _uiState.update { it.copy(errorMessage = InternetMessages.STORE_REQUIRES_INTERNET) }
             return
         }
-        _uiState.update {
-            it.copy(checkoutItem = item, checkoutPhone = "", checkoutLocation = "", errorMessage = null)
+
+        viewModelScope.launch {
+            when (
+                val validation = productRepository.validateForPurchase(
+                    product.productId,
+                    quantityFor(product.productId)
+                )
+            ) {
+                is ProductValidationResult.Invalid -> {
+                    _uiState.update { it.copy(errorMessage = validation.message) }
+                    return@launch
+                }
+                is ProductValidationResult.Valid -> {
+                    val profile = runCatching { getAuthenticatedUserUseCase() }.getOrNull()
+                    _uiState.update {
+                        it.copy(
+                            checkoutProduct = product,
+                            checkoutPhone = profile?.phoneNumber.orEmpty(),
+                            checkoutLocation = profile?.location.orEmpty(),
+                            errorMessage = null
+                        )
+                    }
+                }
+            }
         }
     }
 
     fun dismissCheckout() {
-        _uiState.update { it.copy(checkoutItem = null) }
+        _uiState.update { it.copy(checkoutProduct = null) }
     }
 
     fun onCheckoutPhoneChange(v: String) {
@@ -90,42 +137,66 @@ class StoreViewModel @Inject constructor(
     }
 
     fun placeOrder() {
-        val item = _uiState.value.checkoutItem ?: return
+        val product = _uiState.value.checkoutProduct ?: return
         if (!networkMonitor.isOnline()) {
             _uiState.update { it.copy(errorMessage = InternetMessages.STORE_REQUIRES_INTERNET) }
             return
         }
-        val phone = _uiState.value.checkoutPhone.trim()
-        val location = _uiState.value.checkoutLocation.trim()
-        if (phone.isBlank() || location.isBlank()) {
-            _uiState.update { it.copy(errorMessage = "Enter phone number and location") }
-            return
-        }
+
         viewModelScope.launch {
-            _uiState.update { it.copy(isSubmitting = true, errorMessage = null) }
-            val userId = userIdProvider.getUserId()
-            val qty = quantityFor(item.id)
-            storeRepository.createAndSubmitOrder(
-                userId = userId,
-                itemName = item.itemName,
-                quantity = qty,
-                unitPrice = item.price,
-                phoneNumber = phone,
-                location = location
-            ).onSuccess { order ->
-                _uiState.update {
-                    it.copy(
-                        isSubmitting = false,
-                        checkoutItem = null,
-                        message = "Order ${order.status.name.lowercase()}: ${order.itemName}"
-                    )
+            val qty = quantityFor(product.productId)
+            when (val validation = productRepository.validateForPurchase(product.productId, qty)) {
+                is ProductValidationResult.Invalid -> {
+                    _uiState.update {
+                        it.copy(errorMessage = validation.message, checkoutProduct = null)
+                    }
+                    return@launch
                 }
-            }.onFailure { e ->
-                _uiState.update {
-                    it.copy(
-                        isSubmitting = false,
-                        errorMessage = e.message ?: "Order failed"
+                is ProductValidationResult.Valid -> {
+                    val validated = validation.product
+                    val profile = try {
+                        getAuthenticatedUserUseCase()
+                    } catch (_: Exception) {
+                        _uiState.update { it.copy(errorMessage = "Please sign in to place an order") }
+                        return@launch
+                    }
+                    val phone = PhoneNumberFormatter.normalizeGhanaNumber(
+                        _uiState.value.checkoutPhone.trim().ifBlank { profile.phoneNumber }
                     )
+                    val location = _uiState.value.checkoutLocation.trim().ifBlank { profile.location }
+                    if (!PhoneNumberFormatter.isValidGhanaNumber(phone)) {
+                        _uiState.update { it.copy(errorMessage = "Enter a valid phone number") }
+                        return@launch
+                    }
+                    if (location.isBlank()) {
+                        _uiState.update { it.copy(errorMessage = "Enter delivery location") }
+                        return@launch
+                    }
+                    _uiState.update { it.copy(isSubmitting = true, errorMessage = null) }
+                    storeRepository.createAndSubmitOrder(
+                        userId = profile.userId,
+                        agentName = profile.fullName,
+                        itemName = validated.productName,
+                        quantity = qty,
+                        unitPrice = validated.price,
+                        phoneNumber = phone,
+                        location = location
+                    ).onSuccess { order ->
+                        _uiState.update {
+                            it.copy(
+                                isSubmitting = false,
+                                checkoutProduct = null,
+                                message = "Order ${order.status.firestoreValue}: ${order.itemName}"
+                            )
+                        }
+                    }.onFailure { e ->
+                        _uiState.update {
+                            it.copy(
+                                isSubmitting = false,
+                                errorMessage = e.message ?: "Order failed"
+                            )
+                        }
+                    }
                 }
             }
         }

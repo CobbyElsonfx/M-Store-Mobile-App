@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.momokotle.agent.ussd.UssdSecurityHelperTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-25T12:16:06" hostname="FRANCIS-ANDOH" time="0.001">
+  <properties/>
+  <testcase name="containsSensitiveKeyword_detectsPinPrompts" classname="com.momokotle.agent.ussd.UssdSecurityHelperTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

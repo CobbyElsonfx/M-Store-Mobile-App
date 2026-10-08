@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.momokotle.agent.ussd.UssdScreenValidatorTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-25T12:16:06" hostname="FRANCIS-ANDOH" time="0.001">
+  <properties/>
+  <testcase name="containsFatalError_detectsInvalidOption" classname="com.momokotle.agent.ussd.UssdScreenValidatorTest" time="0.0"/>
+  <testcase name="requiresResolvedValue_forPhoneAndAmount" classname="com.momokotle.agent.ussd.UssdScreenValidatorTest" time="0.0"/>
+  <testcase name="isMenuOptionStep_onlyDigitMenus" classname="com.momokotle.agent.ussd.UssdScreenValidatorTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

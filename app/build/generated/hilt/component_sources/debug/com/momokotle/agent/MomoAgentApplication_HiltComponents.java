@@ -2,20 +2,29 @@ package com.momokotle.agent;
 
 import com.momokotle.agent.accessibility.MomoAccessibilityService_GeneratedInjector;
 import com.momokotle.agent.di.AppModule;
+import com.momokotle.agent.di.FirebaseModule;
 import com.momokotle.agent.di.NetworkModule;
 import com.momokotle.agent.di.RepositoryModule;
 import com.momokotle.agent.presentation.MainActivity_GeneratedInjector;
+import com.momokotle.agent.presentation.auth.LoginViewModel_HiltModules;
+import com.momokotle.agent.presentation.auth.RegisterViewModel_HiltModules;
+import com.momokotle.agent.presentation.auth.SessionViewModel_HiltModules;
 import com.momokotle.agent.presentation.contacts.ContactsViewModel_HiltModules;
 import com.momokotle.agent.presentation.custommenu.CustomFlowViewModel_HiltModules;
 import com.momokotle.agent.presentation.dashboard.DashboardViewModel_HiltModules;
+import com.momokotle.agent.presentation.orders.MyOrdersViewModel_HiltModules;
+import com.momokotle.agent.presentation.orders.OrderDetailViewModel_HiltModules;
 import com.momokotle.agent.presentation.profit.CashInSettingsViewModel_HiltModules;
 import com.momokotle.agent.presentation.profit.CashOutSettingsViewModel_HiltModules;
 import com.momokotle.agent.presentation.profit.ProfitCalculationViewModel_HiltModules;
+import com.momokotle.agent.presentation.referral.ReferralViewModel_HiltModules;
 import com.momokotle.agent.presentation.registration.AgentFormViewModel_HiltModules;
 import com.momokotle.agent.presentation.settings.AccountProfileViewModel_HiltModules;
 import com.momokotle.agent.presentation.settings.AppSettingsViewModel_HiltModules;
 import com.momokotle.agent.presentation.settings.SettingsHomeViewModel_HiltModules;
 import com.momokotle.agent.presentation.store.StoreViewModel_HiltModules;
+import com.momokotle.agent.presentation.submissions.MySubmissionsViewModel_HiltModules;
+import com.momokotle.agent.presentation.submissions.SubmissionDetailViewModel_HiltModules;
 import com.momokotle.agent.presentation.transactions.TransactionsViewModel_HiltModules;
 import dagger.Binds;
 import dagger.Component;
@@ -143,6 +152,7 @@ public final class MomoAgentApplication_HiltComponents {
       modules = {
           AppModule.class,
           ApplicationContextModule.class,
+          FirebaseModule.class,
           HiltWrapper_FragmentGetContextFix_FragmentGetContextFixModule.class,
           ActivityRetainedCBuilderModule.class,
           ServiceCBuilderModule.class,
@@ -181,11 +191,19 @@ public final class MomoAgentApplication_HiltComponents {
           DashboardViewModel_HiltModules.KeyModule.class,
           HiltWrapper_ActivityRetainedComponentManager_LifecycleModule.class,
           HiltWrapper_SavedStateHandleModule.class,
+          LoginViewModel_HiltModules.KeyModule.class,
           ActivityCBuilderModule.class,
           ViewModelCBuilderModule.class,
+          MyOrdersViewModel_HiltModules.KeyModule.class,
+          MySubmissionsViewModel_HiltModules.KeyModule.class,
+          OrderDetailViewModel_HiltModules.KeyModule.class,
           ProfitCalculationViewModel_HiltModules.KeyModule.class,
+          ReferralViewModel_HiltModules.KeyModule.class,
+          RegisterViewModel_HiltModules.KeyModule.class,
+          SessionViewModel_HiltModules.KeyModule.class,
           SettingsHomeViewModel_HiltModules.KeyModule.class,
           StoreViewModel_HiltModules.KeyModule.class,
+          SubmissionDetailViewModel_HiltModules.KeyModule.class,
           TransactionsViewModel_HiltModules.KeyModule.class
       }
   )
@@ -231,9 +249,17 @@ public final class MomoAgentApplication_HiltComponents {
           CustomFlowViewModel_HiltModules.BindsModule.class,
           DashboardViewModel_HiltModules.BindsModule.class,
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
+          LoginViewModel_HiltModules.BindsModule.class,
+          MyOrdersViewModel_HiltModules.BindsModule.class,
+          MySubmissionsViewModel_HiltModules.BindsModule.class,
+          OrderDetailViewModel_HiltModules.BindsModule.class,
           ProfitCalculationViewModel_HiltModules.BindsModule.class,
+          ReferralViewModel_HiltModules.BindsModule.class,
+          RegisterViewModel_HiltModules.BindsModule.class,
+          SessionViewModel_HiltModules.BindsModule.class,
           SettingsHomeViewModel_HiltModules.BindsModule.class,
           StoreViewModel_HiltModules.BindsModule.class,
+          SubmissionDetailViewModel_HiltModules.BindsModule.class,
           TransactionsViewModel_HiltModules.BindsModule.class
       }
   )

@@ -1,6 +1,8 @@
 package com.momokotle.agent.presentation.navigation
 
 object Routes {
+    const val LOGIN = "login"
+    const val REGISTER = "register"
     const val HOME = "home"
     const val STORE = "store"
     const val AGENT_REGISTRATION = "agent_registration"
@@ -8,6 +10,7 @@ object Routes {
     const val HISTORY = "transactions"
     const val TRANSACTIONS = "transactions"
     const val CUSTOM_FLOWS = "custom_flows"
+    const val CUSTOM_MENU_EXECUTION = "custom_menu_execution/{flowId}"
     const val SETTINGS = "settings"
     const val ACCOUNT_PROFILE = "account_profile"
     const val APP_SETTINGS = "app_settings"
@@ -19,8 +22,14 @@ object Routes {
     const val CASH_OUT_SETTINGS = "cash_out_settings"
     const val REFERRAL = "referral"
     const val MY_SUBMISSIONS = "my_submissions"
+    const val MY_ORDERS = "my_orders"
+    const val ORDER_DETAIL = "order_detail/{orderId}"
+    const val SUBMISSION_DETAIL = "submission_detail/{submissionId}"
 
     fun agentForm(formType: String) = "agent_form/$formType"
+    fun orderDetail(orderId: String) = "order_detail/$orderId"
+    fun submissionDetail(submissionId: String) = "submission_detail/$submissionId"
+    fun customMenuExecution(flowId: Long) = "custom_menu_execution/$flowId"
 }
 
 object BottomNavItem {

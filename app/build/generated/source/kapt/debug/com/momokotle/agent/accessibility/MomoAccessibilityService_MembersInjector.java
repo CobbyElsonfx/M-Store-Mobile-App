@@ -1,5 +1,6 @@
 package com.momokotle.agent.accessibility;
 
+import com.momokotle.agent.domain.repository.AccessibilityRepository;
 import com.momokotle.agent.domain.usecase.UpdateTransactionStatusUseCase;
 import com.momokotle.agent.ussd.UssdAutomationEngine;
 import com.momokotle.agent.utils.AutomationLogger;
@@ -30,18 +31,23 @@ public final class MomoAccessibilityService_MembersInjector implements MembersIn
 
   private final Provider<UpdateTransactionStatusUseCase> updateTransactionStatusUseCaseProvider;
 
+  private final Provider<AccessibilityRepository> accessibilityRepositoryProvider;
+
   public MomoAccessibilityService_MembersInjector(Provider<UssdAutomationEngine> engineProvider,
       Provider<AutomationLogger> loggerProvider,
-      Provider<UpdateTransactionStatusUseCase> updateTransactionStatusUseCaseProvider) {
+      Provider<UpdateTransactionStatusUseCase> updateTransactionStatusUseCaseProvider,
+      Provider<AccessibilityRepository> accessibilityRepositoryProvider) {
     this.engineProvider = engineProvider;
     this.loggerProvider = loggerProvider;
     this.updateTransactionStatusUseCaseProvider = updateTransactionStatusUseCaseProvider;
+    this.accessibilityRepositoryProvider = accessibilityRepositoryProvider;
   }
 
   public static MembersInjector<MomoAccessibilityService> create(
       Provider<UssdAutomationEngine> engineProvider, Provider<AutomationLogger> loggerProvider,
-      Provider<UpdateTransactionStatusUseCase> updateTransactionStatusUseCaseProvider) {
-    return new MomoAccessibilityService_MembersInjector(engineProvider, loggerProvider, updateTransactionStatusUseCaseProvider);
+      Provider<UpdateTransactionStatusUseCase> updateTransactionStatusUseCaseProvider,
+      Provider<AccessibilityRepository> accessibilityRepositoryProvider) {
+    return new MomoAccessibilityService_MembersInjector(engineProvider, loggerProvider, updateTransactionStatusUseCaseProvider, accessibilityRepositoryProvider);
   }
 
   @Override
@@ -49,6 +55,7 @@ public final class MomoAccessibilityService_MembersInjector implements MembersIn
     injectEngine(instance, engineProvider.get());
     injectLogger(instance, loggerProvider.get());
     injectUpdateTransactionStatusUseCase(instance, updateTransactionStatusUseCaseProvider.get());
+    injectAccessibilityRepository(instance, accessibilityRepositoryProvider.get());
   }
 
   @InjectedFieldSignature("com.momokotle.agent.accessibility.MomoAccessibilityService.engine")
@@ -65,5 +72,11 @@ public final class MomoAccessibilityService_MembersInjector implements MembersIn
   public static void injectUpdateTransactionStatusUseCase(MomoAccessibilityService instance,
       UpdateTransactionStatusUseCase updateTransactionStatusUseCase) {
     instance.updateTransactionStatusUseCase = updateTransactionStatusUseCase;
+  }
+
+  @InjectedFieldSignature("com.momokotle.agent.accessibility.MomoAccessibilityService.accessibilityRepository")
+  public static void injectAccessibilityRepository(MomoAccessibilityService instance,
+      AccessibilityRepository accessibilityRepository) {
+    instance.accessibilityRepository = accessibilityRepository;
   }
 }

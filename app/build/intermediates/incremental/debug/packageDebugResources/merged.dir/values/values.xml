@@ -5,6 +5,13 @@
     <string name="accessibility_service_description">Automates MTN MoMo agent USSD menus (*171#) for Cash In, Cash Out, Pay to Merchant, and Transfer Airtime. PIN entry is never automated.</string>
     <string name="accessibility_service_label">M Storepay Automation</string>
     <string name="app_name">M Storepay</string>
+    <string name="firebase_database_url" translatable="false">https://m-store-b2ad5-default-rtdb.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">529871416062</string>
+    <string name="google_api_key" translatable="false">AIzaSyDxH3qnHV6MpnZTCXlFj1IgltrFSMJUSxY</string>
+    <string name="google_app_id" translatable="false">1:529871416062:android:0b48245026b7826cff93af</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDxH3qnHV6MpnZTCXlFj1IgltrFSMJUSxY</string>
+    <string name="google_storage_bucket" translatable="false">m-store-b2ad5.firebasestorage.app</string>
+    <string name="project_id" translatable="false">m-store-b2ad5</string>
     <string name="share_app_chooser">Share App</string>
     <string name="share_app_text">Try M Storepay — fast MoMo agent automation for Ghana.</string>
     <string name="support_email">support@mstorepay.com</string>

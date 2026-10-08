@@ -1,17 +1,13 @@
 package com.momokotle.agent.presentation.settings
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.momokotle.agent.accessibility.MomoAccessibilityService
 import com.momokotle.agent.data.datastore.SettingsDataStore
+import com.momokotle.agent.domain.repository.AccessibilityRepository
 import com.momokotle.agent.models.AppSettings
 import com.momokotle.agent.models.SimPurpose
 import com.momokotle.agent.models.SimSlot
-import com.momokotle.agent.utils.AccessibilityHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -26,32 +22,23 @@ data class SettingsUiState(
 
 @HiltViewModel
 class AppSettingsViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val settingsDataStore: SettingsDataStore
+    private val settingsDataStore: SettingsDataStore,
+    private val accessibilityRepository: AccessibilityRepository
 ) : ViewModel() {
-
-    private val accessibilityFlow = MutableStateFlow(false)
 
     val uiState: StateFlow<SettingsUiState> = combine(
         settingsDataStore.settings,
-        accessibilityFlow
+        accessibilityRepository.accessibilityStatus
     ) { settings, accessibility ->
         SettingsUiState(settings = settings, accessibilityEnabled = accessibility)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingsUiState())
 
-    init {
-        refreshAccessibility()
-    }
-
     fun refreshAccessibility() {
-        accessibilityFlow.value = AccessibilityHelper.isAccessibilityServiceEnabled(
-            context,
-            MomoAccessibilityService::class.java
-        )
+        accessibilityRepository.refresh()
     }
 
     fun openAccessibilitySettings() {
-        AccessibilityHelper.openAccessibilitySettings(context)
+        accessibilityRepository.openAccessibilitySettings()
     }
 
     fun setVibrateOnTouch(enabled: Boolean) {

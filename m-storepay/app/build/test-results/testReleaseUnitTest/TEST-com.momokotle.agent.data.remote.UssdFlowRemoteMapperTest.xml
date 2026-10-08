@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.momokotle.agent.data.remote.UssdFlowRemoteMapperTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-09-25T12:16:06" hostname="FRANCIS-ANDOH" time="0.009">
+  <properties/>
+  <testcase name="map_preservesEveryAdminFlowInOrder" classname="com.momokotle.agent.data.remote.UssdFlowRemoteMapperTest" time="0.007"/>
+  <testcase name="map_doesNotDropUnknownAdminStep" classname="com.momokotle.agent.data.remote.UssdFlowRemoteMapperTest" time="0.0"/>
+  <testcase name="requirements_comeFromAdminStepsNotButtonType" classname="com.momokotle.agent.data.remote.UssdFlowRemoteMapperTest" time="0.001"/>
+  <testcase name="map_keepsAdminCustomizedCashOutSteps" classname="com.momokotle.agent.data.remote.UssdFlowRemoteMapperTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,27 +1,20 @@
 package com.momokotle.agent.presentation.transactions
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,8 +22,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.momokotle.agent.models.Transaction
 import com.momokotle.agent.models.TransactionStatus
 import com.momokotle.agent.models.TransactionType
+import com.momokotle.agent.ui.components.AppEmptyState
+import com.momokotle.agent.ui.components.AppFilterChip
+import com.momokotle.agent.ui.components.AppScaffold
+import com.momokotle.agent.ui.components.AppSearchField
+import com.momokotle.agent.ui.components.AppStatusTone
+import com.momokotle.agent.ui.components.AppTransactionCard
+import com.momokotle.agent.ui.components.statusToneForLabel
+import com.momokotle.agent.ui.theme.AppDimens
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionsScreen(
     onBack: (() -> Unit)? = null,
@@ -38,41 +38,51 @@ fun TransactionsScreen(
     viewModel: TransactionsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var searchQuery by remember { mutableStateOf("") }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(if (isRootTab) "History" else "Transactions") },
-                navigationIcon = {
-                    if (!isRootTab && onBack != null) {
-                        IconButton(onClick = onBack) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                        }
-                    }
-                }
-            )
+    val filtered = remember(uiState.transactions, searchQuery) {
+        if (searchQuery.isBlank()) uiState.transactions
+        else {
+            val q = searchQuery.trim().lowercase()
+            uiState.transactions.filter { tx ->
+                tx.phoneNumber?.lowercase()?.contains(q) == true ||
+                    tx.amount.toString().contains(q) ||
+                    TransactionsViewModel.typeLabel(tx.type).lowercase().contains(q) ||
+                    tx.flowName?.lowercase()?.contains(q) == true
+            }
         }
+    }
+
+    AppScaffold(
+        title = if (isRootTab) "History" else "Transactions",
+        onBack = if (!isRootTab) onBack else null
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .padding(horizontal = AppDimens.ScreenHorizontal, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.InputSpacing)
         ) {
+            AppSearchField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                placeholder = "Search phone, amount, type…"
+            )
+
             FilterRow(
                 selected = uiState.filter,
                 onSelect = viewModel::setFilter
             )
 
-            if (uiState.transactions.isEmpty()) {
-                Text(
-                    text = "No transactions yet",
-                    modifier = Modifier.padding(top = 24.dp),
-                    style = MaterialTheme.typography.bodyLarge
+            if (filtered.isEmpty()) {
+                AppEmptyState(
+                    title = if (searchQuery.isNotBlank()) "No matching transactions" else "No transactions yet",
+                    message = "Completed USSD actions appear here"
                 )
             } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(uiState.transactions, key = { it.id }) { tx ->
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(AppDimens.ListItemSpacing)) {
+                    items(filtered, key = { it.id }) { tx ->
                         TransactionCard(transaction = tx)
                     }
                 }
@@ -86,75 +96,53 @@ private fun FilterRow(
     selected: TransactionType?,
     onSelect: (TransactionType?) -> Unit
 ) {
-    androidx.compose.foundation.layout.Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(AppDimens.ChipSpacing),
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
     ) {
-        FilterChip(
-            selected = selected == null,
-            onClick = { onSelect(null) },
-            label = { Text("All") }
-        )
-        FilterChip(
+        AppFilterChip(label = "All", selected = selected == null, onClick = { onSelect(null) })
+        AppFilterChip(
+            label = "Cash In",
             selected = selected == TransactionType.MTN_CASHIN,
-            onClick = { onSelect(TransactionType.MTN_CASHIN) },
-            label = { Text("Cash In") }
+            onClick = { onSelect(TransactionType.MTN_CASHIN) }
         )
-        FilterChip(
+        AppFilterChip(
+            label = "Cash Out",
             selected = selected == TransactionType.MTN_CASHOUT,
-            onClick = { onSelect(TransactionType.MTN_CASHOUT) },
-            label = { Text("Cash Out") }
+            onClick = { onSelect(TransactionType.MTN_CASHOUT) }
         )
-        FilterChip(
+        AppFilterChip(
+            label = "Merchant",
             selected = selected == TransactionType.AGENT_MERCHANT,
-            onClick = { onSelect(TransactionType.AGENT_MERCHANT) },
-            label = { Text("Merchant") }
+            onClick = { onSelect(TransactionType.AGENT_MERCHANT) }
         )
-        FilterChip(
+        AppFilterChip(
+            label = "Balance",
             selected = selected == TransactionType.BALANCE,
-            onClick = { onSelect(TransactionType.BALANCE) },
-            label = { Text("Balance") }
+            onClick = { onSelect(TransactionType.BALANCE) }
         )
-        FilterChip(
+        AppFilterChip(
+            label = "Custom",
             selected = selected == TransactionType.CUSTOM,
-            onClick = { onSelect(TransactionType.CUSTOM) },
-            label = { Text("Custom") }
+            onClick = { onSelect(TransactionType.CUSTOM) }
         )
     }
 }
 
 @Composable
 private fun TransactionCard(transaction: Transaction) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = TransactionsViewModel.typeLabel(transaction.type),
-                style = MaterialTheme.typography.titleMedium
-            )
-            transaction.flowName?.let {
-                Text(text = it, style = MaterialTheme.typography.bodyMedium)
-            }
-            Text(
-                text = "GHS ${transaction.amount} · ${TransactionsViewModel.statusLabel(transaction.status)}",
-                style = MaterialTheme.typography.bodyLarge
-            )
-            if (transaction.profit > 0) {
-                Text(
-                    text = "Est. profit GHS ${transaction.profit}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            }
-            transaction.phoneNumber?.let {
-                Text(text = it, style = MaterialTheme.typography.bodyMedium)
-            }
-            Text(
-                text = TransactionsViewModel.formatDate(transaction.timestamp),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
-        }
-    }
+    val statusLabel = TransactionsViewModel.statusLabel(transaction.status)
+    val profit = if (transaction.profit > 0) "Est. profit GHS ${transaction.profit}" else null
+    AppTransactionCard(
+        typeLabel = TransactionsViewModel.typeLabel(transaction.type),
+        phoneNumber = transaction.phoneNumber,
+        amount = "GHS ${transaction.amount}",
+        profit = profit,
+        statusLabel = statusLabel,
+        statusTone = statusToneForLabel(statusLabel),
+        dateTime = TransactionsViewModel.formatDate(transaction.timestamp),
+        flowName = transaction.flowName
+    )
 }

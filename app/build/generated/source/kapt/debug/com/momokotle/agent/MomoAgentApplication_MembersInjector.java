@@ -1,6 +1,5 @@
 package com.momokotle.agent;
 
-import com.momokotle.agent.data.datastore.UserAccountDataStore;
 import com.momokotle.agent.data.local.DatabaseInitializer;
 import dagger.MembersInjector;
 import dagger.internal.DaggerGenerated;
@@ -25,36 +24,24 @@ import javax.inject.Provider;
 public final class MomoAgentApplication_MembersInjector implements MembersInjector<MomoAgentApplication> {
   private final Provider<DatabaseInitializer> databaseInitializerProvider;
 
-  private final Provider<UserAccountDataStore> userAccountDataStoreProvider;
-
   public MomoAgentApplication_MembersInjector(
-      Provider<DatabaseInitializer> databaseInitializerProvider,
-      Provider<UserAccountDataStore> userAccountDataStoreProvider) {
+      Provider<DatabaseInitializer> databaseInitializerProvider) {
     this.databaseInitializerProvider = databaseInitializerProvider;
-    this.userAccountDataStoreProvider = userAccountDataStoreProvider;
   }
 
   public static MembersInjector<MomoAgentApplication> create(
-      Provider<DatabaseInitializer> databaseInitializerProvider,
-      Provider<UserAccountDataStore> userAccountDataStoreProvider) {
-    return new MomoAgentApplication_MembersInjector(databaseInitializerProvider, userAccountDataStoreProvider);
+      Provider<DatabaseInitializer> databaseInitializerProvider) {
+    return new MomoAgentApplication_MembersInjector(databaseInitializerProvider);
   }
 
   @Override
   public void injectMembers(MomoAgentApplication instance) {
     injectDatabaseInitializer(instance, databaseInitializerProvider.get());
-    injectUserAccountDataStore(instance, userAccountDataStoreProvider.get());
   }
 
   @InjectedFieldSignature("com.momokotle.agent.MomoAgentApplication.databaseInitializer")
   public static void injectDatabaseInitializer(MomoAgentApplication instance,
       DatabaseInitializer databaseInitializer) {
     instance.databaseInitializer = databaseInitializer;
-  }
-
-  @InjectedFieldSignature("com.momokotle.agent.MomoAgentApplication.userAccountDataStore")
-  public static void injectUserAccountDataStore(MomoAgentApplication instance,
-      UserAccountDataStore userAccountDataStore) {
-    instance.userAccountDataStore = userAccountDataStore;
   }
 }

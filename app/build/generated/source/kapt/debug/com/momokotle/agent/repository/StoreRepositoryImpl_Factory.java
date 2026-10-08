@@ -1,8 +1,6 @@
 package com.momokotle.agent.repository;
 
-import com.momokotle.agent.data.remote.MStorepayApiService;
-import com.momokotle.agent.database.dao.StoreOrderDao;
-import com.momokotle.agent.utils.NetworkMonitor;
+import com.momokotle.agent.domain.repository.OrderRepository;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -25,31 +23,23 @@ import javax.inject.Provider;
     "cast"
 })
 public final class StoreRepositoryImpl_Factory implements Factory<StoreRepositoryImpl> {
-  private final Provider<StoreOrderDao> storeOrderDaoProvider;
+  private final Provider<OrderRepository> orderRepositoryProvider;
 
-  private final Provider<MStorepayApiService> apiProvider;
-
-  private final Provider<NetworkMonitor> networkMonitorProvider;
-
-  public StoreRepositoryImpl_Factory(Provider<StoreOrderDao> storeOrderDaoProvider,
-      Provider<MStorepayApiService> apiProvider, Provider<NetworkMonitor> networkMonitorProvider) {
-    this.storeOrderDaoProvider = storeOrderDaoProvider;
-    this.apiProvider = apiProvider;
-    this.networkMonitorProvider = networkMonitorProvider;
+  public StoreRepositoryImpl_Factory(Provider<OrderRepository> orderRepositoryProvider) {
+    this.orderRepositoryProvider = orderRepositoryProvider;
   }
 
   @Override
   public StoreRepositoryImpl get() {
-    return newInstance(storeOrderDaoProvider.get(), apiProvider.get(), networkMonitorProvider.get());
+    return newInstance(orderRepositoryProvider.get());
   }
 
-  public static StoreRepositoryImpl_Factory create(Provider<StoreOrderDao> storeOrderDaoProvider,
-      Provider<MStorepayApiService> apiProvider, Provider<NetworkMonitor> networkMonitorProvider) {
-    return new StoreRepositoryImpl_Factory(storeOrderDaoProvider, apiProvider, networkMonitorProvider);
+  public static StoreRepositoryImpl_Factory create(
+      Provider<OrderRepository> orderRepositoryProvider) {
+    return new StoreRepositoryImpl_Factory(orderRepositoryProvider);
   }
 
-  public static StoreRepositoryImpl newInstance(StoreOrderDao storeOrderDao,
-      MStorepayApiService api, NetworkMonitor networkMonitor) {
-    return new StoreRepositoryImpl(storeOrderDao, api, networkMonitor);
+  public static StoreRepositoryImpl newInstance(OrderRepository orderRepository) {
+    return new StoreRepositoryImpl(orderRepository);
   }
 }

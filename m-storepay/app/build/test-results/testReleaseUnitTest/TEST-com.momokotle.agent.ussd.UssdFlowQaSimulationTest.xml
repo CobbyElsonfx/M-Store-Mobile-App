@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.momokotle.agent.ussd.UssdFlowQaSimulationTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-09-25T12:16:06" hostname="FRANCIS-ANDOH" time="0.059">
+  <properties/>
+  <testcase name="cashOut_followsAdminSteps_andConfirmsNumberBeforeAmount" classname="com.momokotle.agent.ussd.UssdFlowQaSimulationTest" time="0.041"/>
+  <testcase name="payToMerchant_followsAdminSteps_andConfirmsNumberBeforeAmount" classname="com.momokotle.agent.ussd.UssdFlowQaSimulationTest" time="0.001"/>
+  <testcase name="commission_followsAdminSteps_withoutPhoneOrAmount" classname="com.momokotle.agent.ussd.UssdFlowQaSimulationTest" time="0.001"/>
+  <testcase name="adminCustomCashOut_followsStoredStepsNotBuiltInDefaults" classname="com.momokotle.agent.ussd.UssdFlowQaSimulationTest" time="0.005"/>
+  <testcase name="cashOut_doesNotTypeAmountOnConfirmScreen" classname="com.momokotle.agent.ussd.UssdFlowQaSimulationTest" time="0.0"/>
+  <testcase name="cashIn_followsAdminSteps_andConfirmsNumberBeforeAmount" classname="com.momokotle.agent.ussd.UssdFlowQaSimulationTest" time="0.003"/>
+  <testcase name="balance_followsAdminSteps_withoutPhoneOrAmount" classname="com.momokotle.agent.ussd.UssdFlowQaSimulationTest" time="0.003"/>
+  <testcase name="evdJust4u_followsAdminSteps_withoutPhoneOrAmount" classname="com.momokotle.agent.ussd.UssdFlowQaSimulationTest" time="0.001"/>
+  <testcase name="transferAirtime_followsAdminSteps_andConfirmsNumberBeforeAmount" classname="com.momokotle.agent.ussd.UssdFlowQaSimulationTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

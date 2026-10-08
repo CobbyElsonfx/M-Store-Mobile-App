@@ -8,6 +8,7 @@ data class ApiResponse(
 data class OrderSubmitRequest(
     val orderId: String,
     val userId: String,
+    val agentName: String,
     val itemName: String,
     val quantity: Int,
     val totalAmount: Double,
@@ -19,5 +20,7 @@ data class FormSubmitRequest(
     val submissionId: String,
     val userId: String,
     val formType: String,
-    val formData: Map<String, String>
+    val formData: Map<String, String>,
+    val applicantName: String? = null,
+    val phoneNumber: String? = null
 )

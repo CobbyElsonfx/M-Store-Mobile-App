@@ -2,51 +2,89 @@ package com.momokotle.agent.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.momokotle.agent.ui.theme.AppDimens
+import java.io.File
 
 @Composable
 fun DocumentUploadField(
     label: String,
     instruction: String? = null,
     selectedFileName: String?,
+    localPath: String? = null,
+    errorText: String? = null,
+    isValid: Boolean = false,
+    showValidation: Boolean = false,
+    showImagePreview: Boolean = false,
     onPick: () -> Unit,
     onRemove: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(label, style = MaterialTheme.typography.labelLarge)
+    val showError = showValidation && !errorText.isNullOrBlank()
+    val showSuccess = showValidation && isValid && errorText.isNullOrBlank() && !selectedFileName.isNullOrBlank()
+
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        androidx.compose.foundation.layout.Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(label, style = MaterialTheme.typography.labelLarge)
+            if (showSuccess) {
+                Icon(
+                    Icons.Default.CheckCircle,
+                    contentDescription = "Valid",
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+        }
         instruction?.let {
             Text(
                 it,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-        ) {
+        AppUploadBox(
+            label = "",
+            instruction = null,
+            selectedFileName = selectedFileName,
+            onPick = onPick,
+            onRemove = onRemove
+        )
+        if (showImagePreview && localPath != null && File(localPath).exists()) {
+            AsyncImage(
+                model = File(localPath),
+                contentDescription = label,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .clip(RoundedCornerShape(AppDimens.InputRadius)),
+                contentScale = ContentScale.Crop
+            )
+        }
+        if (showError) {
             Text(
-                text = selectedFileName ?: "No file selected",
+                text = errorText.orEmpty(),
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.weight(1f)
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(start = 4.dp)
             )
-            if (selectedFileName != null) {
-                TextButton(onClick = onRemove) { Text("Remove") }
-            }
-        }
-        OutlinedButton(onClick = onPick, modifier = Modifier.fillMaxWidth()) {
-            Text(if (selectedFileName == null) "Upload" else "Replace")
         }
     }
 }
@@ -56,14 +94,15 @@ fun InternetRequiredBanner(message: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(24.dp),
+            .padding(AppDimens.CardPadding),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = message,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.error
+            color = MaterialTheme.colorScheme.error,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
         )
     }
 }

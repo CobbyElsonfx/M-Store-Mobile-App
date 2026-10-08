@@ -4,9 +4,9 @@ import android.content.Context;
 import androidx.datastore.core.DataStore;
 import androidx.datastore.preferences.core.Preferences;
 import com.momokotle.agent.models.UserAccount;
+import com.momokotle.agent.models.UserProfile;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import kotlinx.coroutines.flow.Flow;
-import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

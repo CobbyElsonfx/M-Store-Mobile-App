@@ -9,6 +9,11 @@ import com.momokotle.agent.database.dao.StoreOrderDao
 import com.momokotle.agent.database.dao.ProfitRuleDao
 import com.momokotle.agent.database.dao.SavedContactDao
 import com.momokotle.agent.database.dao.TransactionDao
+import com.momokotle.agent.database.dao.StoreProductDao
+import com.momokotle.agent.domain.repository.AccessibilityRepository
+import com.momokotle.agent.domain.repository.AuthRepository
+import com.momokotle.agent.domain.repository.OrderRepository
+import com.momokotle.agent.domain.repository.ProductRepository
 import com.momokotle.agent.domain.repository.CustomFlowRepository
 import com.momokotle.agent.domain.repository.FormSubmissionRepository
 import com.momokotle.agent.domain.repository.StoreRepository
@@ -16,8 +21,12 @@ import com.momokotle.agent.domain.repository.UserIdProvider
 import com.momokotle.agent.domain.repository.ProfitRuleRepository
 import com.momokotle.agent.domain.repository.SavedContactRepository
 import com.momokotle.agent.domain.repository.TransactionRepository
-import com.momokotle.agent.repository.CustomFlowRepositoryImpl
+import com.momokotle.agent.repository.AccessibilityRepositoryImpl
+import com.momokotle.agent.repository.AuthRepositoryImpl
 import com.momokotle.agent.repository.FormSubmissionRepositoryImpl
+import com.momokotle.agent.repository.OrderRepositoryImpl
+import com.momokotle.agent.repository.ProductRepositoryImpl
+import com.momokotle.agent.repository.CustomFlowRepositoryImpl
 import com.momokotle.agent.repository.StoreRepositoryImpl
 import com.momokotle.agent.repository.UserIdProviderImpl
 import com.momokotle.agent.repository.ProfitRuleRepositoryImpl
@@ -32,6 +41,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
@@ -64,6 +75,15 @@ object AppModule {
     fun provideFormSubmissionDao(db: AppDatabase): FormSubmissionDao = db.formSubmissionDao()
 
     @Provides
+    fun provideStoreProductDao(db: AppDatabase): StoreProductDao = db.storeProductDao()
+
+    @Provides
+    @Singleton
+    @ApplicationScope
+    fun provideApplicationScope(): CoroutineScope =
+        CoroutineScope(SupervisorJob())
+
+    @Provides
     @Singleton
     fun provideUssdDialHelper(@ApplicationContext context: Context): UssdDialHelper =
         UssdDialHelper(context)
@@ -72,11 +92,29 @@ object AppModule {
     @Singleton
     fun provideUssdAutomationEngine(logger: AutomationLogger): UssdAutomationEngine =
         UssdAutomationEngine(logger)
+
+    @Provides
+    @Singleton
+    fun provideAccessibilityRepository(
+        impl: AccessibilityRepositoryImpl
+    ): AccessibilityRepository = impl
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindProductRepository(impl: ProductRepositoryImpl): ProductRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindOrderRepository(impl: OrderRepositoryImpl): OrderRepository
 
     @Binds
     @Singleton

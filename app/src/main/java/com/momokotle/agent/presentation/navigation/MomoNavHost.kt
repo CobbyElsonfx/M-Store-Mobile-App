@@ -15,6 +15,7 @@ import com.momokotle.agent.presentation.profit.CashInSettingsScreen
 import com.momokotle.agent.presentation.profit.CashOutSettingsScreen
 import com.momokotle.agent.presentation.profit.ProfitCalculationScreen
 import com.momokotle.agent.presentation.custommenu.CustomFlowListScreen
+import com.momokotle.agent.presentation.custommenu.CustomMenuExecutionScreen
 import com.momokotle.agent.presentation.dashboard.DashboardScreen
 import com.momokotle.agent.presentation.referral.ReferralScreen
 import com.momokotle.agent.presentation.settings.AboutScreen
@@ -22,7 +23,10 @@ import com.momokotle.agent.presentation.settings.AccountProfileScreen
 import com.momokotle.agent.presentation.settings.AppSettingsScreen
 import com.momokotle.agent.presentation.settings.ContactSupportScreen
 import com.momokotle.agent.presentation.settings.SettingsHomeScreen
+import com.momokotle.agent.presentation.orders.MyOrdersScreen
+import com.momokotle.agent.presentation.orders.OrderDetailScreen
 import com.momokotle.agent.presentation.submissions.MySubmissionsScreen
+import com.momokotle.agent.presentation.submissions.SubmissionDetailScreen
 import com.momokotle.agent.presentation.transactions.TransactionsScreen
 
 @Composable
@@ -38,11 +42,16 @@ fun MomoNavHost(
         composable(Routes.HOME) { entry ->
             DashboardScreen(
                 onCustomMenu = { navController.navigate(Routes.CUSTOM_FLOWS) },
+                onRunCustomMenu = { flowId ->
+                    navController.navigate(Routes.customMenuExecution(flowId))
+                },
                 savedStateHandle = entry.savedStateHandle
             )
         }
         composable(Routes.STORE) {
-            StoreScreen()
+            StoreScreen(
+                onMyOrders = { navController.navigate(Routes.MY_ORDERS) }
+            )
         }
         composable(Routes.AGENT_REGISTRATION) {
             AgentRegistrationScreen(
@@ -61,7 +70,22 @@ fun MomoNavHost(
             TransactionsScreen(isRootTab = true)
         }
         composable(Routes.CUSTOM_FLOWS) {
-            CustomFlowListScreen(onBack = { navController.popBackStack() })
+            CustomFlowListScreen(
+                onBack = { navController.popBackStack() },
+                onRunFlow = { flowId ->
+                    navController.navigate(Routes.customMenuExecution(flowId))
+                }
+            )
+        }
+        composable(
+            route = Routes.CUSTOM_MENU_EXECUTION,
+            arguments = listOf(navArgument("flowId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val flowId = backStackEntry.arguments?.getLong("flowId") ?: 0L
+            CustomMenuExecutionScreen(
+                flowId = flowId,
+                onBack = { navController.popBackStack() }
+            )
         }
         composable(Routes.SETTINGS) {
             SettingsHomeScreen(
@@ -74,14 +98,48 @@ fun MomoNavHost(
                 onContactSupport = { navController.navigate(Routes.CONTACT_SUPPORT) },
                 onAbout = { navController.navigate(Routes.ABOUT) },
                 onReferral = { navController.navigate(Routes.REFERRAL) },
-                onMySubmissions = { navController.navigate(Routes.MY_SUBMISSIONS) }
+                onMySubmissions = { navController.navigate(Routes.MY_SUBMISSIONS) },
+                onMyOrders = { navController.navigate(Routes.MY_ORDERS) }
             )
         }
         composable(Routes.REFERRAL) {
             ReferralScreen(onBack = { navController.popBackStack() })
         }
         composable(Routes.MY_SUBMISSIONS) {
-            MySubmissionsScreen(onBack = { navController.popBackStack() })
+            MySubmissionsScreen(
+                onBack = { navController.popBackStack() },
+                onSubmissionClick = { id ->
+                    navController.navigate(Routes.submissionDetail(id))
+                }
+            )
+        }
+        composable(
+            route = Routes.SUBMISSION_DETAIL,
+            arguments = listOf(navArgument("submissionId") { type = NavType.StringType })
+        ) {
+            val submissionId = it.arguments?.getString("submissionId").orEmpty()
+            SubmissionDetailScreen(
+                submissionId = submissionId,
+                onBack = { navController.popBackStack() }
+            )
+        }
+        composable(Routes.MY_ORDERS) {
+            MyOrdersScreen(
+                onBack = { navController.popBackStack() },
+                onOrderClick = { orderId ->
+                    navController.navigate(Routes.orderDetail(orderId))
+                }
+            )
+        }
+        composable(
+            route = Routes.ORDER_DETAIL,
+            arguments = listOf(navArgument("orderId") { type = NavType.StringType })
+        ) {
+            val orderId = it.arguments?.getString("orderId").orEmpty()
+            OrderDetailScreen(
+                orderId = orderId,
+                onBack = { navController.popBackStack() }
+            )
         }
         composable(Routes.CONTACTS) {
             ContactsScreen(

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">M Storepay</string>
+    <string name="accessibility_service_label">M Storepay Automation</string>
+    <string name="accessibility_service_description">Automates MTN MoMo agent USSD menus (*171#) for Cash In, Cash Out, Pay to Merchant, and Transfer Airtime. PIN entry is never automated.</string>
+    <string name="support_email">support@mstorepay.com</string>
+    <string name="support_phone">+233 30 000 0000</string>
+    <string name="share_app_text">Try M Storepay — fast MoMo agent automation for Ghana.</string>
+    <string name="share_app_chooser">Share App</string>
+    <string name="about_title">About M Storepay</string>
+    <string name="privacy_policy_url">https://test.ihilengineeringltd.com/privacy</string>
+    <string name="privacy_policy_label">Privacy policy</string>
+    <string name="account_deletion_url">https://test.ihilengineeringltd.com/account-deletion</string>
+</resources>

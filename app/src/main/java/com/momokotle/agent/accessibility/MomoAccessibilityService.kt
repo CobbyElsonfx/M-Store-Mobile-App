@@ -8,6 +8,7 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.momokotle.agent.models.AutomationStatus
 import com.momokotle.agent.models.UssdActionType
+import com.momokotle.agent.domain.repository.AccessibilityRepository
 import com.momokotle.agent.domain.usecase.UpdateTransactionStatusUseCase
 import com.momokotle.agent.ussd.UssdAutomationEngine
 import com.momokotle.agent.utils.AutomationLogger
@@ -24,6 +25,7 @@ class MomoAccessibilityService : AccessibilityService() {
     @Inject lateinit var engine: UssdAutomationEngine
     @Inject lateinit var logger: AutomationLogger
     @Inject lateinit var updateTransactionStatusUseCase: UpdateTransactionStatusUseCase
+    @Inject lateinit var accessibilityRepository: AccessibilityRepository
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -33,6 +35,7 @@ class MomoAccessibilityService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+        accessibilityRepository.refresh()
         logger.log("Accessibility service connected")
     }
 
@@ -238,6 +241,7 @@ class MomoAccessibilityService : AccessibilityService() {
 
     override fun onInterrupt() {
         logger.log("Accessibility service interrupted")
+        accessibilityRepository.refresh()
         engine.cancel()
     }
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.momokotle.agent.data.remote.FormSubmissionMappingTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-25T12:16:05" hostname="FRANCIS-ANDOH" time="0.223">
+  <properties/>
+  <testcase name="jsonStringMapsCoercesNumbersAndIgnoresArrays" classname="com.momokotle.agent.data.remote.FormSubmissionMappingTest" time="0.136"/>
+  <testcase name="entityToDomainSkipsUnknownFormTypeAndCorruptJson" classname="com.momokotle.agent.data.remote.FormSubmissionMappingTest" time="0.042"/>
+  <testcase name="mapApplicationAcceptsMixedJsonFromLaravelList" classname="com.momokotle.agent.data.remote.FormSubmissionMappingTest" time="0.042"/>
+  <testcase name="entityToDomainSurvivesNumericAndArrayJson" classname="com.momokotle.agent.data.remote.FormSubmissionMappingTest" time="0.001"/>
+  <testcase name="fromDisplayNameMatchesLegacyAndCaseInsensitiveNames" classname="com.momokotle.agent.data.remote.FormSubmissionMappingTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

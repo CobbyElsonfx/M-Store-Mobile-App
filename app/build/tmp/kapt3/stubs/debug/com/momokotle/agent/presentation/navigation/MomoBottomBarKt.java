@@ -1,6 +1,7 @@
 package com.momokotle.agent.presentation.navigation;
 
 import androidx.compose.material.icons.Icons;
+import androidx.compose.material3.NavigationBarItemDefaults;
 import androidx.compose.runtime.Composable;
 import androidx.compose.ui.graphics.vector.ImageVector;
 import androidx.navigation.NavController;

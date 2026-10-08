@@ -21,6 +21,8 @@ import com.momokotle.agent.database.dao.SavedContactDao;
 import com.momokotle.agent.database.dao.SavedContactDao_Impl;
 import com.momokotle.agent.database.dao.StoreOrderDao;
 import com.momokotle.agent.database.dao.StoreOrderDao_Impl;
+import com.momokotle.agent.database.dao.StoreProductDao;
+import com.momokotle.agent.database.dao.StoreProductDao_Impl;
 import com.momokotle.agent.database.dao.TransactionDao;
 import com.momokotle.agent.database.dao.TransactionDao_Impl;
 import java.lang.Class;
@@ -51,10 +53,12 @@ public final class AppDatabase_Impl extends AppDatabase {
 
   private volatile FormSubmissionDao _formSubmissionDao;
 
+  private volatile StoreProductDao _storeProductDao;
+
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(7) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(10) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `transactions` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `amount` REAL NOT NULL, `profit` REAL NOT NULL, `phoneNumber` TEXT, `flowName` TEXT, `status` TEXT NOT NULL, `note` TEXT, `timestamp` INTEGER NOT NULL)");
@@ -63,10 +67,11 @@ public final class AppDatabase_Impl extends AppDatabase {
         db.execSQL("CREATE TABLE IF NOT EXISTS `profit_rules` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ruleType` TEXT NOT NULL, `amount` REAL NOT NULL, `profitPercentage` REAL NOT NULL)");
         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_profit_rules_ruleType_amount` ON `profit_rules` (`ruleType`, `amount`)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `custom_flows` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `ussdCode` TEXT NOT NULL, `step1` TEXT NOT NULL, `step2` TEXT NOT NULL, `step3` TEXT NOT NULL, `useDynamicPhone` INTEGER NOT NULL, `useDynamicAmount` INTEGER NOT NULL)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `store_orders` (`orderId` TEXT NOT NULL, `userId` TEXT NOT NULL, `itemName` TEXT NOT NULL, `quantity` INTEGER NOT NULL, `totalAmount` REAL NOT NULL, `phoneNumber` TEXT NOT NULL, `location` TEXT NOT NULL, `status` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`orderId`))");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `form_submissions` (`submissionId` TEXT NOT NULL, `userId` TEXT NOT NULL, `formType` TEXT NOT NULL, `formDataJson` TEXT NOT NULL, `documentsJson` TEXT NOT NULL, `status` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`submissionId`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `store_orders` (`orderId` TEXT NOT NULL, `userId` TEXT NOT NULL, `agentName` TEXT NOT NULL, `itemName` TEXT NOT NULL, `quantity` INTEGER NOT NULL, `totalAmount` REAL NOT NULL, `phoneNumber` TEXT NOT NULL, `location` TEXT NOT NULL, `status` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`orderId`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `form_submissions` (`submissionId` TEXT NOT NULL, `userId` TEXT NOT NULL, `applicantName` TEXT NOT NULL, `phoneNumber` TEXT NOT NULL, `formType` TEXT NOT NULL, `formDataJson` TEXT NOT NULL, `documentsJson` TEXT NOT NULL, `status` TEXT NOT NULL, `adminNote` TEXT, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`submissionId`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `store_products` (`productId` TEXT NOT NULL, `productName` TEXT NOT NULL, `productDescription` TEXT NOT NULL, `category` TEXT NOT NULL, `price` REAL NOT NULL, `stockQuantity` INTEGER NOT NULL, `productImageUrl` TEXT, `isAvailable` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`productId`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac4204fc70ee5f42232f5b644b70cf19')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e143b8bc07a84472927b6608da8b799e')");
       }
 
       @Override
@@ -77,6 +82,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         db.execSQL("DROP TABLE IF EXISTS `custom_flows`");
         db.execSQL("DROP TABLE IF EXISTS `store_orders`");
         db.execSQL("DROP TABLE IF EXISTS `form_submissions`");
+        db.execSQL("DROP TABLE IF EXISTS `store_products`");
         final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
         if (_callbacks != null) {
           for (RoomDatabase.Callback _callback : _callbacks) {
@@ -190,9 +196,10 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoCustomFlows + "\n"
                   + " Found:\n" + _existingCustomFlows);
         }
-        final HashMap<String, TableInfo.Column> _columnsStoreOrders = new HashMap<String, TableInfo.Column>(9);
+        final HashMap<String, TableInfo.Column> _columnsStoreOrders = new HashMap<String, TableInfo.Column>(11);
         _columnsStoreOrders.put("orderId", new TableInfo.Column("orderId", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsStoreOrders.put("userId", new TableInfo.Column("userId", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsStoreOrders.put("agentName", new TableInfo.Column("agentName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsStoreOrders.put("itemName", new TableInfo.Column("itemName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsStoreOrders.put("quantity", new TableInfo.Column("quantity", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsStoreOrders.put("totalAmount", new TableInfo.Column("totalAmount", "REAL", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
@@ -200,6 +207,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         _columnsStoreOrders.put("location", new TableInfo.Column("location", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsStoreOrders.put("status", new TableInfo.Column("status", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsStoreOrders.put("createdAt", new TableInfo.Column("createdAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsStoreOrders.put("updatedAt", new TableInfo.Column("updatedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysStoreOrders = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesStoreOrders = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoStoreOrders = new TableInfo("store_orders", _columnsStoreOrders, _foreignKeysStoreOrders, _indicesStoreOrders);
@@ -209,14 +217,18 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoStoreOrders + "\n"
                   + " Found:\n" + _existingStoreOrders);
         }
-        final HashMap<String, TableInfo.Column> _columnsFormSubmissions = new HashMap<String, TableInfo.Column>(7);
+        final HashMap<String, TableInfo.Column> _columnsFormSubmissions = new HashMap<String, TableInfo.Column>(11);
         _columnsFormSubmissions.put("submissionId", new TableInfo.Column("submissionId", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsFormSubmissions.put("userId", new TableInfo.Column("userId", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsFormSubmissions.put("applicantName", new TableInfo.Column("applicantName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsFormSubmissions.put("phoneNumber", new TableInfo.Column("phoneNumber", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsFormSubmissions.put("formType", new TableInfo.Column("formType", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsFormSubmissions.put("formDataJson", new TableInfo.Column("formDataJson", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsFormSubmissions.put("documentsJson", new TableInfo.Column("documentsJson", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsFormSubmissions.put("status", new TableInfo.Column("status", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsFormSubmissions.put("adminNote", new TableInfo.Column("adminNote", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsFormSubmissions.put("createdAt", new TableInfo.Column("createdAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsFormSubmissions.put("updatedAt", new TableInfo.Column("updatedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysFormSubmissions = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesFormSubmissions = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoFormSubmissions = new TableInfo("form_submissions", _columnsFormSubmissions, _foreignKeysFormSubmissions, _indicesFormSubmissions);
@@ -226,9 +238,28 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoFormSubmissions + "\n"
                   + " Found:\n" + _existingFormSubmissions);
         }
+        final HashMap<String, TableInfo.Column> _columnsStoreProducts = new HashMap<String, TableInfo.Column>(9);
+        _columnsStoreProducts.put("productId", new TableInfo.Column("productId", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsStoreProducts.put("productName", new TableInfo.Column("productName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsStoreProducts.put("productDescription", new TableInfo.Column("productDescription", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsStoreProducts.put("category", new TableInfo.Column("category", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsStoreProducts.put("price", new TableInfo.Column("price", "REAL", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsStoreProducts.put("stockQuantity", new TableInfo.Column("stockQuantity", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsStoreProducts.put("productImageUrl", new TableInfo.Column("productImageUrl", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsStoreProducts.put("isAvailable", new TableInfo.Column("isAvailable", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsStoreProducts.put("updatedAt", new TableInfo.Column("updatedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysStoreProducts = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesStoreProducts = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoStoreProducts = new TableInfo("store_products", _columnsStoreProducts, _foreignKeysStoreProducts, _indicesStoreProducts);
+        final TableInfo _existingStoreProducts = TableInfo.read(db, "store_products");
+        if (!_infoStoreProducts.equals(_existingStoreProducts)) {
+          return new RoomOpenHelper.ValidationResult(false, "store_products(com.momokotle.agent.database.entity.StoreProductEntity).\n"
+                  + " Expected:\n" + _infoStoreProducts + "\n"
+                  + " Found:\n" + _existingStoreProducts);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "ac4204fc70ee5f42232f5b644b70cf19", "e12c6532cbd19a04f4d3b90f409da621");
+    }, "e143b8bc07a84472927b6608da8b799e", "6c6bc655a7464c9e2f623381e80a9daf");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -239,7 +270,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "transactions","saved_contacts","profit_rules","custom_flows","store_orders","form_submissions");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "transactions","saved_contacts","profit_rules","custom_flows","store_orders","form_submissions","store_products");
   }
 
   @Override
@@ -254,6 +285,7 @@ public final class AppDatabase_Impl extends AppDatabase {
       _db.execSQL("DELETE FROM `custom_flows`");
       _db.execSQL("DELETE FROM `store_orders`");
       _db.execSQL("DELETE FROM `form_submissions`");
+      _db.execSQL("DELETE FROM `store_products`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
@@ -274,6 +306,7 @@ public final class AppDatabase_Impl extends AppDatabase {
     _typeConvertersMap.put(CustomFlowDao.class, CustomFlowDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(StoreOrderDao.class, StoreOrderDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(FormSubmissionDao.class, FormSubmissionDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(StoreProductDao.class, StoreProductDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -372,6 +405,20 @@ public final class AppDatabase_Impl extends AppDatabase {
           _formSubmissionDao = new FormSubmissionDao_Impl(this);
         }
         return _formSubmissionDao;
+      }
+    }
+  }
+
+  @Override
+  public StoreProductDao storeProductDao() {
+    if (_storeProductDao != null) {
+      return _storeProductDao;
+    } else {
+      synchronized(this) {
+        if(_storeProductDao == null) {
+          _storeProductDao = new StoreProductDao_Impl(this);
+        }
+        return _storeProductDao;
       }
     }
   }

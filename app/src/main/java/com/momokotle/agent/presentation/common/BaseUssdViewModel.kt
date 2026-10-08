@@ -3,13 +3,12 @@ package com.momokotle.agent.presentation.common
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.momokotle.agent.accessibility.MomoAccessibilityService
 import com.momokotle.agent.data.datastore.SettingsDataStore
+import com.momokotle.agent.domain.repository.AccessibilityRepository
 import com.momokotle.agent.domain.usecase.StartUssdFlowUseCase
 import com.momokotle.agent.models.AutomationStatus
 import com.momokotle.agent.ussd.UssdAutomationEngine
 import com.momokotle.agent.ussd.UssdFlow
-import com.momokotle.agent.utils.AccessibilityHelper
 import com.momokotle.agent.utils.PermissionHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +31,8 @@ open class BaseUssdViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     protected val startUssdFlowUseCase: StartUssdFlowUseCase,
     protected val automationEngine: UssdAutomationEngine,
-    settingsDataStore: SettingsDataStore
+    settingsDataStore: SettingsDataStore,
+    private val accessibilityRepository: AccessibilityRepository
 ) : ViewModel() {
 
     protected val _uiState = MutableStateFlow(UssdFlowUiState())
@@ -40,6 +40,11 @@ open class BaseUssdViewModel @Inject constructor(
 
     init {
         refreshPermissions()
+        viewModelScope.launch {
+            accessibilityRepository.accessibilityStatus.collect { enabled ->
+                _uiState.update { it.copy(accessibilityEnabled = enabled) }
+            }
+        }
         viewModelScope.launch {
             automationEngine.status.collect { status ->
                 _uiState.update { it.copy(automationStatus = status) }
@@ -66,19 +71,14 @@ open class BaseUssdViewModel @Inject constructor(
     }
 
     fun refreshPermissions() {
+        accessibilityRepository.refresh()
         _uiState.update {
-            it.copy(
-                accessibilityEnabled = AccessibilityHelper.isAccessibilityServiceEnabled(
-                    context,
-                    MomoAccessibilityService::class.java
-                ),
-                callPermissionGranted = PermissionHelper.hasCallPermission(context)
-            )
+            it.copy(callPermissionGranted = PermissionHelper.hasCallPermission(context))
         }
     }
 
     fun openAccessibilitySettings() {
-        AccessibilityHelper.openAccessibilitySettings(context)
+        accessibilityRepository.openAccessibilitySettings()
     }
 
     protected fun launchUssdFlow(

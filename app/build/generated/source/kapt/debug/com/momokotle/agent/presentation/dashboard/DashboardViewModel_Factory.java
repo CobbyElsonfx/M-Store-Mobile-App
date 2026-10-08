@@ -2,6 +2,8 @@ package com.momokotle.agent.presentation.dashboard;
 
 import android.content.Context;
 import com.momokotle.agent.data.datastore.SettingsDataStore;
+import com.momokotle.agent.domain.repository.AccessibilityRepository;
+import com.momokotle.agent.domain.repository.CustomFlowRepository;
 import com.momokotle.agent.domain.repository.SavedContactRepository;
 import com.momokotle.agent.domain.repository.TransactionRepository;
 import com.momokotle.agent.domain.usecase.RecordAttemptedTransactionUseCase;
@@ -38,9 +40,13 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
 
   private final Provider<SettingsDataStore> settingsDataStoreProvider;
 
+  private final Provider<AccessibilityRepository> accessibilityRepositoryProvider;
+
   private final Provider<RecordAttemptedTransactionUseCase> recordAttemptedTransactionUseCaseProvider;
 
   private final Provider<TransactionRepository> transactionRepositoryProvider;
+
+  private final Provider<CustomFlowRepository> customFlowRepositoryProvider;
 
   private final Provider<SavedContactRepository> savedContactRepositoryProvider;
 
@@ -50,42 +56,48 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
       Provider<StartUssdFlowUseCase> startUssdFlowUseCaseProvider,
       Provider<UssdAutomationEngine> automationEngineProvider,
       Provider<SettingsDataStore> settingsDataStoreProvider,
+      Provider<AccessibilityRepository> accessibilityRepositoryProvider,
       Provider<RecordAttemptedTransactionUseCase> recordAttemptedTransactionUseCaseProvider,
       Provider<TransactionRepository> transactionRepositoryProvider,
+      Provider<CustomFlowRepository> customFlowRepositoryProvider,
       Provider<SavedContactRepository> savedContactRepositoryProvider,
       Provider<SaveContactUseCase> saveContactUseCaseProvider) {
     this.contextProvider = contextProvider;
     this.startUssdFlowUseCaseProvider = startUssdFlowUseCaseProvider;
     this.automationEngineProvider = automationEngineProvider;
     this.settingsDataStoreProvider = settingsDataStoreProvider;
+    this.accessibilityRepositoryProvider = accessibilityRepositoryProvider;
     this.recordAttemptedTransactionUseCaseProvider = recordAttemptedTransactionUseCaseProvider;
     this.transactionRepositoryProvider = transactionRepositoryProvider;
+    this.customFlowRepositoryProvider = customFlowRepositoryProvider;
     this.savedContactRepositoryProvider = savedContactRepositoryProvider;
     this.saveContactUseCaseProvider = saveContactUseCaseProvider;
   }
 
   @Override
   public DashboardViewModel get() {
-    return newInstance(contextProvider.get(), startUssdFlowUseCaseProvider.get(), automationEngineProvider.get(), settingsDataStoreProvider.get(), recordAttemptedTransactionUseCaseProvider.get(), transactionRepositoryProvider.get(), savedContactRepositoryProvider.get(), saveContactUseCaseProvider.get());
+    return newInstance(contextProvider.get(), startUssdFlowUseCaseProvider.get(), automationEngineProvider.get(), settingsDataStoreProvider.get(), accessibilityRepositoryProvider.get(), recordAttemptedTransactionUseCaseProvider.get(), transactionRepositoryProvider.get(), customFlowRepositoryProvider.get(), savedContactRepositoryProvider.get(), saveContactUseCaseProvider.get());
   }
 
   public static DashboardViewModel_Factory create(Provider<Context> contextProvider,
       Provider<StartUssdFlowUseCase> startUssdFlowUseCaseProvider,
       Provider<UssdAutomationEngine> automationEngineProvider,
       Provider<SettingsDataStore> settingsDataStoreProvider,
+      Provider<AccessibilityRepository> accessibilityRepositoryProvider,
       Provider<RecordAttemptedTransactionUseCase> recordAttemptedTransactionUseCaseProvider,
       Provider<TransactionRepository> transactionRepositoryProvider,
+      Provider<CustomFlowRepository> customFlowRepositoryProvider,
       Provider<SavedContactRepository> savedContactRepositoryProvider,
       Provider<SaveContactUseCase> saveContactUseCaseProvider) {
-    return new DashboardViewModel_Factory(contextProvider, startUssdFlowUseCaseProvider, automationEngineProvider, settingsDataStoreProvider, recordAttemptedTransactionUseCaseProvider, transactionRepositoryProvider, savedContactRepositoryProvider, saveContactUseCaseProvider);
+    return new DashboardViewModel_Factory(contextProvider, startUssdFlowUseCaseProvider, automationEngineProvider, settingsDataStoreProvider, accessibilityRepositoryProvider, recordAttemptedTransactionUseCaseProvider, transactionRepositoryProvider, customFlowRepositoryProvider, savedContactRepositoryProvider, saveContactUseCaseProvider);
   }
 
   public static DashboardViewModel newInstance(Context context,
       StartUssdFlowUseCase startUssdFlowUseCase, UssdAutomationEngine automationEngine,
-      SettingsDataStore settingsDataStore,
+      SettingsDataStore settingsDataStore, AccessibilityRepository accessibilityRepository,
       RecordAttemptedTransactionUseCase recordAttemptedTransactionUseCase,
-      TransactionRepository transactionRepository, SavedContactRepository savedContactRepository,
-      SaveContactUseCase saveContactUseCase) {
-    return new DashboardViewModel(context, startUssdFlowUseCase, automationEngine, settingsDataStore, recordAttemptedTransactionUseCase, transactionRepository, savedContactRepository, saveContactUseCase);
+      TransactionRepository transactionRepository, CustomFlowRepository customFlowRepository,
+      SavedContactRepository savedContactRepository, SaveContactUseCase saveContactUseCase) {
+    return new DashboardViewModel(context, startUssdFlowUseCase, automationEngine, settingsDataStore, accessibilityRepository, recordAttemptedTransactionUseCase, transactionRepository, customFlowRepository, savedContactRepository, saveContactUseCase);
   }
 }

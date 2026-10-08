@@ -35,12 +35,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.momokotle.agent.BuildConfig
 import com.momokotle.agent.models.SimPurpose
 import com.momokotle.agent.models.SimSlot
 import com.momokotle.agent.models.UserAccount
+import com.momokotle.agent.ui.components.AppButton
+import com.momokotle.agent.ui.components.AppButtonStyle
+import com.momokotle.agent.ui.components.AppCard
+import com.momokotle.agent.ui.components.AppDetailRow
+import com.momokotle.agent.ui.components.AppFilterChip
+import com.momokotle.agent.ui.components.AppMenuListItem
+import com.momokotle.agent.ui.components.AppScaffold
+import com.momokotle.agent.ui.components.AppSectionHeader
 import com.momokotle.agent.ui.components.AgentActionButton
+import com.momokotle.agent.ui.theme.AppDimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,27 +65,26 @@ fun SettingsHomeScreen(
     onAbout: () -> Unit,
     onReferral: () -> Unit,
     onMySubmissions: () -> Unit,
+    onMyOrders: () -> Unit = {},
     viewModel: SettingsHomeViewModel = hiltViewModel()
 ) {
     val account by viewModel.account.collectAsStateWithLifecycle()
+    val isLoggingOut by viewModel.isLoggingOut.collectAsStateWithLifecycle()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Settings") })
-        }
-    ) { padding ->
+    AppScaffold(title = "Settings") { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
-                .padding(horizontal = 20.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .padding(horizontal = AppDimens.ScreenHorizontal, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.SectionSpacing)
         ) {
             ProfileCard(account = account)
 
             SettingsSection(title = "Your Profile") {
                 SettingsMenuItem(title = "Account Profile", onClick = onAccountProfile)
+                SettingsMenuItem(title = "My Orders", onClick = onMyOrders)
                 SettingsMenuItem(title = "My Submissions", onClick = onMySubmissions)
             }
 
@@ -99,20 +108,22 @@ fun SettingsHomeScreen(
                 )
                 SettingsMenuItem(title = "Share App", onClick = viewModel::shareApp)
             }
+
+            SettingsSection(title = "Account") {
+                SettingsMenuItem(
+                    title = if (isLoggingOut) "Logging out…" else "Logout",
+                    onClick = { if (!isLoggingOut) viewModel.logout() }
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun ProfileCard(account: UserAccount?) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
+    AppCard {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -158,15 +169,9 @@ private fun SettingsSection(
     content: @Composable () -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-        )
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column {
-                content()
-            }
+        AppSectionHeader(title = title)
+        AppCard {
+            Column { content() }
         }
     }
 }
@@ -176,21 +181,7 @@ private fun SettingsMenuItem(
     title: String,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(text = title, style = MaterialTheme.typography.bodyLarge)
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-        )
-    }
+    AppMenuListItem(title = title, onClick = onClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -201,29 +192,20 @@ fun AccountProfileScreen(
 ) {
     val account by viewModel.account.collectAsStateWithLifecycle()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Account Profile") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { padding ->
+    AppScaffold(title = "Account Profile", onBack = onBack) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(AppDimens.ScreenHorizontal),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.SectionSpacing)
         ) {
-            ProfileDetailRow(label = "Full name", value = account?.fullName)
-            ProfileDetailRow(label = "Email", value = account?.email)
-            account?.phoneNumber?.let {
-                ProfileDetailRow(label = "Phone number", value = it)
+            AppCard {
+                AppDetailRow(label = "Full name", value = account?.fullName)
+                AppDetailRow(label = "Email", value = account?.email)
+                AppDetailRow(label = "Phone number", value = account?.phoneNumber)
+                AppDetailRow(label = "Location", value = account?.location)
+                AppDetailRow(label = "Account status", value = account?.accountStatus)
             }
         }
     }
@@ -252,25 +234,19 @@ fun AppSettingsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("App Settings") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { padding ->
+    LifecycleResumeEffect(Unit) {
+        viewModel.refreshAccessibility()
+        onPauseOrDispose { }
+    }
+
+    AppScaffold(title = "App Settings", onBack = onBack) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .padding(AppDimens.ScreenHorizontal),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.SectionSpacing)
         ) {
             SettingsToggleRow(
                 label = "Vibrate on Touch",
@@ -289,9 +265,10 @@ fun AppSettingsScreen(
                     }
                 )
                 if (!uiState.accessibilityEnabled) {
-                    AgentActionButton(
+                    AppButton(
                         text = "Open Accessibility Settings",
-                        onClick = viewModel::openAccessibilitySettings
+                        onClick = viewModel::openAccessibilitySettings,
+                        style = AppButtonStyle.Accent
                     )
                 }
             }
@@ -355,18 +332,15 @@ private fun SimSlotSelector(
         Text(label, style = MaterialTheme.typography.bodyMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             SimSlot.entries.forEach { slot ->
-                FilterChip(
+                val label = when (slot) {
+                    SimSlot.SIM1 -> "SIM 1"
+                    SimSlot.SIM2 -> "SIM 2"
+                    SimSlot.NONE -> "None"
+                }
+                AppFilterChip(
+                    label = label,
                     selected = selected == slot,
-                    onClick = { onSelect(slot) },
-                    label = {
-                        Text(
-                            when (slot) {
-                                SimSlot.SIM1 -> "SIM 1"
-                                SimSlot.SIM2 -> "SIM 2"
-                                SimSlot.NONE -> "None"
-                            }
-                        )
-                    }
+                    onClick = { onSelect(slot) }
                 )
             }
         }
@@ -376,33 +350,24 @@ private fun SimSlotSelector(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactSupportScreen(onBack: () -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Contact Support") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { padding ->
+    AppScaffold(title = "Contact Support", onBack = onBack) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(AppDimens.ScreenHorizontal),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.SectionSpacing)
         ) {
-            ProfileDetailRow(
-                label = "Email",
-                value = stringResource(com.momokotle.agent.R.string.support_email)
-            )
-            ProfileDetailRow(
-                label = "Phone",
-                value = stringResource(com.momokotle.agent.R.string.support_phone)
-            )
+            AppCard {
+                AppDetailRow(
+                    label = "Email",
+                    value = stringResource(com.momokotle.agent.R.string.support_email)
+                )
+                AppDetailRow(
+                    label = "Phone",
+                    value = stringResource(com.momokotle.agent.R.string.support_phone)
+                )
+            }
         }
     }
 }
@@ -410,30 +375,24 @@ fun ContactSupportScreen(onBack: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(onBack: () -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(com.momokotle.agent.R.string.about_title)) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
+    AppScaffold(
+        title = stringResource(com.momokotle.agent.R.string.about_title),
+        onBack = onBack
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(AppDimens.ScreenHorizontal),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.SectionSpacing)
         ) {
-            ProfileDetailRow(
-                label = "App name",
-                value = stringResource(com.momokotle.agent.R.string.app_name)
-            )
-            ProfileDetailRow(label = "Version", value = BuildConfig.VERSION_NAME)
+            AppCard {
+                AppDetailRow(
+                    label = "App name",
+                    value = stringResource(com.momokotle.agent.R.string.app_name)
+                )
+                AppDetailRow(label = "Version", value = BuildConfig.VERSION_NAME)
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.momokotle.agent.presentation.settings;
 
 import android.content.Context;
 import com.momokotle.agent.data.datastore.UserAccountDataStore;
+import com.momokotle.agent.domain.usecase.LogoutUseCase;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -26,27 +27,30 @@ import javax.inject.Provider;
 public final class SettingsHomeViewModel_Factory implements Factory<SettingsHomeViewModel> {
   private final Provider<UserAccountDataStore> userAccountDataStoreProvider;
 
+  private final Provider<LogoutUseCase> logoutUseCaseProvider;
+
   private final Provider<Context> contextProvider;
 
   public SettingsHomeViewModel_Factory(Provider<UserAccountDataStore> userAccountDataStoreProvider,
-      Provider<Context> contextProvider) {
+      Provider<LogoutUseCase> logoutUseCaseProvider, Provider<Context> contextProvider) {
     this.userAccountDataStoreProvider = userAccountDataStoreProvider;
+    this.logoutUseCaseProvider = logoutUseCaseProvider;
     this.contextProvider = contextProvider;
   }
 
   @Override
   public SettingsHomeViewModel get() {
-    return newInstance(userAccountDataStoreProvider.get(), contextProvider.get());
+    return newInstance(userAccountDataStoreProvider.get(), logoutUseCaseProvider.get(), contextProvider.get());
   }
 
   public static SettingsHomeViewModel_Factory create(
       Provider<UserAccountDataStore> userAccountDataStoreProvider,
-      Provider<Context> contextProvider) {
-    return new SettingsHomeViewModel_Factory(userAccountDataStoreProvider, contextProvider);
+      Provider<LogoutUseCase> logoutUseCaseProvider, Provider<Context> contextProvider) {
+    return new SettingsHomeViewModel_Factory(userAccountDataStoreProvider, logoutUseCaseProvider, contextProvider);
   }
 
   public static SettingsHomeViewModel newInstance(UserAccountDataStore userAccountDataStore,
-      Context context) {
-    return new SettingsHomeViewModel(userAccountDataStore, context);
+      LogoutUseCase logoutUseCase, Context context) {
+    return new SettingsHomeViewModel(userAccountDataStore, logoutUseCase, context);
   }
 }

@@ -9,6 +9,13 @@ string about_title
 string accessibility_service_description
 string accessibility_service_label
 string app_name
+string firebase_database_url
+string gcm_defaultSenderId
+string google_api_key
+string google_app_id
+string google_crash_reporting_api_key
+string google_storage_bucket
+string project_id
 string share_app_chooser
 string share_app_text
 string support_email

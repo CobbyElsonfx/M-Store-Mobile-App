@@ -6,12 +6,14 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Store
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
@@ -31,6 +33,7 @@ private val destinations = listOf(
 
 private val subRoutes = setOf(
     Routes.CUSTOM_FLOWS,
+    "custom_menu_execution",
     Routes.CONTACTS,
     Routes.PROFIT_CALCULATION,
     Routes.CASH_IN_SETTINGS,
@@ -39,6 +42,11 @@ private val subRoutes = setOf(
     Routes.APP_SETTINGS,
     Routes.CONTACT_SUPPORT,
     Routes.ABOUT,
+    Routes.MY_SUBMISSIONS,
+    Routes.MY_ORDERS,
+    Routes.REFERRAL,
+    "order_detail",
+    "submission_detail",
     "agent_form"
 )
 
@@ -51,10 +59,14 @@ fun MomoBottomBar(navController: NavController) {
         return
     }
 
-    NavigationBar {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 0.dp
+    ) {
         destinations.forEach { destination ->
+            val selected = currentRoute == destination.route
             NavigationBarItem(
-                selected = currentRoute == destination.route,
+                selected = selected,
                 onClick = {
                     navController.navigate(destination.route) {
                         popUpTo(BottomNavItem.HOME) { saveState = true }
@@ -62,8 +74,15 @@ fun MomoBottomBar(navController: NavController) {
                         restoreState = true
                     }
                 },
-                icon = { Icon(destination.icon, contentDescription = destination.label) },
-                label = { Text(destination.label) }
+                icon = { androidx.compose.material3.Icon(destination.icon, contentDescription = destination.label) },
+                label = { Text(destination.label, style = MaterialTheme.typography.labelSmall) },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.secondary,
+                    selectedTextColor = MaterialTheme.colorScheme.onSurface,
+                    indicatorColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.18f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             )
         }
     }

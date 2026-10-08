@@ -1,7 +1,7 @@
 package com.momokotle.agent.presentation.settings;
 
-import android.content.Context;
 import com.momokotle.agent.data.datastore.SettingsDataStore;
+import com.momokotle.agent.domain.repository.AccessibilityRepository;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -10,7 +10,7 @@ import javax.annotation.processing.Generated;
 import javax.inject.Provider;
 
 @ScopeMetadata
-@QualifierMetadata("dagger.hilt.android.qualifiers.ApplicationContext")
+@QualifierMetadata
 @DaggerGenerated
 @Generated(
     value = "dagger.internal.codegen.ComponentProcessor",
@@ -24,28 +24,29 @@ import javax.inject.Provider;
     "cast"
 })
 public final class AppSettingsViewModel_Factory implements Factory<AppSettingsViewModel> {
-  private final Provider<Context> contextProvider;
-
   private final Provider<SettingsDataStore> settingsDataStoreProvider;
 
-  public AppSettingsViewModel_Factory(Provider<Context> contextProvider,
-      Provider<SettingsDataStore> settingsDataStoreProvider) {
-    this.contextProvider = contextProvider;
+  private final Provider<AccessibilityRepository> accessibilityRepositoryProvider;
+
+  public AppSettingsViewModel_Factory(Provider<SettingsDataStore> settingsDataStoreProvider,
+      Provider<AccessibilityRepository> accessibilityRepositoryProvider) {
     this.settingsDataStoreProvider = settingsDataStoreProvider;
+    this.accessibilityRepositoryProvider = accessibilityRepositoryProvider;
   }
 
   @Override
   public AppSettingsViewModel get() {
-    return newInstance(contextProvider.get(), settingsDataStoreProvider.get());
+    return newInstance(settingsDataStoreProvider.get(), accessibilityRepositoryProvider.get());
   }
 
-  public static AppSettingsViewModel_Factory create(Provider<Context> contextProvider,
-      Provider<SettingsDataStore> settingsDataStoreProvider) {
-    return new AppSettingsViewModel_Factory(contextProvider, settingsDataStoreProvider);
+  public static AppSettingsViewModel_Factory create(
+      Provider<SettingsDataStore> settingsDataStoreProvider,
+      Provider<AccessibilityRepository> accessibilityRepositoryProvider) {
+    return new AppSettingsViewModel_Factory(settingsDataStoreProvider, accessibilityRepositoryProvider);
   }
 
-  public static AppSettingsViewModel newInstance(Context context,
-      SettingsDataStore settingsDataStore) {
-    return new AppSettingsViewModel(context, settingsDataStore);
+  public static AppSettingsViewModel newInstance(SettingsDataStore settingsDataStore,
+      AccessibilityRepository accessibilityRepository) {
+    return new AppSettingsViewModel(settingsDataStore, accessibilityRepository);
   }
 }

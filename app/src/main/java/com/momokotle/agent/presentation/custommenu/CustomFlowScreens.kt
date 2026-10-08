@@ -1,8 +1,5 @@
 package com.momokotle.agent.presentation.custommenu
 
-import android.Manifest
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,18 +10,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,17 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.momokotle.agent.models.AutomationStatus
 import com.momokotle.agent.models.CustomFlow
+import com.momokotle.agent.ui.components.AppCard
+import com.momokotle.agent.ui.components.AppInfoBanner
+import com.momokotle.agent.ui.components.AppScaffold
 import com.momokotle.agent.ui.components.AgentActionButton
 import com.momokotle.agent.ui.components.AgentTextField
-import com.momokotle.agent.ui.components.ErrorBanner
-import com.momokotle.agent.ui.components.InfoBanner
+import com.momokotle.agent.ui.theme.AppDimens
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomFlowListScreen(
     onBack: () -> Unit,
+    onRunFlow: (Long) -> Unit,
     viewModel: CustomFlowViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -50,22 +40,7 @@ fun CustomFlowListScreen(
     val isEditing by viewModel.isEditing.collectAsStateWithLifecycle()
     val flows by viewModel.customFlows.collectAsStateWithLifecycle()
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { viewModel.refreshPermissions() }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Custom Menu") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { padding ->
+    AppScaffold(title = "Custom Menu", onBack = onBack) { padding ->
         if (isEditing) {
             CustomFlowEditForm(
                 formState = formState,
@@ -85,56 +60,36 @@ fun CustomFlowListScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                    .padding(horizontal = AppDimens.ScreenHorizontal, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(AppDimens.ListItemSpacing)
             ) {
                 Text(
-                    text = "Phone & amount for dynamic steps (phone, amount)",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                AgentTextField(
-                    value = formState.phoneNumber,
-                    onValueChange = viewModel::onPhoneChange,
-                    label = "Phone Number"
-                )
-                AgentTextField(
-                    value = formState.amount,
-                    onValueChange = viewModel::onAmountChange,
-                    label = "Amount (GHS)"
+                    text = "Add, edit, or run your custom USSD menus.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                uiState.errorMessage?.let { ErrorBanner(it) }
-                uiState.infoMessage?.let { InfoBanner(it) }
+                uiState.infoMessage?.let { AppInfoBanner(it) }
 
                 AgentActionButton(text = "Add Custom Flow", onClick = viewModel::startNewFlow)
 
                 if (flows.isEmpty()) {
-                    Text("No custom flows yet", modifier = Modifier.padding(top = 16.dp))
+                    Text(
+                        text = "No custom flows yet",
+                        modifier = Modifier.padding(top = 16.dp),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 } else {
                     LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         items(flows, key = { it.id }) { flow ->
                             CustomFlowCard(
                                 flow = flow,
-                                onRun = {
-                                    if (!uiState.callPermissionGranted) {
-                                        permissionLauncher.launch(Manifest.permission.CALL_PHONE)
-                                    } else if (!uiState.accessibilityEnabled) {
-                                        viewModel.openAccessibilitySettings()
-                                    } else {
-                                        viewModel.runFlow(flow)
-                                    }
-                                },
+                                onRun = { onRunFlow(flow.id) },
                                 onEdit = { viewModel.editFlow(flow) },
                                 onDelete = { viewModel.deleteFlow(flow.id) }
                             )
                         }
                     }
-                }
-
-                val running = uiState.automationStatus == AutomationStatus.RUNNING ||
-                    uiState.automationStatus == AutomationStatus.WAITING_FOR_USER
-                if (running) {
-                    AgentActionButton(text = "Cancel Automation", onClick = viewModel::cancelAutomation)
                 }
             }
         }
@@ -190,10 +145,14 @@ private fun CustomFlowCard(
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    AppCard {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(flow.name, style = MaterialTheme.typography.titleMedium)
-            Text("${flow.ussdCode} → ${flow.step1}, ${flow.step2}, ${flow.step3}".trimEnd(',', ' '))
+            Text(
+                "${flow.ussdCode} → ${flow.step1}, ${flow.step2}, ${flow.step3}".trimEnd(',', ' '),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween

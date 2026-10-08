@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.momokotle.agent.ussd.UssdFlowContextAmountTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-25T12:16:06" hostname="FRANCIS-ANDOH" time="0.004">
+  <properties/>
+  <testcase name="resolve_amount_doesNotStripDecimalLikeDigitOnlyFilter" classname="com.momokotle.agent.ussd.UssdFlowContextAmountTest" time="0.0"/>
+  <testcase name="dashboardStyle_formattedAmount_survivesResolve" classname="com.momokotle.agent.ussd.UssdFlowContextAmountTest" time="0.002"/>
+  <testcase name="resolve_amount_preservesDecimalPoint" classname="com.momokotle.agent.ussd.UssdFlowContextAmountTest" time="0.0"/>
+  <testcase name="resolve_embeddedAmountInDirectUssdCode" classname="com.momokotle.agent.ussd.UssdFlowContextAmountTest" time="0.0"/>
+  <testcase name="resolve_phone_stillDigitNormalized" classname="com.momokotle.agent.ussd.UssdFlowContextAmountTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

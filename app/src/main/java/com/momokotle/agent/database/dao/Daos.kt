@@ -8,6 +8,7 @@ import androidx.room.Update
 import com.momokotle.agent.database.entity.CustomFlowEntity
 import com.momokotle.agent.database.entity.FormSubmissionEntity
 import com.momokotle.agent.database.entity.StoreOrderEntity
+import com.momokotle.agent.database.entity.StoreProductEntity
 import com.momokotle.agent.database.entity.ProfitRuleEntity
 import com.momokotle.agent.database.entity.SavedContactEntity
 import com.momokotle.agent.database.entity.TransactionEntity
@@ -82,27 +83,66 @@ interface ProfitRuleDao {
 }
 
 @Dao
+interface StoreProductDao {
+    @Query("SELECT * FROM store_products ORDER BY productName ASC")
+    fun observeAll(): Flow<List<StoreProductEntity>>
+
+    @Query(
+        """
+        SELECT * FROM store_products
+        WHERE category = :category AND isAvailable = 1
+        ORDER BY productName ASC
+        """
+    )
+    fun observeByCategory(category: String): Flow<List<StoreProductEntity>>
+
+    @Query("SELECT * FROM store_products WHERE productId = :productId LIMIT 1")
+    suspend fun getById(productId: String): StoreProductEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(products: List<StoreProductEntity>)
+
+    @Query("DELETE FROM store_products")
+    suspend fun deleteAll()
+}
+
+@Dao
 interface StoreOrderDao {
     @Query("SELECT * FROM store_orders ORDER BY createdAt DESC")
     fun observeAll(): Flow<List<StoreOrderEntity>>
 
+    @Query("SELECT * FROM store_orders WHERE userId = :userId ORDER BY createdAt DESC")
+    fun observeByUserId(userId: String): Flow<List<StoreOrderEntity>>
+
+    @Query("SELECT * FROM store_orders WHERE orderId = :orderId LIMIT 1")
+    suspend fun getById(orderId: String): StoreOrderEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(order: StoreOrderEntity)
 
-    @Query("UPDATE store_orders SET status = :status WHERE orderId = :orderId")
-    suspend fun updateStatus(orderId: String, status: String)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(orders: List<StoreOrderEntity>)
+
+    @Query("DELETE FROM store_orders WHERE userId = :userId")
+    suspend fun deleteByUserId(userId: String)
 }
 
 @Dao
 interface FormSubmissionDao {
-    @Query("SELECT * FROM form_submissions ORDER BY createdAt DESC")
-    fun observeAll(): Flow<List<FormSubmissionEntity>>
+    @Query("SELECT * FROM form_submissions WHERE userId = :userId ORDER BY createdAt DESC")
+    fun observeByUserId(userId: String): Flow<List<FormSubmissionEntity>>
+
+    @Query("SELECT * FROM form_submissions WHERE submissionId = :submissionId LIMIT 1")
+    suspend fun getById(submissionId: String): FormSubmissionEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(submission: FormSubmissionEntity)
 
-    @Query("UPDATE form_submissions SET status = :status WHERE submissionId = :submissionId")
-    suspend fun updateStatus(submissionId: String, status: String)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(submissions: List<FormSubmissionEntity>)
+
+    @Query("DELETE FROM form_submissions WHERE userId = :userId")
+    suspend fun deleteByUserId(userId: String)
 }
 
 @Dao

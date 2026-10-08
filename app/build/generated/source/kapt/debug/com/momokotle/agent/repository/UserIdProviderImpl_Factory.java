@@ -1,6 +1,6 @@
 package com.momokotle.agent.repository;
 
-import com.momokotle.agent.data.datastore.UserAccountDataStore;
+import com.momokotle.agent.domain.repository.AuthRepository;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -23,23 +23,22 @@ import javax.inject.Provider;
     "cast"
 })
 public final class UserIdProviderImpl_Factory implements Factory<UserIdProviderImpl> {
-  private final Provider<UserAccountDataStore> userAccountDataStoreProvider;
+  private final Provider<AuthRepository> authRepositoryProvider;
 
-  public UserIdProviderImpl_Factory(Provider<UserAccountDataStore> userAccountDataStoreProvider) {
-    this.userAccountDataStoreProvider = userAccountDataStoreProvider;
+  public UserIdProviderImpl_Factory(Provider<AuthRepository> authRepositoryProvider) {
+    this.authRepositoryProvider = authRepositoryProvider;
   }
 
   @Override
   public UserIdProviderImpl get() {
-    return newInstance(userAccountDataStoreProvider.get());
+    return newInstance(authRepositoryProvider.get());
   }
 
-  public static UserIdProviderImpl_Factory create(
-      Provider<UserAccountDataStore> userAccountDataStoreProvider) {
-    return new UserIdProviderImpl_Factory(userAccountDataStoreProvider);
+  public static UserIdProviderImpl_Factory create(Provider<AuthRepository> authRepositoryProvider) {
+    return new UserIdProviderImpl_Factory(authRepositoryProvider);
   }
 
-  public static UserIdProviderImpl newInstance(UserAccountDataStore userAccountDataStore) {
-    return new UserIdProviderImpl(userAccountDataStore);
+  public static UserIdProviderImpl newInstance(AuthRepository authRepository) {
+    return new UserIdProviderImpl(authRepository);
   }
 }

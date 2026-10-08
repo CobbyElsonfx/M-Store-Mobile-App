@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.lifecycle.ViewModel;
 import com.momokotle.agent.data.datastore.UserAccountDataStore;
+import com.momokotle.agent.domain.usecase.LogoutUseCase;
 import com.momokotle.agent.models.UserAccount;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import dagger.hilt.android.qualifiers.ApplicationContext;

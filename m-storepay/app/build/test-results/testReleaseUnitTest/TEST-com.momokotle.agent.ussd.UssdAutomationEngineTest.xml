@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.momokotle.agent.ussd.UssdAutomationEngineTest" tests="19" skipped="0" failures="0" errors="0" timestamp="2026-09-25T12:16:06" hostname="FRANCIS-ANDOH" time="0.116">
+  <properties/>
+  <testcase name="newSession_ignoresStaleSessionId" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.047"/>
+  <testcase name="pinWait_releasesSessionAfterTimeoutWithoutClaimingSuccess" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.02"/>
+  <testcase name="confirmNumber_isNotSkippedWhenDialogLooksTheSame" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.012"/>
+  <testcase name="currentStep_returnsNullWhenIdle" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.001"/>
+  <testcase name="stuckOnSameDialog_failsWhenStepTimesOut" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.001"/>
+  <testcase name="pinWait_stillWaitsBeforeTimeout" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.0"/>
+  <testcase name="fatalError_terminatesFailed" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.0"/>
+  <testcase name="pinPrompt_stopsAutomationForManualEntry" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.001"/>
+  <testcase name="cashInFlow_includesPhoneConfirmBeforeAmount" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.0"/>
+  <testcase name="nextDialog_usesCurrentStepValueNotHintMatching" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.001"/>
+  <testcase name="pinWait_succeedsWhenSuccessKeywordsAppear" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.003"/>
+  <testcase name="sameDialogAfterSubmit_waitsInsteadOfDoubleTyping" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.001"/>
+  <testcase name="sessionEnded_allowsImmediateRestart" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.001"/>
+  <testcase name="typedNumber_runsLinearlyThroughCashInUntilPin" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.002"/>
+  <testcase name="dialogAbsence_afterSeenDialog_endsSessionWithoutSuccess" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.001"/>
+  <testcase name="savedContactNumber_isNormalizedAndFilled" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.002"/>
+  <testcase name="advanceStep_reachesPinAfterAllCashInSteps" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.0"/>
+  <testcase name="missingPhone_failsImmediately" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.0"/>
+  <testcase name="everyAdminStoredFlow_runsEachStepInOrder" classname="com.momokotle.agent.ussd.UssdAutomationEngineTest" time="0.019"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

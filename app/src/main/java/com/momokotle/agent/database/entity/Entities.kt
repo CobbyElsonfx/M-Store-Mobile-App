@@ -7,8 +7,8 @@ import com.momokotle.agent.models.ContactNetwork
 import com.momokotle.agent.models.AgentFormType
 import com.momokotle.agent.models.CustomFlow
 import com.momokotle.agent.models.FormSubmission
-import com.momokotle.agent.models.FormSubmissionStatus
-import com.momokotle.agent.models.OrderStatus
+import com.momokotle.agent.models.FormSubmissionStatusMapper
+import com.momokotle.agent.models.OrderStatusMapper
 import com.momokotle.agent.models.StoreOrder
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -60,24 +60,30 @@ data class ProfitRuleEntity(
 data class StoreOrderEntity(
     @PrimaryKey val orderId: String,
     val userId: String,
+    val agentName: String,
     val itemName: String,
     val quantity: Int,
     val totalAmount: Double,
     val phoneNumber: String,
     val location: String,
     val status: String,
-    val createdAt: Long
+    val createdAt: Long,
+    val updatedAt: Long
 )
 
 @Entity(tableName = "form_submissions")
 data class FormSubmissionEntity(
     @PrimaryKey val submissionId: String,
     val userId: String,
+    val applicantName: String,
+    val phoneNumber: String,
     val formType: String,
     val formDataJson: String,
     val documentsJson: String,
     val status: String,
-    val createdAt: Long
+    val adminNote: String?,
+    val createdAt: Long,
+    val updatedAt: Long
 )
 
 @Entity(tableName = "custom_flows")
@@ -177,43 +183,60 @@ private val gson = Gson()
 fun StoreOrderEntity.toDomain() = StoreOrder(
     orderId = orderId,
     userId = userId,
+    agentName = agentName,
     itemName = itemName,
     quantity = quantity,
     totalAmount = totalAmount,
     phoneNumber = phoneNumber,
     location = location,
-    status = OrderStatus.valueOf(status),
-    createdAt = createdAt
+    status = OrderStatusMapper.fromStorage(status),
+    createdAt = createdAt,
+    updatedAt = updatedAt
 )
 
 fun StoreOrder.toEntity() = StoreOrderEntity(
     orderId = orderId,
     userId = userId,
+    agentName = agentName,
     itemName = itemName,
     quantity = quantity,
     totalAmount = totalAmount,
     phoneNumber = phoneNumber,
     location = location,
-    status = status.name,
-    createdAt = createdAt
+    status = OrderStatusMapper.toStorageValue(status),
+    createdAt = createdAt,
+    updatedAt = updatedAt
 )
 
-fun FormSubmissionEntity.toDomain() = FormSubmission(
-    submissionId = submissionId,
-    userId = userId,
-    formType = AgentFormType.valueOf(formType),
-    formData = gson.fromJson(formDataJson, object : TypeToken<Map<String, String>>() {}.type),
-    uploadedDocuments = gson.fromJson(documentsJson, object : TypeToken<Map<String, String>>() {}.type),
-    status = FormSubmissionStatus.valueOf(status),
-    createdAt = createdAt
-)
+fun FormSubmissionEntity.toDomain(): FormSubmission? {
+    val type = AgentFormType.fromDisplayName(formType)
+        ?: runCatching { AgentFormType.valueOf(formType) }.getOrNull()
+        ?: return null
+    return FormSubmission(
+        submissionId = submissionId,
+        userId = userId,
+        formType = type,
+        applicantName = applicantName,
+        phoneNumber = phoneNumber,
+        formData = gson.fromJson(formDataJson, object : TypeToken<Map<String, String>>() {}.type),
+        uploadedDocuments = gson.fromJson(documentsJson, object : TypeToken<Map<String, String>>() {}.type),
+        status = FormSubmissionStatusMapper.fromStorage(status),
+        adminNote = adminNote?.takeIf { it.isNotBlank() },
+        createdAt = createdAt,
+        updatedAt = updatedAt
+    )
+}
 
 fun FormSubmission.toEntity() = FormSubmissionEntity(
     submissionId = submissionId,
     userId = userId,
+    applicantName = applicantName,
+    phoneNumber = phoneNumber,
     formType = formType.name,
     formDataJson = gson.toJson(formData),
     documentsJson = gson.toJson(uploadedDocuments),
-    status = status.name,
-    createdAt = createdAt
+    status = FormSubmissionStatusMapper.toStorageValue(status),
+    adminNote = adminNote,
+    createdAt = createdAt,
+    updatedAt = updatedAt
 )

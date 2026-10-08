@@ -4,6 +4,7 @@ import android.os.Bundle;
 import androidx.activity.ComponentActivity;
 import androidx.compose.ui.Modifier;
 import com.momokotle.agent.data.datastore.SettingsDataStore;
+import com.momokotle.agent.presentation.auth.SessionViewModel;
 import dagger.hilt.android.AndroidEntryPoint;
 import javax.inject.Inject;
 

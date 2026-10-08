@@ -1,7 +1,8 @@
 package com.momokotle.agent.presentation.store;
 
+import com.momokotle.agent.domain.repository.ProductRepository;
 import com.momokotle.agent.domain.repository.StoreRepository;
-import com.momokotle.agent.domain.repository.UserIdProvider;
+import com.momokotle.agent.domain.usecase.GetAuthenticatedUserUseCase;
 import com.momokotle.agent.utils.NetworkMonitor;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
@@ -27,29 +28,37 @@ import javax.inject.Provider;
 public final class StoreViewModel_Factory implements Factory<StoreViewModel> {
   private final Provider<NetworkMonitor> networkMonitorProvider;
 
+  private final Provider<ProductRepository> productRepositoryProvider;
+
   private final Provider<StoreRepository> storeRepositoryProvider;
 
-  private final Provider<UserIdProvider> userIdProvider;
+  private final Provider<GetAuthenticatedUserUseCase> getAuthenticatedUserUseCaseProvider;
 
   public StoreViewModel_Factory(Provider<NetworkMonitor> networkMonitorProvider,
-      Provider<StoreRepository> storeRepositoryProvider, Provider<UserIdProvider> userIdProvider) {
+      Provider<ProductRepository> productRepositoryProvider,
+      Provider<StoreRepository> storeRepositoryProvider,
+      Provider<GetAuthenticatedUserUseCase> getAuthenticatedUserUseCaseProvider) {
     this.networkMonitorProvider = networkMonitorProvider;
+    this.productRepositoryProvider = productRepositoryProvider;
     this.storeRepositoryProvider = storeRepositoryProvider;
-    this.userIdProvider = userIdProvider;
+    this.getAuthenticatedUserUseCaseProvider = getAuthenticatedUserUseCaseProvider;
   }
 
   @Override
   public StoreViewModel get() {
-    return newInstance(networkMonitorProvider.get(), storeRepositoryProvider.get(), userIdProvider.get());
+    return newInstance(networkMonitorProvider.get(), productRepositoryProvider.get(), storeRepositoryProvider.get(), getAuthenticatedUserUseCaseProvider.get());
   }
 
   public static StoreViewModel_Factory create(Provider<NetworkMonitor> networkMonitorProvider,
-      Provider<StoreRepository> storeRepositoryProvider, Provider<UserIdProvider> userIdProvider) {
-    return new StoreViewModel_Factory(networkMonitorProvider, storeRepositoryProvider, userIdProvider);
+      Provider<ProductRepository> productRepositoryProvider,
+      Provider<StoreRepository> storeRepositoryProvider,
+      Provider<GetAuthenticatedUserUseCase> getAuthenticatedUserUseCaseProvider) {
+    return new StoreViewModel_Factory(networkMonitorProvider, productRepositoryProvider, storeRepositoryProvider, getAuthenticatedUserUseCaseProvider);
   }
 
   public static StoreViewModel newInstance(NetworkMonitor networkMonitor,
-      StoreRepository storeRepository, UserIdProvider userIdProvider) {
-    return new StoreViewModel(networkMonitor, storeRepository, userIdProvider);
+      ProductRepository productRepository, StoreRepository storeRepository,
+      GetAuthenticatedUserUseCase getAuthenticatedUserUseCase) {
+    return new StoreViewModel(networkMonitor, productRepository, storeRepository, getAuthenticatedUserUseCase);
   }
 }

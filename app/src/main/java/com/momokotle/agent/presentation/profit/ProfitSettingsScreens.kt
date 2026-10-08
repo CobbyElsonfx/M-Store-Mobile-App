@@ -32,7 +32,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.momokotle.agent.models.ProfitCalculationMode
 import com.momokotle.agent.models.ProfitRule
+import com.momokotle.agent.ui.components.AppButton
+import com.momokotle.agent.ui.components.AppButtonStyle
+import com.momokotle.agent.ui.components.AppCard
+import com.momokotle.agent.ui.components.AppErrorBanner
+import com.momokotle.agent.ui.components.AppFilterChip
+import com.momokotle.agent.ui.components.AppInfoBanner
+import com.momokotle.agent.ui.components.AppScaffold
+import com.momokotle.agent.ui.components.AppTextField
 import com.momokotle.agent.ui.components.AgentActionButton
+import com.momokotle.agent.ui.theme.AppDimens
 import com.momokotle.agent.utils.AmountFormatter
 import com.momokotle.agent.utils.PercentFormatter
 import com.momokotle.agent.ui.components.AgentTextField
@@ -47,25 +56,14 @@ fun ProfitCalculationScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Calculation") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { padding ->
+    AppScaffold(title = "Profit Calculator", onBack = onBack) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
-                .padding(horizontal = 20.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .padding(horizontal = AppDimens.ScreenHorizontal, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.SectionSpacing)
         ) {
             ProfitCalculatorSection(
                 title = "Cash In Calculator",
@@ -96,14 +94,8 @@ private fun ProfitCalculatorSection(
     onCalculate: () -> Unit,
     result: com.momokotle.agent.models.ProfitResult?
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
+    AppCard(modifier = Modifier.fillMaxWidth()) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             Text(
                 text = "Mode: $modeLabel",
@@ -172,28 +164,17 @@ private fun ProfitTypeSettingsScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(title) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { padding ->
+    AppScaffold(title = title, onBack = onBack) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
-                .padding(horizontal = 20.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(horizontal = AppDimens.ScreenHorizontal, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.SectionSpacing)
         ) {
-            uiState.message?.let { InfoBanner(message = it) }
-            uiState.errorMessage?.let { ErrorBanner(message = it) }
+            uiState.message?.let { AppInfoBanner(it) }
+            uiState.errorMessage?.let { AppErrorBanner(it) }
 
             CalculationModeSection(
                 selectedMode = uiState.calculationMode,
@@ -228,10 +209,10 @@ private fun CalculationModeSection(
     SettingsBlock(title = "Calculation Mode") {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ProfitCalculationMode.entries.forEach { mode ->
-                FilterChip(
+                AppFilterChip(
+                    label = mode.displayName,
                     selected = selectedMode == mode,
-                    onClick = { onModeSelected(mode) },
-                    label = { Text(mode.displayName) }
+                    onClick = { onModeSelected(mode) }
                 )
             }
         }
@@ -333,14 +314,9 @@ private fun SettingsBlock(
     title: String,
     content: @Composable () -> Unit
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            content()
-        }
+    AppCard {
+        Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        content()
     }
 }
 

@@ -1,62 +1,73 @@
-com.momokotle.agent.app-room-runtime-2.6.1-0 C:\Users\Francis Andoh\.gradle\caches\transforms-4\002aa6a48e56364a747f223897919090\transformed\room-runtime-2.6.1\res
-com.momokotle.agent.app-emoji2-1.3.0-1 C:\Users\Francis Andoh\.gradle\caches\transforms-4\020f029efc7d853f03fb6a3bac0a664c\transformed\emoji2-1.3.0\res
-com.momokotle.agent.app-core-runtime-2.2.0-2 C:\Users\Francis Andoh\.gradle\caches\transforms-4\043c3ff0c36829a3cf1402ba3d53f66b\transformed\core-runtime-2.2.0\res
-com.momokotle.agent.app-ui-unit-release-3 C:\Users\Francis Andoh\.gradle\caches\transforms-4\0ec197f8fe28ae32ea6a6fc45ad482e8\transformed\ui-unit-release\res
-com.momokotle.agent.app-animation-release-4 C:\Users\Francis Andoh\.gradle\caches\transforms-4\227cb6746deff7cb2c93edffcd13bd1a\transformed\animation-release\res
-com.momokotle.agent.app-startup-runtime-1.1.1-5 C:\Users\Francis Andoh\.gradle\caches\transforms-4\2bf1671c88bfa4a9843cdf191925d119\transformed\startup-runtime-1.1.1\res
-com.momokotle.agent.app-foundation-layout-release-6 C:\Users\Francis Andoh\.gradle\caches\transforms-4\2c2976ca67da7d0abcb91b93bc09feac\transformed\foundation-layout-release\res
-com.momokotle.agent.app-sqlite-2.4.0-7 C:\Users\Francis Andoh\.gradle\caches\transforms-4\32781262529050f616c154b5390c3d66\transformed\sqlite-2.4.0\res
-com.momokotle.agent.app-fragment-1.5.1-8 C:\Users\Francis Andoh\.gradle\caches\transforms-4\3aca9f5fb28bc1cc562a5d811946fdab\transformed\fragment-1.5.1\res
-com.momokotle.agent.app-navigation-runtime-2.7.7-9 C:\Users\Francis Andoh\.gradle\caches\transforms-4\3f94bad0cbbef1dfb562505481501ff0\transformed\navigation-runtime-2.7.7\res
-com.momokotle.agent.app-material-icons-core-release-10 C:\Users\Francis Andoh\.gradle\caches\transforms-4\47461c6b26da4186cc421abe33fef47a\transformed\material-icons-core-release\res
-com.momokotle.agent.app-ui-graphics-release-11 C:\Users\Francis Andoh\.gradle\caches\transforms-4\4f5c1ce076270db4a2ddc1426bf64021\transformed\ui-graphics-release\res
-com.momokotle.agent.app-savedstate-1.2.1-12 C:\Users\Francis Andoh\.gradle\caches\transforms-4\57d43326b316cebfc01966e9937bc3b5\transformed\savedstate-1.2.1\res
-com.momokotle.agent.app-navigation-compose-2.7.7-13 C:\Users\Francis Andoh\.gradle\caches\transforms-4\59a2f328472a36a236a1c013753d1001\transformed\navigation-compose-2.7.7\res
-com.momokotle.agent.app-ui-util-release-14 C:\Users\Francis Andoh\.gradle\caches\transforms-4\59f94c29fd2929f93d77613a3c8e33ce\transformed\ui-util-release\res
-com.momokotle.agent.app-material-ripple-release-15 C:\Users\Francis Andoh\.gradle\caches\transforms-4\5a4ae535f636f7a7f76df849f418c7c4\transformed\material-ripple-release\res
-com.momokotle.agent.app-navigation-common-2.7.7-16 C:\Users\Francis Andoh\.gradle\caches\transforms-4\5a5c8a59799befc61985ab113b5d0d67\transformed\navigation-common-2.7.7\res
-com.momokotle.agent.app-lifecycle-livedata-core-ktx-2.7.0-17 C:\Users\Francis Andoh\.gradle\caches\transforms-4\5ae5c103e1984c7a38824d5898fa500f\transformed\lifecycle-livedata-core-ktx-2.7.0\res
-com.momokotle.agent.app-navigation-runtime-ktx-2.7.7-18 C:\Users\Francis Andoh\.gradle\caches\transforms-4\5dfb66c7011d6d45b199ab392d1a5847\transformed\navigation-runtime-ktx-2.7.7\res
-com.momokotle.agent.app-profileinstaller-1.3.0-19 C:\Users\Francis Andoh\.gradle\caches\transforms-4\6012ce394b52c83b95cbdd25775dfddd\transformed\profileinstaller-1.3.0\res
-com.momokotle.agent.app-core-ktx-1.12.0-20 C:\Users\Francis Andoh\.gradle\caches\transforms-4\61ddd1b8a711dd679b3e0a4b65af7453\transformed\core-ktx-1.12.0\res
-com.momokotle.agent.app-ui-geometry-release-21 C:\Users\Francis Andoh\.gradle\caches\transforms-4\630cd37170caffd2db8b5ba63a7805b8\transformed\ui-geometry-release\res
-com.momokotle.agent.app-runtime-release-22 C:\Users\Francis Andoh\.gradle\caches\transforms-4\68346766250768ec66c2c429b8d47b59\transformed\runtime-release\res
-com.momokotle.agent.app-room-ktx-2.6.1-23 C:\Users\Francis Andoh\.gradle\caches\transforms-4\70004c27bacb722910e2e999533ac6a9\transformed\room-ktx-2.6.1\res
-com.momokotle.agent.app-lifecycle-runtime-2.7.0-24 C:\Users\Francis Andoh\.gradle\caches\transforms-4\720adc96d88b8b1d6156afdfcec35a61\transformed\lifecycle-runtime-2.7.0\res
-com.momokotle.agent.app-lifecycle-runtime-ktx-2.7.0-25 C:\Users\Francis Andoh\.gradle\caches\transforms-4\75457470b805acef7b4a13dfe9cc091a\transformed\lifecycle-runtime-ktx-2.7.0\res
-com.momokotle.agent.app-ui-tooling-preview-release-26 C:\Users\Francis Andoh\.gradle\caches\transforms-4\79050abbfe996717d5721605884c66d0\transformed\ui-tooling-preview-release\res
-com.momokotle.agent.app-datastore-1.0.0-27 C:\Users\Francis Andoh\.gradle\caches\transforms-4\7d06b2f69f93e55e85b340cbe351290b\transformed\datastore-1.0.0\res
-com.momokotle.agent.app-lifecycle-viewmodel-savedstate-2.7.0-28 C:\Users\Francis Andoh\.gradle\caches\transforms-4\84703385cdc1b00f231ef89b07d1256a\transformed\lifecycle-viewmodel-savedstate-2.7.0\res
-com.momokotle.agent.app-ui-text-release-29 C:\Users\Francis Andoh\.gradle\caches\transforms-4\884528204a2ffa75ce339b85088d6ac2\transformed\ui-text-release\res
-com.momokotle.agent.app-lifecycle-runtime-compose-2.7.0-30 C:\Users\Francis Andoh\.gradle\caches\transforms-4\88e60cdc1f1bd7405cffc311098490cb\transformed\lifecycle-runtime-compose-2.7.0\res
-com.momokotle.agent.app-lifecycle-viewmodel-compose-2.7.0-31 C:\Users\Francis Andoh\.gradle\caches\transforms-4\9079f94ba4103cc5cdfc2ec2286ade43\transformed\lifecycle-viewmodel-compose-2.7.0\res
-com.momokotle.agent.app-datastore-preferences-1.0.0-32 C:\Users\Francis Andoh\.gradle\caches\transforms-4\956a46257dbd4c84c1587cba3d798083\transformed\datastore-preferences-1.0.0\res
-com.momokotle.agent.app-navigation-common-ktx-2.7.7-33 C:\Users\Francis Andoh\.gradle\caches\transforms-4\95c736bd0021931e760527e6f6a0b601\transformed\navigation-common-ktx-2.7.7\res
-com.momokotle.agent.app-ui-release-34 C:\Users\Francis Andoh\.gradle\caches\transforms-4\983a5346e97d5d543722abaa86d8ee01\transformed\ui-release\res
-com.momokotle.agent.app-sqlite-framework-2.4.0-35 C:\Users\Francis Andoh\.gradle\caches\transforms-4\986bcfb5a2799019998d9197941cca0b\transformed\sqlite-framework-2.4.0\res
-com.momokotle.agent.app-lifecycle-viewmodel-ktx-2.7.0-36 C:\Users\Francis Andoh\.gradle\caches\transforms-4\9ba6317f9ac276f745716f0f040941f8\transformed\lifecycle-viewmodel-ktx-2.7.0\res
-com.momokotle.agent.app-lifecycle-livedata-2.7.0-37 C:\Users\Francis Andoh\.gradle\caches\transforms-4\9d4aac2cc30b198a70a417b1e3963548\transformed\lifecycle-livedata-2.7.0\res
-com.momokotle.agent.app-runtime-saveable-release-38 C:\Users\Francis Andoh\.gradle\caches\transforms-4\a14c46618c99d61da7db654e4d9b2318\transformed\runtime-saveable-release\res
-com.momokotle.agent.app-customview-poolingcontainer-1.0.0-39 C:\Users\Francis Andoh\.gradle\caches\transforms-4\a3858c4759c898e08702147b80604092\transformed\customview-poolingcontainer-1.0.0\res
-com.momokotle.agent.app-lifecycle-viewmodel-2.7.0-40 C:\Users\Francis Andoh\.gradle\caches\transforms-4\ae6502c8dff1c77dacf295dc77d363b7\transformed\lifecycle-viewmodel-2.7.0\res
-com.momokotle.agent.app-activity-1.8.2-41 C:\Users\Francis Andoh\.gradle\caches\transforms-4\b931f45b326de13d3aad4e8dac08a58e\transformed\activity-1.8.2\res
-com.momokotle.agent.app-activity-compose-1.8.2-42 C:\Users\Francis Andoh\.gradle\caches\transforms-4\c18c2b5f0c5fc9914ad98d8a0e619a36\transformed\activity-compose-1.8.2\res
-com.momokotle.agent.app-core-1.12.0-43 C:\Users\Francis Andoh\.gradle\caches\transforms-4\c217414c464dc529fcb6a44f63a1f871\transformed\core-1.12.0\res
-com.momokotle.agent.app-material-icons-extended-release-44 C:\Users\Francis Andoh\.gradle\caches\transforms-4\d2ff310d41bab4d655dfae4dd2f9b7a3\transformed\material-icons-extended-release\res
-com.momokotle.agent.app-material3-release-45 C:\Users\Francis Andoh\.gradle\caches\transforms-4\d328576efcd9b15c74a05b2f440b68a3\transformed\material3-release\res
-com.momokotle.agent.app-savedstate-ktx-1.2.1-46 C:\Users\Francis Andoh\.gradle\caches\transforms-4\d6ca2dca04597ec3bca9ce69c513bf1e\transformed\savedstate-ktx-1.2.1\res
-com.momokotle.agent.app-lifecycle-livedata-core-2.7.0-47 C:\Users\Francis Andoh\.gradle\caches\transforms-4\e55da494967033ee41ae2c7d00751688\transformed\lifecycle-livedata-core-2.7.0\res
-com.momokotle.agent.app-annotation-experimental-1.4.0-48 C:\Users\Francis Andoh\.gradle\caches\transforms-4\e7ea7d2a0323b271e63e2f71d0920ddd\transformed\annotation-experimental-1.4.0\res
-com.momokotle.agent.app-hilt-navigation-1.2.0-49 C:\Users\Francis Andoh\.gradle\caches\transforms-4\e9288d728fddc4a653c70e99c2e763fd\transformed\hilt-navigation-1.2.0\res
-com.momokotle.agent.app-lifecycle-process-2.7.0-50 C:\Users\Francis Andoh\.gradle\caches\transforms-4\e975cb3f2afe2d9978eed76d6b4d6de3\transformed\lifecycle-process-2.7.0\res
-com.momokotle.agent.app-hilt-navigation-compose-1.2.0-51 C:\Users\Francis Andoh\.gradle\caches\transforms-4\ec0c22e9e1cd0a2e351ae22d6d567e55\transformed\hilt-navigation-compose-1.2.0\res
-com.momokotle.agent.app-activity-ktx-1.8.2-52 C:\Users\Francis Andoh\.gradle\caches\transforms-4\ee4d68cd3617c12dc3659aa8efbd8508\transformed\activity-ktx-1.8.2\res
-com.momokotle.agent.app-foundation-release-53 C:\Users\Francis Andoh\.gradle\caches\transforms-4\ef043d39d972b0d7063f92ef82ebf795\transformed\foundation-release\res
-com.momokotle.agent.app-animation-core-release-54 C:\Users\Francis Andoh\.gradle\caches\transforms-4\f8dd9f4063eb972c0ec0c464b79f77be\transformed\animation-core-release\res
-com.momokotle.agent.app-pngs-55 H:\Projects\momo-kotle\app\build\generated\res\pngs\debug
-com.momokotle.agent.app-resValues-56 H:\Projects\momo-kotle\app\build\generated\res\resValues\debug
-com.momokotle.agent.app-packageDebugResources-57 H:\Projects\momo-kotle\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.momokotle.agent.app-packageDebugResources-58 H:\Projects\momo-kotle\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.momokotle.agent.app-debug-59 H:\Projects\momo-kotle\app\build\intermediates\merged_res\debug\mergeDebugResources
-com.momokotle.agent.app-debug-60 H:\Projects\momo-kotle\app\src\debug\res
-com.momokotle.agent.app-main-61 H:\Projects\momo-kotle\app\src\main\res
+com.momokotle.agent.app-ui-unit-release-0 C:\Users\Francis Andoh\.gradle\caches\transforms-4\00c107019ae116e825a52f8bd55605b2\transformed\ui-unit-release\res
+com.momokotle.agent.app-sqlite-2.4.0-1 C:\Users\Francis Andoh\.gradle\caches\transforms-4\110fd716e33c1c08743d2883e32bc3f0\transformed\sqlite-2.4.0\res
+com.momokotle.agent.app-foundation-release-2 C:\Users\Francis Andoh\.gradle\caches\transforms-4\116501184de07f643b2cc3b49ffade53\transformed\foundation-release\res
+com.momokotle.agent.app-hilt-navigation-compose-1.2.0-3 C:\Users\Francis Andoh\.gradle\caches\transforms-4\15cb5c9916724f8b431a8ca665bf912d\transformed\hilt-navigation-compose-1.2.0\res
+com.momokotle.agent.app-material-ripple-release-4 C:\Users\Francis Andoh\.gradle\caches\transforms-4\16d83a772d3adba837d20660b07a4f91\transformed\material-ripple-release\res
+com.momokotle.agent.app-ui-text-release-5 C:\Users\Francis Andoh\.gradle\caches\transforms-4\16d8ded58403399326d858ccc950aeb7\transformed\ui-text-release\res
+com.momokotle.agent.app-ui-geometry-release-6 C:\Users\Francis Andoh\.gradle\caches\transforms-4\17df2c20030dea7424014b02757572b3\transformed\ui-geometry-release\res
+com.momokotle.agent.app-coil-base-2.6.0-7 C:\Users\Francis Andoh\.gradle\caches\transforms-4\19b1885a8977143bff5e317df98491a7\transformed\coil-base-2.6.0\res
+com.momokotle.agent.app-lifecycle-process-2.7.0-8 C:\Users\Francis Andoh\.gradle\caches\transforms-4\1bba00fabcdc4e08175eea2dda20b111\transformed\lifecycle-process-2.7.0\res
+com.momokotle.agent.app-navigation-compose-2.7.7-9 C:\Users\Francis Andoh\.gradle\caches\transforms-4\1c69d5ed6e532e8805af521e8956fe5e\transformed\navigation-compose-2.7.7\res
+com.momokotle.agent.app-material-icons-extended-release-10 C:\Users\Francis Andoh\.gradle\caches\transforms-4\1cb393383ac016bd4517e3b6f9822338\transformed\material-icons-extended-release\res
+com.momokotle.agent.app-ui-tooling-preview-release-11 C:\Users\Francis Andoh\.gradle\caches\transforms-4\1cfdd738e7e8a6be07d4fcbc04920075\transformed\ui-tooling-preview-release\res
+com.momokotle.agent.app-credentials-play-services-auth-1.2.0-rc01-12 C:\Users\Francis Andoh\.gradle\caches\transforms-4\1d6b53f68a07822b01e78d76da4cd415\transformed\credentials-play-services-auth-1.2.0-rc01\res
+com.momokotle.agent.app-savedstate-ktx-1.2.1-13 C:\Users\Francis Andoh\.gradle\caches\transforms-4\20b71f1eb5e07217420709f0cb48fee7\transformed\savedstate-ktx-1.2.1\res
+com.momokotle.agent.app-appcompat-resources-1.6.1-14 C:\Users\Francis Andoh\.gradle\caches\transforms-4\23ff7b8b1f87e1a0c00e61cfb4a0ea09\transformed\appcompat-resources-1.6.1\res
+com.momokotle.agent.app-lifecycle-livedata-core-ktx-2.7.0-15 C:\Users\Francis Andoh\.gradle\caches\transforms-4\2797e0869be7e21af0b9c20b0dec75cc\transformed\lifecycle-livedata-core-ktx-2.7.0\res
+com.momokotle.agent.app-ui-release-16 C:\Users\Francis Andoh\.gradle\caches\transforms-4\2932b4ed5733d92a465b490b24760f02\transformed\ui-release\res
+com.momokotle.agent.app-datastore-preferences-1.0.0-17 C:\Users\Francis Andoh\.gradle\caches\transforms-4\2d18ffb8be0cc14c10b36a34946c0036\transformed\datastore-preferences-1.0.0\res
+com.momokotle.agent.app-material-icons-core-release-18 C:\Users\Francis Andoh\.gradle\caches\transforms-4\3439d4e8dd01cee2fd317f87f7386739\transformed\material-icons-core-release\res
+com.momokotle.agent.app-savedstate-1.2.1-19 C:\Users\Francis Andoh\.gradle\caches\transforms-4\35ed1ae5f20e560f06049a8b6c9e959f\transformed\savedstate-1.2.1\res
+com.momokotle.agent.app-core-1.12.0-20 C:\Users\Francis Andoh\.gradle\caches\transforms-4\387908a87221f8cece85ff174fa3768b\transformed\core-1.12.0\res
+com.momokotle.agent.app-activity-compose-1.8.2-21 C:\Users\Francis Andoh\.gradle\caches\transforms-4\3b294376f0faa54e68c80ad9ffb39bb5\transformed\activity-compose-1.8.2\res
+com.momokotle.agent.app-lifecycle-livedata-core-2.7.0-22 C:\Users\Francis Andoh\.gradle\caches\transforms-4\3e3cd4f750c58614fb6358143f052b7b\transformed\lifecycle-livedata-core-2.7.0\res
+com.momokotle.agent.app-play-services-base-18.1.0-23 C:\Users\Francis Andoh\.gradle\caches\transforms-4\3e41b267b0ed02e08ca4cdd119460a53\transformed\play-services-base-18.1.0\res
+com.momokotle.agent.app-core-runtime-2.2.0-24 C:\Users\Francis Andoh\.gradle\caches\transforms-4\4c10329803d17b664e5b2845da121149\transformed\core-runtime-2.2.0\res
+com.momokotle.agent.app-navigation-runtime-2.7.7-25 C:\Users\Francis Andoh\.gradle\caches\transforms-4\54cc4ea0357af13dced47d93b3223fda\transformed\navigation-runtime-2.7.7\res
+com.momokotle.agent.app-core-ktx-1.12.0-26 C:\Users\Francis Andoh\.gradle\caches\transforms-4\5537cc90fc3ac8eeb89a600527314d38\transformed\core-ktx-1.12.0\res
+com.momokotle.agent.app-activity-1.8.2-27 C:\Users\Francis Andoh\.gradle\caches\transforms-4\58f94945308198d0e59b114597606c80\transformed\activity-1.8.2\res
+com.momokotle.agent.app-foundation-layout-release-28 C:\Users\Francis Andoh\.gradle\caches\transforms-4\5cb17c8f3ad879265b317e2ca73532b2\transformed\foundation-layout-release\res
+com.momokotle.agent.app-material3-release-29 C:\Users\Francis Andoh\.gradle\caches\transforms-4\6562ad80f499e7b7d6284e5588ac59c8\transformed\material3-release\res
+com.momokotle.agent.app-lifecycle-runtime-ktx-2.7.0-30 C:\Users\Francis Andoh\.gradle\caches\transforms-4\6c4b766322076d5c7b5341555e8939f8\transformed\lifecycle-runtime-ktx-2.7.0\res
+com.momokotle.agent.app-navigation-common-2.7.7-31 C:\Users\Francis Andoh\.gradle\caches\transforms-4\6d9dda2221965c011bdfa0079f1db54f\transformed\navigation-common-2.7.7\res
+com.momokotle.agent.app-room-ktx-2.6.1-32 C:\Users\Francis Andoh\.gradle\caches\transforms-4\6ee96c6c55dcff61150275de9add3e4d\transformed\room-ktx-2.6.1\res
+com.momokotle.agent.app-lifecycle-viewmodel-2.7.0-33 C:\Users\Francis Andoh\.gradle\caches\transforms-4\736f1ddb4039aa5cec4075e73512804d\transformed\lifecycle-viewmodel-2.7.0\res
+com.momokotle.agent.app-ui-util-release-34 C:\Users\Francis Andoh\.gradle\caches\transforms-4\7e73821874b838be55f2ade74e69582d\transformed\ui-util-release\res
+com.momokotle.agent.app-ui-graphics-release-35 C:\Users\Francis Andoh\.gradle\caches\transforms-4\810bd74b56d38147bf131c48ae4b638a\transformed\ui-graphics-release\res
+com.momokotle.agent.app-profileinstaller-1.3.1-36 C:\Users\Francis Andoh\.gradle\caches\transforms-4\8621414888c5bd31eeb8f0644537127f\transformed\profileinstaller-1.3.1\res
+com.momokotle.agent.app-core-common-2.0.3-37 C:\Users\Francis Andoh\.gradle\caches\transforms-4\88c06432375c6adccdd135a18650647c\transformed\core-common-2.0.3\res
+com.momokotle.agent.app-fragment-1.5.1-38 C:\Users\Francis Andoh\.gradle\caches\transforms-4\93bbd8b874f393aa6df730625d544ae1\transformed\fragment-1.5.1\res
+com.momokotle.agent.app-animation-core-release-39 C:\Users\Francis Andoh\.gradle\caches\transforms-4\9526516310fd40b862bc110c2db4873d\transformed\animation-core-release\res
+com.momokotle.agent.app-lifecycle-runtime-compose-2.7.0-40 C:\Users\Francis Andoh\.gradle\caches\transforms-4\96cfbefff8b0b25f5057f73e3ff22134\transformed\lifecycle-runtime-compose-2.7.0\res
+com.momokotle.agent.app-browser-1.4.0-41 C:\Users\Francis Andoh\.gradle\caches\transforms-4\9bbd4d263aeab4fbdfb679184c4210c5\transformed\browser-1.4.0\res
+com.momokotle.agent.app-lifecycle-viewmodel-compose-2.7.0-42 C:\Users\Francis Andoh\.gradle\caches\transforms-4\9c1be1b2307816417528e2fe8867ea6d\transformed\lifecycle-viewmodel-compose-2.7.0\res
+com.momokotle.agent.app-emoji2-1.3.0-43 C:\Users\Francis Andoh\.gradle\caches\transforms-4\9cea21dc1f967946c77a9132db44be10\transformed\emoji2-1.3.0\res
+com.momokotle.agent.app-hilt-navigation-1.2.0-44 C:\Users\Francis Andoh\.gradle\caches\transforms-4\9e5fba7d80b75775d61e7178f7349422\transformed\hilt-navigation-1.2.0\res
+com.momokotle.agent.app-sqlite-framework-2.4.0-45 C:\Users\Francis Andoh\.gradle\caches\transforms-4\b031770eea0de96c2950309994edd497\transformed\sqlite-framework-2.4.0\res
+com.momokotle.agent.app-annotation-experimental-1.4.0-46 C:\Users\Francis Andoh\.gradle\caches\transforms-4\b04cd4929e6e9c99b6e34eb5c833a5f4\transformed\annotation-experimental-1.4.0\res
+com.momokotle.agent.app-navigation-runtime-ktx-2.7.7-47 C:\Users\Francis Andoh\.gradle\caches\transforms-4\b9b3a811bbd496a3082e36a72b72b2f2\transformed\navigation-runtime-ktx-2.7.7\res
+com.momokotle.agent.app-navigation-common-ktx-2.7.7-48 C:\Users\Francis Andoh\.gradle\caches\transforms-4\bc98b9b41a4e77a19ac2e2192542fa68\transformed\navigation-common-ktx-2.7.7\res
+com.momokotle.agent.app-firebase-common-21.0.0-49 C:\Users\Francis Andoh\.gradle\caches\transforms-4\c398a451a21dea01eaff4dbdd1a1b9d4\transformed\firebase-common-21.0.0\res
+com.momokotle.agent.app-credentials-1.2.0-rc01-50 C:\Users\Francis Andoh\.gradle\caches\transforms-4\c7ee64e2b029f300399cc6b90041c74b\transformed\credentials-1.2.0-rc01\res
+com.momokotle.agent.app-animation-release-51 C:\Users\Francis Andoh\.gradle\caches\transforms-4\c93915d9ef84929f60b4d97d2b263ad5\transformed\animation-release\res
+com.momokotle.agent.app-play-services-basement-18.4.0-52 C:\Users\Francis Andoh\.gradle\caches\transforms-4\cc855c38268af3c10b5b6808d6f8e8ed\transformed\play-services-basement-18.4.0\res
+com.momokotle.agent.app-lifecycle-livedata-2.7.0-53 C:\Users\Francis Andoh\.gradle\caches\transforms-4\d8d703fc8745420d5006887de215f5b2\transformed\lifecycle-livedata-2.7.0\res
+com.momokotle.agent.app-lifecycle-runtime-2.7.0-54 C:\Users\Francis Andoh\.gradle\caches\transforms-4\dbe5e7b4dc871534d41e4dc77f242ccd\transformed\lifecycle-runtime-2.7.0\res
+com.momokotle.agent.app-runtime-saveable-release-55 C:\Users\Francis Andoh\.gradle\caches\transforms-4\de675d1e2cac6e7c6958f2b376a2c9a8\transformed\runtime-saveable-release\res
+com.momokotle.agent.app-startup-runtime-1.1.1-56 C:\Users\Francis Andoh\.gradle\caches\transforms-4\e44fd456bcc65af4ebb73d82a45cb87c\transformed\startup-runtime-1.1.1\res
+com.momokotle.agent.app-runtime-release-57 C:\Users\Francis Andoh\.gradle\caches\transforms-4\f073d60d5b1f5594c8dbb6b98517f0e9\transformed\runtime-release\res
+com.momokotle.agent.app-room-runtime-2.6.1-58 C:\Users\Francis Andoh\.gradle\caches\transforms-4\f2f6a0289606a781a308c95e58fba8c7\transformed\room-runtime-2.6.1\res
+com.momokotle.agent.app-lifecycle-viewmodel-ktx-2.7.0-59 C:\Users\Francis Andoh\.gradle\caches\transforms-4\f43bb4f6395090715397cbed8d0ab0f1\transformed\lifecycle-viewmodel-ktx-2.7.0\res
+com.momokotle.agent.app-play-services-auth-20.7.0-60 C:\Users\Francis Andoh\.gradle\caches\transforms-4\f5331b73a4b2ef5af8dd2679654bb3db\transformed\play-services-auth-20.7.0\res
+com.momokotle.agent.app-customview-poolingcontainer-1.0.0-61 C:\Users\Francis Andoh\.gradle\caches\transforms-4\f911261336095b7fd3cb435ddd6ef764\transformed\customview-poolingcontainer-1.0.0\res
+com.momokotle.agent.app-lifecycle-viewmodel-savedstate-2.7.0-62 C:\Users\Francis Andoh\.gradle\caches\transforms-4\f9e98b660f72c8b7e625a5cc7498eedb\transformed\lifecycle-viewmodel-savedstate-2.7.0\res
+com.momokotle.agent.app-datastore-1.0.0-63 C:\Users\Francis Andoh\.gradle\caches\transforms-4\fbfc046d74b355c8414f0612f6ee29bf\transformed\datastore-1.0.0\res
+com.momokotle.agent.app-activity-ktx-1.8.2-64 C:\Users\Francis Andoh\.gradle\caches\transforms-4\ff515d19064a3b73a1e820ba9797b530\transformed\activity-ktx-1.8.2\res
+com.momokotle.agent.app-pngs-65 H:\Projects\momo-kotle\app\build\generated\res\pngs\debug
+com.momokotle.agent.app-res-66 H:\Projects\momo-kotle\app\build\generated\res\processDebugGoogleServices
+com.momokotle.agent.app-resValues-67 H:\Projects\momo-kotle\app\build\generated\res\resValues\debug
+com.momokotle.agent.app-packageDebugResources-68 H:\Projects\momo-kotle\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.momokotle.agent.app-packageDebugResources-69 H:\Projects\momo-kotle\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.momokotle.agent.app-debug-70 H:\Projects\momo-kotle\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.momokotle.agent.app-debug-71 H:\Projects\momo-kotle\app\src\debug\res
+com.momokotle.agent.app-main-72 H:\Projects\momo-kotle\app\src\main\res

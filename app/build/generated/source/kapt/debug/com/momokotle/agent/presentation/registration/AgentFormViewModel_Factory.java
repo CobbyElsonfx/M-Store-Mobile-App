@@ -2,7 +2,7 @@ package com.momokotle.agent.presentation.registration;
 
 import androidx.lifecycle.SavedStateHandle;
 import com.momokotle.agent.domain.repository.FormSubmissionRepository;
-import com.momokotle.agent.domain.repository.UserIdProvider;
+import com.momokotle.agent.domain.usecase.GetAuthenticatedUserUseCase;
 import com.momokotle.agent.utils.FileDocumentHelper;
 import com.momokotle.agent.utils.NetworkMonitor;
 import dagger.internal.DaggerGenerated;
@@ -31,7 +31,7 @@ public final class AgentFormViewModel_Factory implements Factory<AgentFormViewMo
 
   private final Provider<FormSubmissionRepository> formSubmissionRepositoryProvider;
 
-  private final Provider<UserIdProvider> userIdProvider;
+  private final Provider<GetAuthenticatedUserUseCase> getAuthenticatedUserUseCaseProvider;
 
   private final Provider<NetworkMonitor> networkMonitorProvider;
 
@@ -39,31 +39,34 @@ public final class AgentFormViewModel_Factory implements Factory<AgentFormViewMo
 
   public AgentFormViewModel_Factory(Provider<SavedStateHandle> savedStateHandleProvider,
       Provider<FormSubmissionRepository> formSubmissionRepositoryProvider,
-      Provider<UserIdProvider> userIdProvider, Provider<NetworkMonitor> networkMonitorProvider,
+      Provider<GetAuthenticatedUserUseCase> getAuthenticatedUserUseCaseProvider,
+      Provider<NetworkMonitor> networkMonitorProvider,
       Provider<FileDocumentHelper> fileDocumentHelperProvider) {
     this.savedStateHandleProvider = savedStateHandleProvider;
     this.formSubmissionRepositoryProvider = formSubmissionRepositoryProvider;
-    this.userIdProvider = userIdProvider;
+    this.getAuthenticatedUserUseCaseProvider = getAuthenticatedUserUseCaseProvider;
     this.networkMonitorProvider = networkMonitorProvider;
     this.fileDocumentHelperProvider = fileDocumentHelperProvider;
   }
 
   @Override
   public AgentFormViewModel get() {
-    return newInstance(savedStateHandleProvider.get(), formSubmissionRepositoryProvider.get(), userIdProvider.get(), networkMonitorProvider.get(), fileDocumentHelperProvider.get());
+    return newInstance(savedStateHandleProvider.get(), formSubmissionRepositoryProvider.get(), getAuthenticatedUserUseCaseProvider.get(), networkMonitorProvider.get(), fileDocumentHelperProvider.get());
   }
 
   public static AgentFormViewModel_Factory create(
       Provider<SavedStateHandle> savedStateHandleProvider,
       Provider<FormSubmissionRepository> formSubmissionRepositoryProvider,
-      Provider<UserIdProvider> userIdProvider, Provider<NetworkMonitor> networkMonitorProvider,
+      Provider<GetAuthenticatedUserUseCase> getAuthenticatedUserUseCaseProvider,
+      Provider<NetworkMonitor> networkMonitorProvider,
       Provider<FileDocumentHelper> fileDocumentHelperProvider) {
-    return new AgentFormViewModel_Factory(savedStateHandleProvider, formSubmissionRepositoryProvider, userIdProvider, networkMonitorProvider, fileDocumentHelperProvider);
+    return new AgentFormViewModel_Factory(savedStateHandleProvider, formSubmissionRepositoryProvider, getAuthenticatedUserUseCaseProvider, networkMonitorProvider, fileDocumentHelperProvider);
   }
 
   public static AgentFormViewModel newInstance(SavedStateHandle savedStateHandle,
-      FormSubmissionRepository formSubmissionRepository, UserIdProvider userIdProvider,
-      NetworkMonitor networkMonitor, FileDocumentHelper fileDocumentHelper) {
-    return new AgentFormViewModel(savedStateHandle, formSubmissionRepository, userIdProvider, networkMonitor, fileDocumentHelper);
+      FormSubmissionRepository formSubmissionRepository,
+      GetAuthenticatedUserUseCase getAuthenticatedUserUseCase, NetworkMonitor networkMonitor,
+      FileDocumentHelper fileDocumentHelper) {
+    return new AgentFormViewModel(savedStateHandle, formSubmissionRepository, getAuthenticatedUserUseCase, networkMonitor, fileDocumentHelper);
   }
 }

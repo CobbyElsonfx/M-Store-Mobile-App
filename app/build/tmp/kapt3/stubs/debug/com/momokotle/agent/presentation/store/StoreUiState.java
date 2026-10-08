@@ -1,28 +1,31 @@
 package com.momokotle.agent.presentation.store;
 
 import androidx.lifecycle.ViewModel;
-import com.momokotle.agent.data.catalog.StoreCatalog;
+import com.momokotle.agent.domain.repository.ProductRepository;
+import com.momokotle.agent.domain.repository.ProductValidationResult;
 import com.momokotle.agent.domain.repository.StoreRepository;
-import com.momokotle.agent.domain.repository.UserIdProvider;
+import com.momokotle.agent.domain.usecase.GetAuthenticatedUserUseCase;
 import com.momokotle.agent.models.StoreCategory;
-import com.momokotle.agent.models.StoreItem;
+import com.momokotle.agent.models.StoreProduct;
 import com.momokotle.agent.utils.InternetMessages;
 import com.momokotle.agent.utils.NetworkMonitor;
+import com.momokotle.agent.utils.PhoneNumberFormatter;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import kotlinx.coroutines.flow.StateFlow;
 import javax.inject.Inject;
 
-@kotlin.Metadata(mv = {1, 9, 0}, k = 1, xi = 48, d1 = {"\u00000\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0000\n\u0002\u0010$\n\u0002\u0010\u000e\n\u0002\u0010\b\n\u0002\b%\b\u0087\b\u0018\u00002\u00020\u0001B\u0081\u0001\u0012\b\b\u0002\u0010\u0002\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0004\u001a\u00020\u0005\u0012\u000e\b\u0002\u0010\u0006\u001a\b\u0012\u0004\u0012\u00020\b0\u0007\u0012\u0014\b\u0002\u0010\t\u001a\u000e\u0012\u0004\u0012\u00020\u000b\u0012\u0004\u0012\u00020\f0\n\u0012\n\b\u0002\u0010\r\u001a\u0004\u0018\u00010\b\u0012\b\b\u0002\u0010\u000e\u001a\u00020\u000b\u0012\b\b\u0002\u0010\u000f\u001a\u00020\u000b\u0012\b\b\u0002\u0010\u0010\u001a\u00020\u0003\u0012\n\b\u0002\u0010\u0011\u001a\u0004\u0018\u00010\u000b\u0012\n\b\u0002\u0010\u0012\u001a\u0004\u0018\u00010\u000b\u00a2\u0006\u0002\u0010\u0013J\t\u0010\"\u001a\u00020\u0003H\u00c6\u0003J\u000b\u0010#\u001a\u0004\u0018\u00010\u000bH\u00c6\u0003J\t\u0010$\u001a\u00020\u0005H\u00c6\u0003J\u000f\u0010%\u001a\b\u0012\u0004\u0012\u00020\b0\u0007H\u00c6\u0003J\u0015\u0010&\u001a\u000e\u0012\u0004\u0012\u00020\u000b\u0012\u0004\u0012\u00020\f0\nH\u00c6\u0003J\u000b\u0010\'\u001a\u0004\u0018\u00010\bH\u00c6\u0003J\t\u0010(\u001a\u00020\u000bH\u00c6\u0003J\t\u0010)\u001a\u00020\u000bH\u00c6\u0003J\t\u0010*\u001a\u00020\u0003H\u00c6\u0003J\u000b\u0010+\u001a\u0004\u0018\u00010\u000bH\u00c6\u0003J\u0085\u0001\u0010,\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00052\u000e\b\u0002\u0010\u0006\u001a\b\u0012\u0004\u0012\u00020\b0\u00072\u0014\b\u0002\u0010\t\u001a\u000e\u0012\u0004\u0012\u00020\u000b\u0012\u0004\u0012\u00020\f0\n2\n\b\u0002\u0010\r\u001a\u0004\u0018\u00010\b2\b\b\u0002\u0010\u000e\u001a\u00020\u000b2\b\b\u0002\u0010\u000f\u001a\u00020\u000b2\b\b\u0002\u0010\u0010\u001a\u00020\u00032\n\b\u0002\u0010\u0011\u001a\u0004\u0018\u00010\u000b2\n\b\u0002\u0010\u0012\u001a\u0004\u0018\u00010\u000bH\u00c6\u0001J\u0013\u0010-\u001a\u00020\u00032\b\u0010.\u001a\u0004\u0018\u00010\u0001H\u00d6\u0003J\t\u0010/\u001a\u00020\fH\u00d6\u0001J\t\u00100\u001a\u00020\u000bH\u00d6\u0001R\u0013\u0010\r\u001a\u0004\u0018\u00010\b\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0014\u0010\u0015R\u0011\u0010\u000f\u001a\u00020\u000b\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0016\u0010\u0017R\u0011\u0010\u000e\u001a\u00020\u000b\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0018\u0010\u0017R\u0013\u0010\u0012\u001a\u0004\u0018\u00010\u000b\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0019\u0010\u0017R\u0011\u0010\u0002\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0002\u0010\u001aR\u0011\u0010\u0010\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0010\u0010\u001aR\u0017\u0010\u0006\u001a\b\u0012\u0004\u0012\u00020\b0\u0007\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001b\u0010\u001cR\u0013\u0010\u0011\u001a\u0004\u0018\u00010\u000b\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001d\u0010\u0017R\u001d\u0010\t\u001a\u000e\u0012\u0004\u0012\u00020\u000b\u0012\u0004\u0012\u00020\f0\n\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001e\u0010\u001fR\u0011\u0010\u0004\u001a\u00020\u0005\u00a2\u0006\b\n\u0000\u001a\u0004\b \u0010!\u00a8\u00061"}, d2 = {"Lcom/momokotle/agent/presentation/store/StoreUiState;", "", "isOnline", "", "selectedCategory", "Lcom/momokotle/agent/models/StoreCategory;", "items", "", "Lcom/momokotle/agent/models/StoreItem;", "quantities", "", "", "", "checkoutItem", "checkoutPhone", "checkoutLocation", "isSubmitting", "message", "errorMessage", "(ZLcom/momokotle/agent/models/StoreCategory;Ljava/util/List;Ljava/util/Map;Lcom/momokotle/agent/models/StoreItem;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;)V", "getCheckoutItem", "()Lcom/momokotle/agent/models/StoreItem;", "getCheckoutLocation", "()Ljava/lang/String;", "getCheckoutPhone", "getErrorMessage", "()Z", "getItems", "()Ljava/util/List;", "getMessage", "getQuantities", "()Ljava/util/Map;", "getSelectedCategory", "()Lcom/momokotle/agent/models/StoreCategory;", "component1", "component10", "component2", "component3", "component4", "component5", "component6", "component7", "component8", "component9", "copy", "equals", "other", "hashCode", "toString", "app_debug"})
+@kotlin.Metadata(mv = {1, 9, 0}, k = 1, xi = 48, d1 = {"\u00002\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0000\n\u0002\u0010$\n\u0002\u0010\u000e\n\u0002\u0010\b\n\u0002\b&\b\u0087\b\u0018\u00002\u00020\u0001B\u008b\u0001\u0012\b\b\u0002\u0010\u0002\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0004\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0005\u001a\u00020\u0006\u0012\u000e\b\u0002\u0010\u0007\u001a\b\u0012\u0004\u0012\u00020\t0\b\u0012\u0014\b\u0002\u0010\n\u001a\u000e\u0012\u0004\u0012\u00020\f\u0012\u0004\u0012\u00020\r0\u000b\u0012\n\b\u0002\u0010\u000e\u001a\u0004\u0018\u00010\t\u0012\b\b\u0002\u0010\u000f\u001a\u00020\f\u0012\b\b\u0002\u0010\u0010\u001a\u00020\f\u0012\b\b\u0002\u0010\u0011\u001a\u00020\u0003\u0012\n\b\u0002\u0010\u0012\u001a\u0004\u0018\u00010\f\u0012\n\b\u0002\u0010\u0013\u001a\u0004\u0018\u00010\f\u00a2\u0006\u0002\u0010\u0014J\t\u0010#\u001a\u00020\u0003H\u00c6\u0003J\u000b\u0010$\u001a\u0004\u0018\u00010\fH\u00c6\u0003J\u000b\u0010%\u001a\u0004\u0018\u00010\fH\u00c6\u0003J\t\u0010&\u001a\u00020\u0003H\u00c6\u0003J\t\u0010\'\u001a\u00020\u0006H\u00c6\u0003J\u000f\u0010(\u001a\b\u0012\u0004\u0012\u00020\t0\bH\u00c6\u0003J\u0015\u0010)\u001a\u000e\u0012\u0004\u0012\u00020\f\u0012\u0004\u0012\u00020\r0\u000bH\u00c6\u0003J\u000b\u0010*\u001a\u0004\u0018\u00010\tH\u00c6\u0003J\t\u0010+\u001a\u00020\fH\u00c6\u0003J\t\u0010,\u001a\u00020\fH\u00c6\u0003J\t\u0010-\u001a\u00020\u0003H\u00c6\u0003J\u008f\u0001\u0010.\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00032\b\b\u0002\u0010\u0005\u001a\u00020\u00062\u000e\b\u0002\u0010\u0007\u001a\b\u0012\u0004\u0012\u00020\t0\b2\u0014\b\u0002\u0010\n\u001a\u000e\u0012\u0004\u0012\u00020\f\u0012\u0004\u0012\u00020\r0\u000b2\n\b\u0002\u0010\u000e\u001a\u0004\u0018\u00010\t2\b\b\u0002\u0010\u000f\u001a\u00020\f2\b\b\u0002\u0010\u0010\u001a\u00020\f2\b\b\u0002\u0010\u0011\u001a\u00020\u00032\n\b\u0002\u0010\u0012\u001a\u0004\u0018\u00010\f2\n\b\u0002\u0010\u0013\u001a\u0004\u0018\u00010\fH\u00c6\u0001J\u0013\u0010/\u001a\u00020\u00032\b\u00100\u001a\u0004\u0018\u00010\u0001H\u00d6\u0003J\t\u00101\u001a\u00020\rH\u00d6\u0001J\t\u00102\u001a\u00020\fH\u00d6\u0001R\u0011\u0010\u0010\u001a\u00020\f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0015\u0010\u0016R\u0011\u0010\u000f\u001a\u00020\f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0017\u0010\u0016R\u0013\u0010\u000e\u001a\u0004\u0018\u00010\t\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0018\u0010\u0019R\u0013\u0010\u0013\u001a\u0004\u0018\u00010\f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001a\u0010\u0016R\u0011\u0010\u0004\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0004\u0010\u001bR\u0011\u0010\u0002\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0002\u0010\u001bR\u0011\u0010\u0011\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0011\u0010\u001bR\u0013\u0010\u0012\u001a\u0004\u0018\u00010\f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001c\u0010\u0016R\u0017\u0010\u0007\u001a\b\u0012\u0004\u0012\u00020\t0\b\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001d\u0010\u001eR\u001d\u0010\n\u001a\u000e\u0012\u0004\u0012\u00020\f\u0012\u0004\u0012\u00020\r0\u000b\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001f\u0010 R\u0011\u0010\u0005\u001a\u00020\u0006\u00a2\u0006\b\n\u0000\u001a\u0004\b!\u0010\"\u00a8\u00063"}, d2 = {"Lcom/momokotle/agent/presentation/store/StoreUiState;", "", "isOnline", "", "isLoadingProducts", "selectedCategory", "Lcom/momokotle/agent/models/StoreCategory;", "products", "", "Lcom/momokotle/agent/models/StoreProduct;", "quantities", "", "", "", "checkoutProduct", "checkoutPhone", "checkoutLocation", "isSubmitting", "message", "errorMessage", "(ZZLcom/momokotle/agent/models/StoreCategory;Ljava/util/List;Ljava/util/Map;Lcom/momokotle/agent/models/StoreProduct;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;)V", "getCheckoutLocation", "()Ljava/lang/String;", "getCheckoutPhone", "getCheckoutProduct", "()Lcom/momokotle/agent/models/StoreProduct;", "getErrorMessage", "()Z", "getMessage", "getProducts", "()Ljava/util/List;", "getQuantities", "()Ljava/util/Map;", "getSelectedCategory", "()Lcom/momokotle/agent/models/StoreCategory;", "component1", "component10", "component11", "component2", "component3", "component4", "component5", "component6", "component7", "component8", "component9", "copy", "equals", "other", "hashCode", "toString", "app_debug"})
 public final class StoreUiState {
     private final boolean isOnline = false;
+    private final boolean isLoadingProducts = false;
     @org.jetbrains.annotations.NotNull()
     private final com.momokotle.agent.models.StoreCategory selectedCategory = null;
     @org.jetbrains.annotations.NotNull()
-    private final java.util.List<com.momokotle.agent.models.StoreItem> items = null;
+    private final java.util.List<com.momokotle.agent.models.StoreProduct> products = null;
     @org.jetbrains.annotations.NotNull()
     private final java.util.Map<java.lang.String, java.lang.Integer> quantities = null;
     @org.jetbrains.annotations.Nullable()
-    private final com.momokotle.agent.models.StoreItem checkoutItem = null;
+    private final com.momokotle.agent.models.StoreProduct checkoutProduct = null;
     @org.jetbrains.annotations.NotNull()
     private final java.lang.String checkoutPhone = null;
     @org.jetbrains.annotations.NotNull()
@@ -33,11 +36,11 @@ public final class StoreUiState {
     @org.jetbrains.annotations.Nullable()
     private final java.lang.String errorMessage = null;
     
-    public StoreUiState(boolean isOnline, @org.jetbrains.annotations.NotNull()
+    public StoreUiState(boolean isOnline, boolean isLoadingProducts, @org.jetbrains.annotations.NotNull()
     com.momokotle.agent.models.StoreCategory selectedCategory, @org.jetbrains.annotations.NotNull()
-    java.util.List<com.momokotle.agent.models.StoreItem> items, @org.jetbrains.annotations.NotNull()
+    java.util.List<com.momokotle.agent.models.StoreProduct> products, @org.jetbrains.annotations.NotNull()
     java.util.Map<java.lang.String, java.lang.Integer> quantities, @org.jetbrains.annotations.Nullable()
-    com.momokotle.agent.models.StoreItem checkoutItem, @org.jetbrains.annotations.NotNull()
+    com.momokotle.agent.models.StoreProduct checkoutProduct, @org.jetbrains.annotations.NotNull()
     java.lang.String checkoutPhone, @org.jetbrains.annotations.NotNull()
     java.lang.String checkoutLocation, boolean isSubmitting, @org.jetbrains.annotations.Nullable()
     java.lang.String message, @org.jetbrains.annotations.Nullable()
@@ -49,13 +52,17 @@ public final class StoreUiState {
         return false;
     }
     
+    public final boolean isLoadingProducts() {
+        return false;
+    }
+    
     @org.jetbrains.annotations.NotNull()
     public final com.momokotle.agent.models.StoreCategory getSelectedCategory() {
         return null;
     }
     
     @org.jetbrains.annotations.NotNull()
-    public final java.util.List<com.momokotle.agent.models.StoreItem> getItems() {
+    public final java.util.List<com.momokotle.agent.models.StoreProduct> getProducts() {
         return null;
     }
     
@@ -65,7 +72,7 @@ public final class StoreUiState {
     }
     
     @org.jetbrains.annotations.Nullable()
-    public final com.momokotle.agent.models.StoreItem getCheckoutItem() {
+    public final com.momokotle.agent.models.StoreProduct getCheckoutProduct() {
         return null;
     }
     
@@ -106,28 +113,32 @@ public final class StoreUiState {
         return null;
     }
     
+    @org.jetbrains.annotations.Nullable()
+    public final java.lang.String component11() {
+        return null;
+    }
+    
+    public final boolean component2() {
+        return false;
+    }
+    
     @org.jetbrains.annotations.NotNull()
-    public final com.momokotle.agent.models.StoreCategory component2() {
+    public final com.momokotle.agent.models.StoreCategory component3() {
         return null;
     }
     
     @org.jetbrains.annotations.NotNull()
-    public final java.util.List<com.momokotle.agent.models.StoreItem> component3() {
+    public final java.util.List<com.momokotle.agent.models.StoreProduct> component4() {
         return null;
     }
     
     @org.jetbrains.annotations.NotNull()
-    public final java.util.Map<java.lang.String, java.lang.Integer> component4() {
+    public final java.util.Map<java.lang.String, java.lang.Integer> component5() {
         return null;
     }
     
     @org.jetbrains.annotations.Nullable()
-    public final com.momokotle.agent.models.StoreItem component5() {
-        return null;
-    }
-    
-    @org.jetbrains.annotations.NotNull()
-    public final java.lang.String component6() {
+    public final com.momokotle.agent.models.StoreProduct component6() {
         return null;
     }
     
@@ -136,21 +147,21 @@ public final class StoreUiState {
         return null;
     }
     
-    public final boolean component8() {
-        return false;
-    }
-    
-    @org.jetbrains.annotations.Nullable()
-    public final java.lang.String component9() {
+    @org.jetbrains.annotations.NotNull()
+    public final java.lang.String component8() {
         return null;
     }
     
+    public final boolean component9() {
+        return false;
+    }
+    
     @org.jetbrains.annotations.NotNull()
-    public final com.momokotle.agent.presentation.store.StoreUiState copy(boolean isOnline, @org.jetbrains.annotations.NotNull()
+    public final com.momokotle.agent.presentation.store.StoreUiState copy(boolean isOnline, boolean isLoadingProducts, @org.jetbrains.annotations.NotNull()
     com.momokotle.agent.models.StoreCategory selectedCategory, @org.jetbrains.annotations.NotNull()
-    java.util.List<com.momokotle.agent.models.StoreItem> items, @org.jetbrains.annotations.NotNull()
+    java.util.List<com.momokotle.agent.models.StoreProduct> products, @org.jetbrains.annotations.NotNull()
     java.util.Map<java.lang.String, java.lang.Integer> quantities, @org.jetbrains.annotations.Nullable()
-    com.momokotle.agent.models.StoreItem checkoutItem, @org.jetbrains.annotations.NotNull()
+    com.momokotle.agent.models.StoreProduct checkoutProduct, @org.jetbrains.annotations.NotNull()
     java.lang.String checkoutPhone, @org.jetbrains.annotations.NotNull()
     java.lang.String checkoutLocation, boolean isSubmitting, @org.jetbrains.annotations.Nullable()
     java.lang.String message, @org.jetbrains.annotations.Nullable()
