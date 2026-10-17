@@ -35,7 +35,7 @@ import javax.inject.Inject
 data class CustomFlowFormState(
     val id: Long = 0,
     val name: String = "",
-    val ussdCode: String = "*171#",
+    val ussdCode: String = "",
     /** Editable step fields; may include blanks while typing. Cap: [CustomFlow.MAX_STEPS]. */
     val steps: List<StepDraft> = listOf(StepDraft()),
     val useDynamicPhone: Boolean = false,

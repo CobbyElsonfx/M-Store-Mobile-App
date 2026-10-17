@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.momokotle.agent.models.DuplicateTransactionWarningWindowTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-06T22:28:22" hostname="FRANCIS-ANDOH" time="0.008">
-  <properties/>
-  <testcase name="off_hasNoWindowMs" classname="com.momokotle.agent.models.DuplicateTransactionWarningWindowTest" time="0.003"/>
-  <testcase name="windows_haveExpectedDurations" classname="com.momokotle.agent.models.DuplicateTransactionWarningWindowTest" time="0.0"/>
-  <testcase name="defaultFromStored_isFiveMinutes" classname="com.momokotle.agent.models.DuplicateTransactionWarningWindowTest" time="0.003"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

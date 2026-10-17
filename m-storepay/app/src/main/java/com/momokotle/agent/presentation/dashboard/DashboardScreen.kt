@@ -60,10 +60,9 @@ import com.momokotle.agent.ui.components.AppStatusTone
 import com.momokotle.agent.ui.components.AppTextField
 import com.momokotle.agent.ui.components.ContactSearchSuggestions
 import com.momokotle.agent.ui.components.DashboardGridButton
-import com.momokotle.agent.ui.components.PhoneNumberWithSaveRow
+import com.momokotle.agent.ui.components.PhoneNumberWithClearRow
 import com.momokotle.agent.ui.components.DuplicateTransactionWarningDialog
 import com.momokotle.agent.ui.components.LargeTransactionConfirmDialog
-import com.momokotle.agent.ui.components.SaveContactDialog
 import com.momokotle.agent.ui.theme.AppColors
 import com.momokotle.agent.ui.theme.AppDimens
 import com.momokotle.agent.ui.theme.appFormCheckboxColors
@@ -76,7 +75,6 @@ private data class GridAction(
     val onClick: () -> Unit,
     val isSpacer: Boolean = false,
     val highlighted: Boolean = false,
-    val isCustom: Boolean = false
 )
 
 @Composable
@@ -122,20 +120,6 @@ fun DashboardScreen(
         handle.remove<String>("prefill_phone")
         handle.remove<String>("prefill_network")
         handle.remove<Boolean>("prefill_ported")
-    }
-
-    if (contactUi.showSaveDialog) {
-        SaveContactDialog(
-            formState = contactUi.saveDialogForm,
-            onContactNameChange = viewModel::onSaveDialogNameChange,
-            onPhoneNumberChange = viewModel::onSaveDialogPhoneChange,
-            onNetworkChange = viewModel::onSaveDialogNetworkChange,
-            onPortedChange = viewModel::onSaveDialogPortedChange,
-            onDismiss = viewModel::dismissSaveDialog,
-            onSave = viewModel::saveContactFromDialog,
-            errorMessage = contactUi.saveDialogError,
-            phoneEditable = true
-        )
     }
 
     largeTxConfirm?.let { pending ->
@@ -187,13 +171,23 @@ fun DashboardScreen(
         }
     }
 
+    val featuredActions = listOf(
+        GridAction(
+            id = "cash_in",
+            label = "CASH IN",
+            icon = Icons.Default.SouthWest,
+            onClick = { runWithPermissions { viewModel.startCashIn() } },
+            highlighted = true
+        ),
+        GridAction(
+            id = "cash_out",
+            label = "CASH OUT",
+            icon = Icons.Default.NorthEast,
+            onClick = { runWithPermissions(requireSms = true) { viewModel.startCashOut() } },
+            highlighted = true
+        )
+    )
     val gridActions = buildList {
-        add(GridAction("cash_in", "CASH IN", Icons.Default.SouthWest, {
-            runWithPermissions { viewModel.startCashIn() }
-        }))
-        add(GridAction("cash_out", "CASH OUT", Icons.Default.NorthEast, {
-            runWithPermissions(requireSms = true) { viewModel.startCashOut() }
-        }))
         add(GridAction("balance", "BALANCE", Icons.Default.AccountBalance, {
             runWithPermissions { viewModel.startBalance() }
         }))
@@ -212,13 +206,8 @@ fun DashboardScreen(
         customFlows.forEach { flow ->
             add(
                 customFlowGridAction(flow) {
-                    runWithPermissions {
-                        if (CustomFlowExecutor.canRunImmediately(flow)) {
-                            viewModel.runCustomFlowImmediately(flow.id)
-                        } else {
-                            onRunCustomMenu(flow.id)
-                        }
-                    }
+                    // Use dashboard phone/amount fields and dial — no separate Run screen.
+                    runWithPermissions { viewModel.runCustomFlowFromDashboard(flow.id) }
                 }
             )
         }
@@ -274,10 +263,12 @@ fun DashboardScreen(
                 verticalAlignment = Alignment.Top
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    PhoneNumberWithSaveRow(
+                    PhoneNumberWithClearRow(
                         phoneValue = formState.phoneNumber,
                         onPhoneChange = viewModel::onPhoneChange,
-                        onSaveContactClick = viewModel::openSaveContactDialog,
+                        onClearFieldsClick = viewModel::clearFormFields,
+                        clearEnabled = formState.phoneNumber.isNotBlank() ||
+                            formState.amount.isNotBlank(),
                         enabled = !uiState.isLoading
                     )
                     ContactSearchSuggestions(
@@ -328,6 +319,7 @@ fun DashboardScreen(
         )
 
         DashboardActionGrid(
+            featuredActions = featuredActions,
             actions = gridActions,
             actionsEnabled = actionsEnabled,
             locked = ussdLocked
@@ -342,23 +334,44 @@ private fun customFlowGridAction(
     id = "custom_flow_${flow.id}",
     label = CustomFlowExecutor.gridLabel(flow.name),
     icon = Icons.Default.Apps,
-    onClick = onClick,
-    isCustom = true
+    onClick = onClick
 )
 
 @Composable
 private fun DashboardActionGrid(
+    featuredActions: List<GridAction>,
     actions: List<GridAction>,
     actionsEnabled: Boolean,
     locked: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val visibleActions = actions.filterNot { it.isSpacer }
+    val secondaryActions = actions.filterNot { it.isSpacer }
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(AppDimens.DashboardGridSpacing)
     ) {
-        visibleActions.chunked(4).forEach { rowActions ->
+        if (featuredActions.isNotEmpty()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(AppDimens.DashboardGridSpacing)
+            ) {
+                featuredActions.forEach { action ->
+                    DashboardGridButton(
+                        label = action.label,
+                        onClick = action.onClick,
+                        enabled = actionsEnabled,
+                        icon = action.icon,
+                        highlighted = action.highlighted,
+                        compact = false,
+                        featured = true,
+                        locked = locked,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        }
+
+        secondaryActions.chunked(4).forEach { rowActions ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(AppDimens.DashboardGridSpacing)
@@ -370,7 +383,6 @@ private fun DashboardActionGrid(
                         enabled = actionsEnabled,
                         icon = action.icon,
                         highlighted = action.highlighted,
-                        showCustomBadge = action.isCustom,
                         locked = locked && action.id != "custom_menu",
                         modifier = Modifier.weight(1f)
                     )

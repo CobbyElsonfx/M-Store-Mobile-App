@@ -75,6 +75,20 @@ class TransactionRepositoryImpl @Inject constructor(
         return dao.findRecentByPhoneNumbers(phoneNumbers, cutoffTime)?.toDomain()
     }
 
+    override suspend fun countByPhoneNumbers(phoneNumbers: List<String>): Int {
+        if (phoneNumbers.isEmpty()) return 0
+        return dao.countByPhoneNumbers(phoneNumbers)
+    }
+
+    override suspend fun findFrequentPhonesMatching(
+        query: String,
+        minCount: Int,
+        limit: Int
+    ): List<String> {
+        if (query.isBlank() || limit <= 0) return emptyList()
+        return dao.findFrequentPhonesMatching(query.trim(), minCount, limit)
+    }
+
     override suspend fun delete(id: Long) {
         dao.deleteById(id)
     }

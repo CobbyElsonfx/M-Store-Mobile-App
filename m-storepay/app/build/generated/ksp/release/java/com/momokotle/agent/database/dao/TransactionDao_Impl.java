@@ -11,15 +11,18 @@ import androidx.room.RoomSQLiteQuery;
 import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
+import androidx.room.util.StringUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import com.momokotle.agent.database.entity.TransactionEntity;
 import java.lang.Class;
 import java.lang.Double;
 import java.lang.Exception;
+import java.lang.Integer;
 import java.lang.Long;
 import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.StringBuilder;
 import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -529,6 +532,194 @@ public final class TransactionDao_Impl implements TransactionDao {
             _result = new TransactionEntity(_tmpId,_tmpType,_tmpAmount,_tmpProfit,_tmpCommission,_tmpCommissionRuleUsed,_tmpPhoneNumber,_tmpFlowName,_tmpStatus,_tmpNote,_tmpTimestamp);
           } else {
             _result = null;
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object findRecentByPhoneNumbers(final List<String> phoneNumbers, final long cutoffTime,
+      final Continuation<? super TransactionEntity> $completion) {
+    final StringBuilder _stringBuilder = StringUtil.newStringBuilder();
+    _stringBuilder.append("\n");
+    _stringBuilder.append("        SELECT * FROM transactions");
+    _stringBuilder.append("\n");
+    _stringBuilder.append("        WHERE phoneNumber IN (");
+    final int _inputSize = phoneNumbers.size();
+    StringUtil.appendPlaceholders(_stringBuilder, _inputSize);
+    _stringBuilder.append(")");
+    _stringBuilder.append("\n");
+    _stringBuilder.append("          AND timestamp >= ");
+    _stringBuilder.append("?");
+    _stringBuilder.append("\n");
+    _stringBuilder.append("        ORDER BY timestamp DESC");
+    _stringBuilder.append("\n");
+    _stringBuilder.append("        LIMIT 1");
+    _stringBuilder.append("\n");
+    _stringBuilder.append("        ");
+    final String _sql = _stringBuilder.toString();
+    final int _argCount = 1 + _inputSize;
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, _argCount);
+    int _argIndex = 1;
+    for (String _item : phoneNumbers) {
+      _statement.bindString(_argIndex, _item);
+      _argIndex++;
+    }
+    _argIndex = 1 + _inputSize;
+    _statement.bindLong(_argIndex, cutoffTime);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<TransactionEntity>() {
+      @Override
+      @Nullable
+      public TransactionEntity call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfType = CursorUtil.getColumnIndexOrThrow(_cursor, "type");
+          final int _cursorIndexOfAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "amount");
+          final int _cursorIndexOfProfit = CursorUtil.getColumnIndexOrThrow(_cursor, "profit");
+          final int _cursorIndexOfCommission = CursorUtil.getColumnIndexOrThrow(_cursor, "commission");
+          final int _cursorIndexOfCommissionRuleUsed = CursorUtil.getColumnIndexOrThrow(_cursor, "commissionRuleUsed");
+          final int _cursorIndexOfPhoneNumber = CursorUtil.getColumnIndexOrThrow(_cursor, "phoneNumber");
+          final int _cursorIndexOfFlowName = CursorUtil.getColumnIndexOrThrow(_cursor, "flowName");
+          final int _cursorIndexOfStatus = CursorUtil.getColumnIndexOrThrow(_cursor, "status");
+          final int _cursorIndexOfNote = CursorUtil.getColumnIndexOrThrow(_cursor, "note");
+          final int _cursorIndexOfTimestamp = CursorUtil.getColumnIndexOrThrow(_cursor, "timestamp");
+          final TransactionEntity _result;
+          if (_cursor.moveToFirst()) {
+            final long _tmpId;
+            _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpType;
+            _tmpType = _cursor.getString(_cursorIndexOfType);
+            final double _tmpAmount;
+            _tmpAmount = _cursor.getDouble(_cursorIndexOfAmount);
+            final double _tmpProfit;
+            _tmpProfit = _cursor.getDouble(_cursorIndexOfProfit);
+            final double _tmpCommission;
+            _tmpCommission = _cursor.getDouble(_cursorIndexOfCommission);
+            final String _tmpCommissionRuleUsed;
+            if (_cursor.isNull(_cursorIndexOfCommissionRuleUsed)) {
+              _tmpCommissionRuleUsed = null;
+            } else {
+              _tmpCommissionRuleUsed = _cursor.getString(_cursorIndexOfCommissionRuleUsed);
+            }
+            final String _tmpPhoneNumber;
+            if (_cursor.isNull(_cursorIndexOfPhoneNumber)) {
+              _tmpPhoneNumber = null;
+            } else {
+              _tmpPhoneNumber = _cursor.getString(_cursorIndexOfPhoneNumber);
+            }
+            final String _tmpFlowName;
+            if (_cursor.isNull(_cursorIndexOfFlowName)) {
+              _tmpFlowName = null;
+            } else {
+              _tmpFlowName = _cursor.getString(_cursorIndexOfFlowName);
+            }
+            final String _tmpStatus;
+            _tmpStatus = _cursor.getString(_cursorIndexOfStatus);
+            final String _tmpNote;
+            if (_cursor.isNull(_cursorIndexOfNote)) {
+              _tmpNote = null;
+            } else {
+              _tmpNote = _cursor.getString(_cursorIndexOfNote);
+            }
+            final long _tmpTimestamp;
+            _tmpTimestamp = _cursor.getLong(_cursorIndexOfTimestamp);
+            _result = new TransactionEntity(_tmpId,_tmpType,_tmpAmount,_tmpProfit,_tmpCommission,_tmpCommissionRuleUsed,_tmpPhoneNumber,_tmpFlowName,_tmpStatus,_tmpNote,_tmpTimestamp);
+          } else {
+            _result = null;
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object countByPhoneNumbers(final List<String> phoneNumbers,
+      final Continuation<? super Integer> $completion) {
+    final StringBuilder _stringBuilder = StringUtil.newStringBuilder();
+    _stringBuilder.append("\n");
+    _stringBuilder.append("        SELECT COUNT(*) FROM transactions");
+    _stringBuilder.append("\n");
+    _stringBuilder.append("        WHERE phoneNumber IN (");
+    final int _inputSize = phoneNumbers.size();
+    StringUtil.appendPlaceholders(_stringBuilder, _inputSize);
+    _stringBuilder.append(")");
+    _stringBuilder.append("\n");
+    _stringBuilder.append("        ");
+    final String _sql = _stringBuilder.toString();
+    final int _argCount = 0 + _inputSize;
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, _argCount);
+    int _argIndex = 1;
+    for (String _item : phoneNumbers) {
+      _statement.bindString(_argIndex, _item);
+      _argIndex++;
+    }
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<Integer>() {
+      @Override
+      @NonNull
+      public Integer call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final Integer _result;
+          if (_cursor.moveToFirst()) {
+            final int _tmp;
+            _tmp = _cursor.getInt(0);
+            _result = _tmp;
+          } else {
+            _result = 0;
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object findFrequentPhonesMatching(final String query, final int minCount, final int limit,
+      final Continuation<? super List<String>> $completion) {
+    final String _sql = "\n"
+            + "        SELECT phoneNumber FROM transactions\n"
+            + "        WHERE phoneNumber IS NOT NULL\n"
+            + "          AND phoneNumber != ''\n"
+            + "          AND phoneNumber LIKE '%' || ? || '%'\n"
+            + "        GROUP BY phoneNumber\n"
+            + "        HAVING COUNT(*) >= ?\n"
+            + "        ORDER BY MAX(timestamp) DESC\n"
+            + "        LIMIT ?\n"
+            + "        ";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 3);
+    int _argIndex = 1;
+    _statement.bindString(_argIndex, query);
+    _argIndex = 2;
+    _statement.bindLong(_argIndex, minCount);
+    _argIndex = 3;
+    _statement.bindLong(_argIndex, limit);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<List<String>>() {
+      @Override
+      @NonNull
+      public List<String> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final List<String> _result = new ArrayList<String>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final String _item;
+            _item = _cursor.getString(0);
+            _result.add(_item);
           }
           return _result;
         } finally {

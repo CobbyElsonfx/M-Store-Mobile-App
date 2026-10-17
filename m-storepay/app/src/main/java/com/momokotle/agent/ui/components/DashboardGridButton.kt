@@ -17,6 +17,7 @@ fun DashboardGridButton(
     highlighted: Boolean = false,
     showCustomBadge: Boolean = false,
     compact: Boolean = true,
+    featured: Boolean = false,
     locked: Boolean = false
 ) {
     AppActionGridButton(
@@ -28,6 +29,7 @@ fun DashboardGridButton(
         highlighted = highlighted,
         showCustomBadge = showCustomBadge,
         compact = compact,
+        featured = featured,
         locked = locked
     )
 }

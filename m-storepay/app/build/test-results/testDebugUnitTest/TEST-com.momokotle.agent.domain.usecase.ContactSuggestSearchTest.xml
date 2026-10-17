@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.momokotle.agent.domain.usecase.ContactSuggestSearchTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-08T09:27:53" hostname="FRANCIS-ANDOH" time="0.184">
+  <properties/>
+  <testcase name="search_requiresAtLeastTwoCharsInDashboardGate" classname="com.momokotle.agent.domain.usecase.ContactSuggestSearchTest" time="0.004"/>
+  <testcase name="selectingContact_bumpsUpdatedAtSoItRanksFirstNextTime" classname="com.momokotle.agent.domain.usecase.ContactSuggestSearchTest" time="0.125"/>
+  <testcase name="search_ranksByUpdatedAtDescAndLimitsTo8" classname="com.momokotle.agent.domain.usecase.ContactSuggestSearchTest" time="0.053"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

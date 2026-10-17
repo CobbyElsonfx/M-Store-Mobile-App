@@ -25,9 +25,7 @@ data class TransactionsUiState(
     val transactions: List<Transaction> = emptyList(),
     val filter: TransactionType? = null,
     val todaySummary: CommissionSummary = CommissionSummary(),
-    val weekSummary: CommissionSummary = CommissionSummary(),
-    val monthSummary: CommissionSummary = CommissionSummary(),
-    val lifetimeSummary: CommissionSummary = CommissionSummary()
+    val weekSummary: CommissionSummary = CommissionSummary()
 )
 
 @HiltViewModel
@@ -42,9 +40,8 @@ class TransactionsViewModel @Inject constructor(
         transactionRepository.observeAll(),
         filter,
         observeCommissionSummaryUseCase.observe(CommissionPeriod.TODAY),
-        observeCommissionSummaryUseCase.observe(CommissionPeriod.THIS_WEEK),
-        observeCommissionSummaryUseCase.observe(CommissionPeriod.THIS_MONTH)
-    ) { transactions, selectedFilter, today, week, month ->
+        observeCommissionSummaryUseCase.observe(CommissionPeriod.THIS_WEEK)
+    ) { transactions, selectedFilter, today, week ->
         TransactionsUiState(
             transactions = if (selectedFilter == null) {
                 transactions
@@ -53,11 +50,8 @@ class TransactionsViewModel @Inject constructor(
             },
             filter = selectedFilter,
             todaySummary = today,
-            weekSummary = week,
-            monthSummary = month
+            weekSummary = week
         )
-    }.combine(observeCommissionSummaryUseCase.observe(CommissionPeriod.LIFETIME)) { state, lifetime ->
-        state.copy(lifetimeSummary = lifetime)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TransactionsUiState())
 
     fun setFilter(type: TransactionType?) {

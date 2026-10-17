@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.Gson;
 import com.momokotle.agent.accessibility.MomoAccessibilityService;
 import com.momokotle.agent.accessibility.MomoAccessibilityService_MembersInjector;
+import com.momokotle.agent.data.contacts.DeviceContactReader;
 import com.momokotle.agent.data.datastore.AuthTokenDataStore;
 import com.momokotle.agent.data.datastore.SettingsDataStore;
 import com.momokotle.agent.data.datastore.UserAccountDataStore;
@@ -58,6 +59,7 @@ import com.momokotle.agent.domain.usecase.CheckDuplicateTransactionUseCase;
 import com.momokotle.agent.domain.usecase.CheckSubscriptionPaymentStatusUseCase;
 import com.momokotle.agent.domain.usecase.CheckUssdAccessUseCase;
 import com.momokotle.agent.domain.usecase.GetAuthenticatedUserUseCase;
+import com.momokotle.agent.domain.usecase.ImportDeviceContactsUseCase;
 import com.momokotle.agent.domain.usecase.InitializeManualSubscriptionPaymentUseCase;
 import com.momokotle.agent.domain.usecase.InitializeSubscriptionPaymentUseCase;
 import com.momokotle.agent.domain.usecase.LoginUseCase;
@@ -74,12 +76,14 @@ import com.momokotle.agent.domain.usecase.ObserveSubscriptionPlansUseCase;
 import com.momokotle.agent.domain.usecase.ObserveWalletTransactionsUseCase;
 import com.momokotle.agent.domain.usecase.ObserveWalletUseCase;
 import com.momokotle.agent.domain.usecase.ObserveWithdrawalsUseCase;
+import com.momokotle.agent.domain.usecase.PromoteFrequentCustomerContactUseCase;
 import com.momokotle.agent.domain.usecase.RecordAttemptedTransactionUseCase;
 import com.momokotle.agent.domain.usecase.RefreshUserProfileUseCase;
 import com.momokotle.agent.domain.usecase.RegisterUseCase;
 import com.momokotle.agent.domain.usecase.RequestWithdrawalUseCase;
 import com.momokotle.agent.domain.usecase.ResendRegistrationOtpUseCase;
 import com.momokotle.agent.domain.usecase.SaveContactUseCase;
+import com.momokotle.agent.domain.usecase.SearchCustomerSuggestionsUseCase;
 import com.momokotle.agent.domain.usecase.StartUssdFlowUseCase;
 import com.momokotle.agent.domain.usecase.UpdateTransactionStatusUseCase;
 import com.momokotle.agent.domain.usecase.VerifyRegistrationOtpUseCase;
@@ -540,88 +544,61 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_momokotle_agent_presentation_referral_ReferralViewModel = "com.momokotle.agent.presentation.referral.ReferralViewModel";
+      static String com_momokotle_agent_presentation_subscription_SubscriptionViewModel = "com.momokotle.agent.presentation.subscription.SubscriptionViewModel";
 
-      static String com_momokotle_agent_presentation_profit_CashInSettingsViewModel = "com.momokotle.agent.presentation.profit.CashInSettingsViewModel";
-
-      static String com_momokotle_agent_presentation_profit_ProfitCalculationViewModel = "com.momokotle.agent.presentation.profit.ProfitCalculationViewModel";
-
-      static String com_momokotle_agent_presentation_registration_AgentFormViewModel = "com.momokotle.agent.presentation.registration.AgentFormViewModel";
-
-      static String com_momokotle_agent_presentation_settings_SettingsHomeViewModel = "com.momokotle.agent.presentation.settings.SettingsHomeViewModel";
-
-      static String com_momokotle_agent_presentation_auth_RegisterViewModel = "com.momokotle.agent.presentation.auth.RegisterViewModel";
-
-      static String com_momokotle_agent_presentation_auth_LoginViewModel = "com.momokotle.agent.presentation.auth.LoginViewModel";
-
-      static String com_momokotle_agent_presentation_settings_HelpCenterViewModel = "com.momokotle.agent.presentation.settings.HelpCenterViewModel";
-
-      static String com_momokotle_agent_presentation_wallet_WalletViewModel = "com.momokotle.agent.presentation.wallet.WalletViewModel";
-
-      static String com_momokotle_agent_presentation_dashboard_DashboardViewModel = "com.momokotle.agent.presentation.dashboard.DashboardViewModel";
-
-      static String com_momokotle_agent_presentation_orders_OrderDetailViewModel = "com.momokotle.agent.presentation.orders.OrderDetailViewModel";
+      static String com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel = "com.momokotle.agent.presentation.submissions.SubmissionDetailViewModel";
 
       static String com_momokotle_agent_presentation_auth_SessionViewModel = "com.momokotle.agent.presentation.auth.SessionViewModel";
 
       static String com_momokotle_agent_presentation_transactions_TransactionsViewModel = "com.momokotle.agent.presentation.transactions.TransactionsViewModel";
 
+      static String com_momokotle_agent_presentation_settings_AppSettingsViewModel = "com.momokotle.agent.presentation.settings.AppSettingsViewModel";
+
       static String com_momokotle_agent_presentation_orders_MyOrdersViewModel = "com.momokotle.agent.presentation.orders.MyOrdersViewModel";
 
-      static String com_momokotle_agent_presentation_submissions_MySubmissionsViewModel = "com.momokotle.agent.presentation.submissions.MySubmissionsViewModel";
+      static String com_momokotle_agent_presentation_registration_AgentFormViewModel = "com.momokotle.agent.presentation.registration.AgentFormViewModel";
 
-      static String com_momokotle_agent_presentation_subscription_SubscriptionViewModel = "com.momokotle.agent.presentation.subscription.SubscriptionViewModel";
+      static String com_momokotle_agent_presentation_referral_ReferralViewModel = "com.momokotle.agent.presentation.referral.ReferralViewModel";
 
-      static String com_momokotle_agent_presentation_notifications_NotificationsViewModel = "com.momokotle.agent.presentation.notifications.NotificationsViewModel";
-
-      static String com_momokotle_agent_presentation_settings_AccountProfileViewModel = "com.momokotle.agent.presentation.settings.AccountProfileViewModel";
-
-      static String com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel = "com.momokotle.agent.presentation.submissions.SubmissionDetailViewModel";
-
-      static String com_momokotle_agent_presentation_store_StoreViewModel = "com.momokotle.agent.presentation.store.StoreViewModel";
-
-      static String com_momokotle_agent_presentation_subscription_ManualPaymentViewModel = "com.momokotle.agent.presentation.subscription.ManualPaymentViewModel";
+      static String com_momokotle_agent_presentation_settings_HelpCenterViewModel = "com.momokotle.agent.presentation.settings.HelpCenterViewModel";
 
       static String com_momokotle_agent_presentation_profit_CashOutSettingsViewModel = "com.momokotle.agent.presentation.profit.CashOutSettingsViewModel";
 
+      static String com_momokotle_agent_presentation_profit_CashInSettingsViewModel = "com.momokotle.agent.presentation.profit.CashInSettingsViewModel";
+
+      static String com_momokotle_agent_presentation_subscription_ManualPaymentViewModel = "com.momokotle.agent.presentation.subscription.ManualPaymentViewModel";
+
+      static String com_momokotle_agent_presentation_auth_RegisterViewModel = "com.momokotle.agent.presentation.auth.RegisterViewModel";
+
+      static String com_momokotle_agent_presentation_store_StoreViewModel = "com.momokotle.agent.presentation.store.StoreViewModel";
+
+      static String com_momokotle_agent_presentation_profit_ProfitCalculationViewModel = "com.momokotle.agent.presentation.profit.ProfitCalculationViewModel";
+
       static String com_momokotle_agent_presentation_contacts_ContactsViewModel = "com.momokotle.agent.presentation.contacts.ContactsViewModel";
+
+      static String com_momokotle_agent_presentation_orders_OrderDetailViewModel = "com.momokotle.agent.presentation.orders.OrderDetailViewModel";
+
+      static String com_momokotle_agent_presentation_settings_SettingsHomeViewModel = "com.momokotle.agent.presentation.settings.SettingsHomeViewModel";
+
+      static String com_momokotle_agent_presentation_submissions_MySubmissionsViewModel = "com.momokotle.agent.presentation.submissions.MySubmissionsViewModel";
+
+      static String com_momokotle_agent_presentation_settings_AccountProfileViewModel = "com.momokotle.agent.presentation.settings.AccountProfileViewModel";
+
+      static String com_momokotle_agent_presentation_auth_LoginViewModel = "com.momokotle.agent.presentation.auth.LoginViewModel";
+
+      static String com_momokotle_agent_presentation_wallet_WalletViewModel = "com.momokotle.agent.presentation.wallet.WalletViewModel";
+
+      static String com_momokotle_agent_presentation_dashboard_DashboardViewModel = "com.momokotle.agent.presentation.dashboard.DashboardViewModel";
+
+      static String com_momokotle_agent_presentation_notifications_NotificationsViewModel = "com.momokotle.agent.presentation.notifications.NotificationsViewModel";
 
       static String com_momokotle_agent_presentation_custommenu_CustomFlowViewModel = "com.momokotle.agent.presentation.custommenu.CustomFlowViewModel";
 
-      static String com_momokotle_agent_presentation_settings_AppSettingsViewModel = "com.momokotle.agent.presentation.settings.AppSettingsViewModel";
+      @KeepFieldType
+      SubscriptionViewModel com_momokotle_agent_presentation_subscription_SubscriptionViewModel2;
 
       @KeepFieldType
-      ReferralViewModel com_momokotle_agent_presentation_referral_ReferralViewModel2;
-
-      @KeepFieldType
-      CashInSettingsViewModel com_momokotle_agent_presentation_profit_CashInSettingsViewModel2;
-
-      @KeepFieldType
-      ProfitCalculationViewModel com_momokotle_agent_presentation_profit_ProfitCalculationViewModel2;
-
-      @KeepFieldType
-      AgentFormViewModel com_momokotle_agent_presentation_registration_AgentFormViewModel2;
-
-      @KeepFieldType
-      SettingsHomeViewModel com_momokotle_agent_presentation_settings_SettingsHomeViewModel2;
-
-      @KeepFieldType
-      RegisterViewModel com_momokotle_agent_presentation_auth_RegisterViewModel2;
-
-      @KeepFieldType
-      LoginViewModel com_momokotle_agent_presentation_auth_LoginViewModel2;
-
-      @KeepFieldType
-      HelpCenterViewModel com_momokotle_agent_presentation_settings_HelpCenterViewModel2;
-
-      @KeepFieldType
-      WalletViewModel com_momokotle_agent_presentation_wallet_WalletViewModel2;
-
-      @KeepFieldType
-      DashboardViewModel com_momokotle_agent_presentation_dashboard_DashboardViewModel2;
-
-      @KeepFieldType
-      OrderDetailViewModel com_momokotle_agent_presentation_orders_OrderDetailViewModel2;
+      SubmissionDetailViewModel com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel2;
 
       @KeepFieldType
       SessionViewModel com_momokotle_agent_presentation_auth_SessionViewModel2;
@@ -630,40 +607,67 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
       TransactionsViewModel com_momokotle_agent_presentation_transactions_TransactionsViewModel2;
 
       @KeepFieldType
+      AppSettingsViewModel com_momokotle_agent_presentation_settings_AppSettingsViewModel2;
+
+      @KeepFieldType
       MyOrdersViewModel com_momokotle_agent_presentation_orders_MyOrdersViewModel2;
 
       @KeepFieldType
-      MySubmissionsViewModel com_momokotle_agent_presentation_submissions_MySubmissionsViewModel2;
+      AgentFormViewModel com_momokotle_agent_presentation_registration_AgentFormViewModel2;
 
       @KeepFieldType
-      SubscriptionViewModel com_momokotle_agent_presentation_subscription_SubscriptionViewModel2;
+      ReferralViewModel com_momokotle_agent_presentation_referral_ReferralViewModel2;
 
       @KeepFieldType
-      NotificationsViewModel com_momokotle_agent_presentation_notifications_NotificationsViewModel2;
-
-      @KeepFieldType
-      AccountProfileViewModel com_momokotle_agent_presentation_settings_AccountProfileViewModel2;
-
-      @KeepFieldType
-      SubmissionDetailViewModel com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel2;
-
-      @KeepFieldType
-      StoreViewModel com_momokotle_agent_presentation_store_StoreViewModel2;
-
-      @KeepFieldType
-      ManualPaymentViewModel com_momokotle_agent_presentation_subscription_ManualPaymentViewModel2;
+      HelpCenterViewModel com_momokotle_agent_presentation_settings_HelpCenterViewModel2;
 
       @KeepFieldType
       CashOutSettingsViewModel com_momokotle_agent_presentation_profit_CashOutSettingsViewModel2;
 
       @KeepFieldType
+      CashInSettingsViewModel com_momokotle_agent_presentation_profit_CashInSettingsViewModel2;
+
+      @KeepFieldType
+      ManualPaymentViewModel com_momokotle_agent_presentation_subscription_ManualPaymentViewModel2;
+
+      @KeepFieldType
+      RegisterViewModel com_momokotle_agent_presentation_auth_RegisterViewModel2;
+
+      @KeepFieldType
+      StoreViewModel com_momokotle_agent_presentation_store_StoreViewModel2;
+
+      @KeepFieldType
+      ProfitCalculationViewModel com_momokotle_agent_presentation_profit_ProfitCalculationViewModel2;
+
+      @KeepFieldType
       ContactsViewModel com_momokotle_agent_presentation_contacts_ContactsViewModel2;
 
       @KeepFieldType
-      CustomFlowViewModel com_momokotle_agent_presentation_custommenu_CustomFlowViewModel2;
+      OrderDetailViewModel com_momokotle_agent_presentation_orders_OrderDetailViewModel2;
 
       @KeepFieldType
-      AppSettingsViewModel com_momokotle_agent_presentation_settings_AppSettingsViewModel2;
+      SettingsHomeViewModel com_momokotle_agent_presentation_settings_SettingsHomeViewModel2;
+
+      @KeepFieldType
+      MySubmissionsViewModel com_momokotle_agent_presentation_submissions_MySubmissionsViewModel2;
+
+      @KeepFieldType
+      AccountProfileViewModel com_momokotle_agent_presentation_settings_AccountProfileViewModel2;
+
+      @KeepFieldType
+      LoginViewModel com_momokotle_agent_presentation_auth_LoginViewModel2;
+
+      @KeepFieldType
+      WalletViewModel com_momokotle_agent_presentation_wallet_WalletViewModel2;
+
+      @KeepFieldType
+      DashboardViewModel com_momokotle_agent_presentation_dashboard_DashboardViewModel2;
+
+      @KeepFieldType
+      NotificationsViewModel com_momokotle_agent_presentation_notifications_NotificationsViewModel2;
+
+      @KeepFieldType
+      CustomFlowViewModel com_momokotle_agent_presentation_custommenu_CustomFlowViewModel2;
     }
   }
 
@@ -744,6 +748,10 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
       return new SaveContactUseCase(singletonCImpl.savedContactRepositoryImplProvider.get());
     }
 
+    private ImportDeviceContactsUseCase importDeviceContactsUseCase() {
+      return new ImportDeviceContactsUseCase(saveContactUseCase());
+    }
+
     private StartUssdFlowUseCase startUssdFlowUseCase() {
       return new StartUssdFlowUseCase(singletonCImpl.provideUssdDialHelperProvider.get(), singletonCImpl.provideUssdAutomationEngineProvider.get(), singletonCImpl.settingsDataStoreProvider.get(), singletonCImpl.systemUssdFlowRepositoryImplProvider.get(), singletonCImpl.cashOutSmsWatcherProvider.get());
     }
@@ -752,8 +760,12 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
       return new CheckUssdAccessUseCase(singletonCImpl.userAccountDataStoreProvider.get(), singletonCImpl.entitlementClockProvider.get());
     }
 
+    private PromoteFrequentCustomerContactUseCase promoteFrequentCustomerContactUseCase() {
+      return new PromoteFrequentCustomerContactUseCase(singletonCImpl.transactionRepositoryImplProvider.get(), singletonCImpl.savedContactRepositoryImplProvider.get());
+    }
+
     private RecordAttemptedTransactionUseCase recordAttemptedTransactionUseCase() {
-      return new RecordAttemptedTransactionUseCase(singletonCImpl.transactionRepositoryImplProvider.get());
+      return new RecordAttemptedTransactionUseCase(singletonCImpl.transactionRepositoryImplProvider.get(), promoteFrequentCustomerContactUseCase());
     }
 
     private CheckDuplicateTransactionUseCase checkDuplicateTransactionUseCase() {
@@ -766,6 +778,10 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
 
     private ObserveCommissionSummaryUseCase observeCommissionSummaryUseCase() {
       return new ObserveCommissionSummaryUseCase(singletonCImpl.transactionRepositoryImplProvider.get());
+    }
+
+    private SearchCustomerSuggestionsUseCase searchCustomerSuggestionsUseCase() {
+      return new SearchCustomerSuggestionsUseCase(singletonCImpl.savedContactRepositoryImplProvider.get(), singletonCImpl.transactionRepositoryImplProvider.get());
     }
 
     private ObserveBusinessSettingsUseCase observeBusinessSettingsUseCase() {
@@ -891,85 +907,112 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_momokotle_agent_presentation_auth_LoginViewModel = "com.momokotle.agent.presentation.auth.LoginViewModel";
-
-      static String com_momokotle_agent_presentation_auth_SessionViewModel = "com.momokotle.agent.presentation.auth.SessionViewModel";
-
-      static String com_momokotle_agent_presentation_settings_AccountProfileViewModel = "com.momokotle.agent.presentation.settings.AccountProfileViewModel";
-
-      static String com_momokotle_agent_presentation_notifications_NotificationsViewModel = "com.momokotle.agent.presentation.notifications.NotificationsViewModel";
+      static String com_momokotle_agent_presentation_profit_CashOutSettingsViewModel = "com.momokotle.agent.presentation.profit.CashOutSettingsViewModel";
 
       static String com_momokotle_agent_presentation_profit_ProfitCalculationViewModel = "com.momokotle.agent.presentation.profit.ProfitCalculationViewModel";
 
-      static String com_momokotle_agent_presentation_store_StoreViewModel = "com.momokotle.agent.presentation.store.StoreViewModel";
+      static String com_momokotle_agent_presentation_transactions_TransactionsViewModel = "com.momokotle.agent.presentation.transactions.TransactionsViewModel";
+
+      static String com_momokotle_agent_presentation_wallet_WalletViewModel = "com.momokotle.agent.presentation.wallet.WalletViewModel";
+
+      static String com_momokotle_agent_presentation_notifications_NotificationsViewModel = "com.momokotle.agent.presentation.notifications.NotificationsViewModel";
+
+      static String com_momokotle_agent_presentation_auth_RegisterViewModel = "com.momokotle.agent.presentation.auth.RegisterViewModel";
+
+      static String com_momokotle_agent_presentation_dashboard_DashboardViewModel = "com.momokotle.agent.presentation.dashboard.DashboardViewModel";
+
+      static String com_momokotle_agent_presentation_orders_OrderDetailViewModel = "com.momokotle.agent.presentation.orders.OrderDetailViewModel";
 
       static String com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel = "com.momokotle.agent.presentation.submissions.SubmissionDetailViewModel";
 
+      static String com_momokotle_agent_presentation_auth_SessionViewModel = "com.momokotle.agent.presentation.auth.SessionViewModel";
+
+      static String com_momokotle_agent_presentation_subscription_SubscriptionViewModel = "com.momokotle.agent.presentation.subscription.SubscriptionViewModel";
+
+      static String com_momokotle_agent_presentation_subscription_ManualPaymentViewModel = "com.momokotle.agent.presentation.subscription.ManualPaymentViewModel";
+
       static String com_momokotle_agent_presentation_contacts_ContactsViewModel = "com.momokotle.agent.presentation.contacts.ContactsViewModel";
 
-      static String com_momokotle_agent_presentation_profit_CashInSettingsViewModel = "com.momokotle.agent.presentation.profit.CashInSettingsViewModel";
-
       static String com_momokotle_agent_presentation_orders_MyOrdersViewModel = "com.momokotle.agent.presentation.orders.MyOrdersViewModel";
+
+      static String com_momokotle_agent_presentation_settings_SettingsHomeViewModel = "com.momokotle.agent.presentation.settings.SettingsHomeViewModel";
+
+      static String com_momokotle_agent_presentation_store_StoreViewModel = "com.momokotle.agent.presentation.store.StoreViewModel";
+
+      static String com_momokotle_agent_presentation_registration_AgentFormViewModel = "com.momokotle.agent.presentation.registration.AgentFormViewModel";
+
+      static String com_momokotle_agent_presentation_referral_ReferralViewModel = "com.momokotle.agent.presentation.referral.ReferralViewModel";
+
+      static String com_momokotle_agent_presentation_settings_AccountProfileViewModel = "com.momokotle.agent.presentation.settings.AccountProfileViewModel";
 
       static String com_momokotle_agent_presentation_custommenu_CustomFlowViewModel = "com.momokotle.agent.presentation.custommenu.CustomFlowViewModel";
 
       static String com_momokotle_agent_presentation_submissions_MySubmissionsViewModel = "com.momokotle.agent.presentation.submissions.MySubmissionsViewModel";
 
-      static String com_momokotle_agent_presentation_profit_CashOutSettingsViewModel = "com.momokotle.agent.presentation.profit.CashOutSettingsViewModel";
-
-      static String com_momokotle_agent_presentation_settings_SettingsHomeViewModel = "com.momokotle.agent.presentation.settings.SettingsHomeViewModel";
-
-      static String com_momokotle_agent_presentation_dashboard_DashboardViewModel = "com.momokotle.agent.presentation.dashboard.DashboardViewModel";
-
-      static String com_momokotle_agent_presentation_subscription_ManualPaymentViewModel = "com.momokotle.agent.presentation.subscription.ManualPaymentViewModel";
-
-      static String com_momokotle_agent_presentation_referral_ReferralViewModel = "com.momokotle.agent.presentation.referral.ReferralViewModel";
-
-      static String com_momokotle_agent_presentation_orders_OrderDetailViewModel = "com.momokotle.agent.presentation.orders.OrderDetailViewModel";
-
-      static String com_momokotle_agent_presentation_registration_AgentFormViewModel = "com.momokotle.agent.presentation.registration.AgentFormViewModel";
+      static String com_momokotle_agent_presentation_profit_CashInSettingsViewModel = "com.momokotle.agent.presentation.profit.CashInSettingsViewModel";
 
       static String com_momokotle_agent_presentation_settings_HelpCenterViewModel = "com.momokotle.agent.presentation.settings.HelpCenterViewModel";
 
-      static String com_momokotle_agent_presentation_subscription_SubscriptionViewModel = "com.momokotle.agent.presentation.subscription.SubscriptionViewModel";
-
-      static String com_momokotle_agent_presentation_wallet_WalletViewModel = "com.momokotle.agent.presentation.wallet.WalletViewModel";
-
-      static String com_momokotle_agent_presentation_transactions_TransactionsViewModel = "com.momokotle.agent.presentation.transactions.TransactionsViewModel";
-
-      static String com_momokotle_agent_presentation_auth_RegisterViewModel = "com.momokotle.agent.presentation.auth.RegisterViewModel";
+      static String com_momokotle_agent_presentation_auth_LoginViewModel = "com.momokotle.agent.presentation.auth.LoginViewModel";
 
       static String com_momokotle_agent_presentation_settings_AppSettingsViewModel = "com.momokotle.agent.presentation.settings.AppSettingsViewModel";
 
       @KeepFieldType
-      LoginViewModel com_momokotle_agent_presentation_auth_LoginViewModel2;
-
-      @KeepFieldType
-      SessionViewModel com_momokotle_agent_presentation_auth_SessionViewModel2;
-
-      @KeepFieldType
-      AccountProfileViewModel com_momokotle_agent_presentation_settings_AccountProfileViewModel2;
-
-      @KeepFieldType
-      NotificationsViewModel com_momokotle_agent_presentation_notifications_NotificationsViewModel2;
+      CashOutSettingsViewModel com_momokotle_agent_presentation_profit_CashOutSettingsViewModel2;
 
       @KeepFieldType
       ProfitCalculationViewModel com_momokotle_agent_presentation_profit_ProfitCalculationViewModel2;
 
       @KeepFieldType
-      StoreViewModel com_momokotle_agent_presentation_store_StoreViewModel2;
+      TransactionsViewModel com_momokotle_agent_presentation_transactions_TransactionsViewModel2;
+
+      @KeepFieldType
+      WalletViewModel com_momokotle_agent_presentation_wallet_WalletViewModel2;
+
+      @KeepFieldType
+      NotificationsViewModel com_momokotle_agent_presentation_notifications_NotificationsViewModel2;
+
+      @KeepFieldType
+      RegisterViewModel com_momokotle_agent_presentation_auth_RegisterViewModel2;
+
+      @KeepFieldType
+      DashboardViewModel com_momokotle_agent_presentation_dashboard_DashboardViewModel2;
+
+      @KeepFieldType
+      OrderDetailViewModel com_momokotle_agent_presentation_orders_OrderDetailViewModel2;
 
       @KeepFieldType
       SubmissionDetailViewModel com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel2;
 
       @KeepFieldType
+      SessionViewModel com_momokotle_agent_presentation_auth_SessionViewModel2;
+
+      @KeepFieldType
+      SubscriptionViewModel com_momokotle_agent_presentation_subscription_SubscriptionViewModel2;
+
+      @KeepFieldType
+      ManualPaymentViewModel com_momokotle_agent_presentation_subscription_ManualPaymentViewModel2;
+
+      @KeepFieldType
       ContactsViewModel com_momokotle_agent_presentation_contacts_ContactsViewModel2;
 
       @KeepFieldType
-      CashInSettingsViewModel com_momokotle_agent_presentation_profit_CashInSettingsViewModel2;
+      MyOrdersViewModel com_momokotle_agent_presentation_orders_MyOrdersViewModel2;
 
       @KeepFieldType
-      MyOrdersViewModel com_momokotle_agent_presentation_orders_MyOrdersViewModel2;
+      SettingsHomeViewModel com_momokotle_agent_presentation_settings_SettingsHomeViewModel2;
+
+      @KeepFieldType
+      StoreViewModel com_momokotle_agent_presentation_store_StoreViewModel2;
+
+      @KeepFieldType
+      AgentFormViewModel com_momokotle_agent_presentation_registration_AgentFormViewModel2;
+
+      @KeepFieldType
+      ReferralViewModel com_momokotle_agent_presentation_referral_ReferralViewModel2;
+
+      @KeepFieldType
+      AccountProfileViewModel com_momokotle_agent_presentation_settings_AccountProfileViewModel2;
 
       @KeepFieldType
       CustomFlowViewModel com_momokotle_agent_presentation_custommenu_CustomFlowViewModel2;
@@ -978,40 +1021,13 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
       MySubmissionsViewModel com_momokotle_agent_presentation_submissions_MySubmissionsViewModel2;
 
       @KeepFieldType
-      CashOutSettingsViewModel com_momokotle_agent_presentation_profit_CashOutSettingsViewModel2;
-
-      @KeepFieldType
-      SettingsHomeViewModel com_momokotle_agent_presentation_settings_SettingsHomeViewModel2;
-
-      @KeepFieldType
-      DashboardViewModel com_momokotle_agent_presentation_dashboard_DashboardViewModel2;
-
-      @KeepFieldType
-      ManualPaymentViewModel com_momokotle_agent_presentation_subscription_ManualPaymentViewModel2;
-
-      @KeepFieldType
-      ReferralViewModel com_momokotle_agent_presentation_referral_ReferralViewModel2;
-
-      @KeepFieldType
-      OrderDetailViewModel com_momokotle_agent_presentation_orders_OrderDetailViewModel2;
-
-      @KeepFieldType
-      AgentFormViewModel com_momokotle_agent_presentation_registration_AgentFormViewModel2;
+      CashInSettingsViewModel com_momokotle_agent_presentation_profit_CashInSettingsViewModel2;
 
       @KeepFieldType
       HelpCenterViewModel com_momokotle_agent_presentation_settings_HelpCenterViewModel2;
 
       @KeepFieldType
-      SubscriptionViewModel com_momokotle_agent_presentation_subscription_SubscriptionViewModel2;
-
-      @KeepFieldType
-      WalletViewModel com_momokotle_agent_presentation_wallet_WalletViewModel2;
-
-      @KeepFieldType
-      TransactionsViewModel com_momokotle_agent_presentation_transactions_TransactionsViewModel2;
-
-      @KeepFieldType
-      RegisterViewModel com_momokotle_agent_presentation_auth_RegisterViewModel2;
+      LoginViewModel com_momokotle_agent_presentation_auth_LoginViewModel2;
 
       @KeepFieldType
       AppSettingsViewModel com_momokotle_agent_presentation_settings_AppSettingsViewModel2;
@@ -1054,13 +1070,13 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
           return (T) new CashOutSettingsViewModel(singletonCImpl.settingsDataStoreProvider.get(), singletonCImpl.profitRuleRepositoryImplProvider.get());
 
           case 5: // com.momokotle.agent.presentation.contacts.ContactsViewModel 
-          return (T) new ContactsViewModel(singletonCImpl.savedContactRepositoryImplProvider.get(), viewModelCImpl.saveContactUseCase());
+          return (T) new ContactsViewModel(singletonCImpl.savedContactRepositoryImplProvider.get(), viewModelCImpl.saveContactUseCase(), singletonCImpl.deviceContactReaderProvider.get(), viewModelCImpl.importDeviceContactsUseCase());
 
           case 6: // com.momokotle.agent.presentation.custommenu.CustomFlowViewModel 
           return (T) new CustomFlowViewModel(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), viewModelCImpl.startUssdFlowUseCase(), singletonCImpl.provideUssdAutomationEngineProvider.get(), singletonCImpl.settingsDataStoreProvider.get(), singletonCImpl.provideAccessibilityRepositoryProvider.get(), viewModelCImpl.checkUssdAccessUseCase(), singletonCImpl.cashOutSmsWatcherProvider.get(), singletonCImpl.customFlowRepositoryImplProvider.get(), viewModelCImpl.recordAttemptedTransactionUseCase(), singletonCImpl.businessSettingsRepositoryImplProvider.get(), viewModelCImpl.checkDuplicateTransactionUseCase());
 
           case 7: // com.momokotle.agent.presentation.dashboard.DashboardViewModel 
-          return (T) new DashboardViewModel(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), viewModelCImpl.startUssdFlowUseCase(), singletonCImpl.provideUssdAutomationEngineProvider.get(), singletonCImpl.settingsDataStoreProvider.get(), singletonCImpl.provideAccessibilityRepositoryProvider.get(), viewModelCImpl.checkUssdAccessUseCase(), singletonCImpl.cashOutSmsWatcherProvider.get(), viewModelCImpl.refreshUserProfileUseCase(), viewModelCImpl.recordAttemptedTransactionUseCase(), singletonCImpl.transactionRepositoryImplProvider.get(), viewModelCImpl.observeCommissionSummaryUseCase(), singletonCImpl.customFlowRepositoryImplProvider.get(), singletonCImpl.systemUssdFlowRepositoryImplProvider.get(), singletonCImpl.savedContactRepositoryImplProvider.get(), viewModelCImpl.saveContactUseCase(), singletonCImpl.businessSettingsRepositoryImplProvider.get(), viewModelCImpl.checkDuplicateTransactionUseCase());
+          return (T) new DashboardViewModel(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), viewModelCImpl.startUssdFlowUseCase(), singletonCImpl.provideUssdAutomationEngineProvider.get(), singletonCImpl.settingsDataStoreProvider.get(), singletonCImpl.provideAccessibilityRepositoryProvider.get(), viewModelCImpl.checkUssdAccessUseCase(), singletonCImpl.cashOutSmsWatcherProvider.get(), viewModelCImpl.refreshUserProfileUseCase(), viewModelCImpl.recordAttemptedTransactionUseCase(), singletonCImpl.transactionRepositoryImplProvider.get(), viewModelCImpl.observeCommissionSummaryUseCase(), singletonCImpl.customFlowRepositoryImplProvider.get(), singletonCImpl.systemUssdFlowRepositoryImplProvider.get(), singletonCImpl.savedContactRepositoryImplProvider.get(), viewModelCImpl.searchCustomerSuggestionsUseCase(), viewModelCImpl.promoteFrequentCustomerContactUseCase(), singletonCImpl.businessSettingsRepositoryImplProvider.get(), viewModelCImpl.checkDuplicateTransactionUseCase());
 
           case 8: // com.momokotle.agent.presentation.settings.HelpCenterViewModel 
           return (T) new HelpCenterViewModel(viewModelCImpl.observeBusinessSettingsUseCase());
@@ -1256,6 +1272,8 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
 
     private Provider<SavedContactRepositoryImpl> savedContactRepositoryImplProvider;
 
+    private Provider<DeviceContactReader> deviceContactReaderProvider;
+
     private Provider<UssdDialHelper> provideUssdDialHelperProvider;
 
     private Provider<AutomationLogger> automationLoggerProvider;
@@ -1372,28 +1390,29 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
       this.provideAccessibilityRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<AccessibilityRepository>(singletonCImpl, 20));
       this.profitRuleRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<ProfitRuleRepositoryImpl>(singletonCImpl, 22));
       this.savedContactRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<SavedContactRepositoryImpl>(singletonCImpl, 23));
-      this.provideUssdDialHelperProvider = DoubleCheck.provider(new SwitchingProvider<UssdDialHelper>(singletonCImpl, 24));
-      this.automationLoggerProvider = DoubleCheck.provider(new SwitchingProvider<AutomationLogger>(singletonCImpl, 26));
-      this.provideUssdAutomationEngineProvider = DoubleCheck.provider(new SwitchingProvider<UssdAutomationEngine>(singletonCImpl, 25));
-      this.provideGsonProvider = DoubleCheck.provider(new SwitchingProvider<Gson>(singletonCImpl, 29));
-      this.ussdFlowCacheDataStoreProvider = DoubleCheck.provider(new SwitchingProvider<UssdFlowCacheDataStore>(singletonCImpl, 28));
-      this.systemUssdFlowRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<SystemUssdFlowRepositoryImpl>(singletonCImpl, 27));
-      this.transactionRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<TransactionRepositoryImpl>(singletonCImpl, 31));
-      this.agentCommissionEngineProvider = DoubleCheck.provider(new SwitchingProvider<AgentCommissionEngine>(singletonCImpl, 32));
-      this.cashOutSmsWatcherProvider = DoubleCheck.provider(new SwitchingProvider<CashOutSmsWatcher>(singletonCImpl, 30));
-      this.entitlementClockProvider = DoubleCheck.provider(new SwitchingProvider<EntitlementClock>(singletonCImpl, 33));
-      this.customFlowRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<CustomFlowRepositoryImpl>(singletonCImpl, 34));
-      this.laravelBusinessSettingsRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelBusinessSettingsRemoteDataSource>(singletonCImpl, 36));
-      this.businessSettingsRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<BusinessSettingsRepositoryImpl>(singletonCImpl, 35));
-      this.laravelSubscriptionPlanRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelSubscriptionPlanRemoteDataSource>(singletonCImpl, 38));
-      this.laravelSubscriptionRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelSubscriptionRemoteDataSource>(singletonCImpl, 39));
-      this.subscriptionRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionRepositoryImpl>(singletonCImpl, 37));
-      this.laravelNotificationRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelNotificationRemoteDataSource>(singletonCImpl, 41));
-      this.notificationRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<NotificationRepositoryImpl>(singletonCImpl, 40));
-      this.laravelReferralRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelReferralRemoteDataSource>(singletonCImpl, 43));
-      this.referralRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<ReferralRepositoryImpl>(singletonCImpl, 42));
-      this.laravelWalletRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelWalletRemoteDataSource>(singletonCImpl, 45));
-      this.walletRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<WalletRepositoryImpl>(singletonCImpl, 44));
+      this.deviceContactReaderProvider = DoubleCheck.provider(new SwitchingProvider<DeviceContactReader>(singletonCImpl, 24));
+      this.provideUssdDialHelperProvider = DoubleCheck.provider(new SwitchingProvider<UssdDialHelper>(singletonCImpl, 25));
+      this.automationLoggerProvider = DoubleCheck.provider(new SwitchingProvider<AutomationLogger>(singletonCImpl, 27));
+      this.provideUssdAutomationEngineProvider = DoubleCheck.provider(new SwitchingProvider<UssdAutomationEngine>(singletonCImpl, 26));
+      this.provideGsonProvider = DoubleCheck.provider(new SwitchingProvider<Gson>(singletonCImpl, 30));
+      this.ussdFlowCacheDataStoreProvider = DoubleCheck.provider(new SwitchingProvider<UssdFlowCacheDataStore>(singletonCImpl, 29));
+      this.systemUssdFlowRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<SystemUssdFlowRepositoryImpl>(singletonCImpl, 28));
+      this.transactionRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<TransactionRepositoryImpl>(singletonCImpl, 32));
+      this.agentCommissionEngineProvider = DoubleCheck.provider(new SwitchingProvider<AgentCommissionEngine>(singletonCImpl, 33));
+      this.cashOutSmsWatcherProvider = DoubleCheck.provider(new SwitchingProvider<CashOutSmsWatcher>(singletonCImpl, 31));
+      this.entitlementClockProvider = DoubleCheck.provider(new SwitchingProvider<EntitlementClock>(singletonCImpl, 34));
+      this.customFlowRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<CustomFlowRepositoryImpl>(singletonCImpl, 35));
+      this.laravelBusinessSettingsRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelBusinessSettingsRemoteDataSource>(singletonCImpl, 37));
+      this.businessSettingsRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<BusinessSettingsRepositoryImpl>(singletonCImpl, 36));
+      this.laravelSubscriptionPlanRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelSubscriptionPlanRemoteDataSource>(singletonCImpl, 39));
+      this.laravelSubscriptionRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelSubscriptionRemoteDataSource>(singletonCImpl, 40));
+      this.subscriptionRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionRepositoryImpl>(singletonCImpl, 38));
+      this.laravelNotificationRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelNotificationRemoteDataSource>(singletonCImpl, 42));
+      this.notificationRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<NotificationRepositoryImpl>(singletonCImpl, 41));
+      this.laravelReferralRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelReferralRemoteDataSource>(singletonCImpl, 44));
+      this.referralRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<ReferralRepositoryImpl>(singletonCImpl, 43));
+      this.laravelWalletRemoteDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<LaravelWalletRemoteDataSource>(singletonCImpl, 46));
+      this.walletRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<WalletRepositoryImpl>(singletonCImpl, 45));
     }
 
     @Override
@@ -1507,70 +1526,73 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
           case 23: // com.momokotle.agent.repository.SavedContactRepositoryImpl 
           return (T) new SavedContactRepositoryImpl(singletonCImpl.savedContactDao());
 
-          case 24: // com.momokotle.agent.ussd.UssdDialHelper 
+          case 24: // com.momokotle.agent.data.contacts.DeviceContactReader 
+          return (T) new DeviceContactReader(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
+
+          case 25: // com.momokotle.agent.ussd.UssdDialHelper 
           return (T) AppModule_ProvideUssdDialHelperFactory.provideUssdDialHelper(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
-          case 25: // com.momokotle.agent.ussd.UssdAutomationEngine 
+          case 26: // com.momokotle.agent.ussd.UssdAutomationEngine 
           return (T) AppModule_ProvideUssdAutomationEngineFactory.provideUssdAutomationEngine(singletonCImpl.automationLoggerProvider.get());
 
-          case 26: // com.momokotle.agent.utils.AutomationLogger 
+          case 27: // com.momokotle.agent.utils.AutomationLogger 
           return (T) new AutomationLogger();
 
-          case 27: // com.momokotle.agent.repository.SystemUssdFlowRepositoryImpl 
+          case 28: // com.momokotle.agent.repository.SystemUssdFlowRepositoryImpl 
           return (T) new SystemUssdFlowRepositoryImpl(singletonCImpl.provideMStorepayApiProvider.get(), singletonCImpl.systemUssdFlowDao(), singletonCImpl.ussdFlowCacheDataStoreProvider.get(), singletonCImpl.provideGsonProvider.get());
 
-          case 28: // com.momokotle.agent.data.datastore.UssdFlowCacheDataStore 
+          case 29: // com.momokotle.agent.data.datastore.UssdFlowCacheDataStore 
           return (T) new UssdFlowCacheDataStore(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideGsonProvider.get());
 
-          case 29: // com.google.gson.Gson 
+          case 30: // com.google.gson.Gson 
           return (T) NetworkModule_ProvideGsonFactory.provideGson();
 
-          case 30: // com.momokotle.agent.sms.CashOutSmsWatcher 
+          case 31: // com.momokotle.agent.sms.CashOutSmsWatcher 
           return (T) new CashOutSmsWatcher(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.updateTransactionStatusUseCase(), singletonCImpl.automationLoggerProvider.get(), singletonCImpl.provideApplicationScopeProvider.get());
 
-          case 31: // com.momokotle.agent.repository.TransactionRepositoryImpl 
+          case 32: // com.momokotle.agent.repository.TransactionRepositoryImpl 
           return (T) new TransactionRepositoryImpl(singletonCImpl.transactionDao());
 
-          case 32: // com.momokotle.agent.domain.engine.AgentCommissionEngine 
+          case 33: // com.momokotle.agent.domain.engine.AgentCommissionEngine 
           return (T) new AgentCommissionEngine();
 
-          case 33: // com.momokotle.agent.domain.ussd.EntitlementClock 
+          case 34: // com.momokotle.agent.domain.ussd.EntitlementClock 
           return (T) new EntitlementClock();
 
-          case 34: // com.momokotle.agent.repository.CustomFlowRepositoryImpl 
+          case 35: // com.momokotle.agent.repository.CustomFlowRepositoryImpl 
           return (T) new CustomFlowRepositoryImpl(singletonCImpl.customFlowDao());
 
-          case 35: // com.momokotle.agent.repository.BusinessSettingsRepositoryImpl 
+          case 36: // com.momokotle.agent.repository.BusinessSettingsRepositoryImpl 
           return (T) new BusinessSettingsRepositoryImpl(singletonCImpl.laravelBusinessSettingsRemoteDataSourceProvider.get());
 
-          case 36: // com.momokotle.agent.data.remote.LaravelBusinessSettingsRemoteDataSource 
+          case 37: // com.momokotle.agent.data.remote.LaravelBusinessSettingsRemoteDataSource 
           return (T) new LaravelBusinessSettingsRemoteDataSource(singletonCImpl.provideMStorepayApiProvider.get());
 
-          case 37: // com.momokotle.agent.repository.SubscriptionRepositoryImpl 
+          case 38: // com.momokotle.agent.repository.SubscriptionRepositoryImpl 
           return (T) new SubscriptionRepositoryImpl(singletonCImpl.laravelSubscriptionPlanRemoteDataSourceProvider.get(), singletonCImpl.laravelSubscriptionRemoteDataSourceProvider.get());
 
-          case 38: // com.momokotle.agent.data.remote.LaravelSubscriptionPlanRemoteDataSource 
+          case 39: // com.momokotle.agent.data.remote.LaravelSubscriptionPlanRemoteDataSource 
           return (T) new LaravelSubscriptionPlanRemoteDataSource(singletonCImpl.provideMStorepayApiProvider.get());
 
-          case 39: // com.momokotle.agent.data.remote.LaravelSubscriptionRemoteDataSource 
+          case 40: // com.momokotle.agent.data.remote.LaravelSubscriptionRemoteDataSource 
           return (T) new LaravelSubscriptionRemoteDataSource(singletonCImpl.provideMStorepayApiProvider.get());
 
-          case 40: // com.momokotle.agent.repository.NotificationRepositoryImpl 
+          case 41: // com.momokotle.agent.repository.NotificationRepositoryImpl 
           return (T) new NotificationRepositoryImpl(singletonCImpl.laravelNotificationRemoteDataSourceProvider.get());
 
-          case 41: // com.momokotle.agent.data.remote.LaravelNotificationRemoteDataSource 
+          case 42: // com.momokotle.agent.data.remote.LaravelNotificationRemoteDataSource 
           return (T) new LaravelNotificationRemoteDataSource(singletonCImpl.provideMStorepayApiProvider.get());
 
-          case 42: // com.momokotle.agent.repository.ReferralRepositoryImpl 
+          case 43: // com.momokotle.agent.repository.ReferralRepositoryImpl 
           return (T) new ReferralRepositoryImpl(singletonCImpl.laravelReferralRemoteDataSourceProvider.get());
 
-          case 43: // com.momokotle.agent.data.remote.LaravelReferralRemoteDataSource 
+          case 44: // com.momokotle.agent.data.remote.LaravelReferralRemoteDataSource 
           return (T) new LaravelReferralRemoteDataSource(singletonCImpl.provideMStorepayApiProvider.get());
 
-          case 44: // com.momokotle.agent.repository.WalletRepositoryImpl 
+          case 45: // com.momokotle.agent.repository.WalletRepositoryImpl 
           return (T) new WalletRepositoryImpl(singletonCImpl.laravelWalletRemoteDataSourceProvider.get());
 
-          case 45: // com.momokotle.agent.data.remote.LaravelWalletRemoteDataSource 
+          case 46: // com.momokotle.agent.data.remote.LaravelWalletRemoteDataSource 
           return (T) new LaravelWalletRemoteDataSource(singletonCImpl.provideMStorepayApiProvider.get());
 
           default: throw new AssertionError(id);

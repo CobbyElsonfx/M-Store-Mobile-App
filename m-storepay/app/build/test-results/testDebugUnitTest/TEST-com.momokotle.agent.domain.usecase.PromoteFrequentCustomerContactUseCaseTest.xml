@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.momokotle.agent.domain.usecase.PromoteFrequentCustomerContactUseCaseTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-08T09:27:54" hostname="FRANCIS-ANDOH" time="0.153">
+  <properties/>
+  <testcase name="secondDial_savesFrequentContact" classname="com.momokotle.agent.domain.usecase.PromoteFrequentCustomerContactUseCaseTest" time="0.145"/>
+  <testcase name="thresholdHelper_firstUseNotPromoted" classname="com.momokotle.agent.domain.usecase.PromoteFrequentCustomerContactUseCaseTest" time="0.0"/>
+  <testcase name="alreadySaved_bumpsUpdatedAtWithoutDuplicate" classname="com.momokotle.agent.domain.usecase.PromoteFrequentCustomerContactUseCaseTest" time="0.001"/>
+  <testcase name="firstDial_doesNotSaveContact" classname="com.momokotle.agent.domain.usecase.PromoteFrequentCustomerContactUseCaseTest" time="0.002"/>
+  <testcase name="oneOffDifferentNumbers_notSaved" classname="com.momokotle.agent.domain.usecase.PromoteFrequentCustomerContactUseCaseTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

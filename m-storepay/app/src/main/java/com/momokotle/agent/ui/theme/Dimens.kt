@@ -10,6 +10,8 @@ object AppDimens {
     val ButtonHeight = 52.dp
     val GridButtonHeight = 64.dp
     val DashboardGridButtonHeight = 58.dp
+    /** Cash In / Cash Out hero row on the home grid. */
+    val DashboardFeaturedButtonHeight = 88.dp
     val DashboardGridSpacing = 8.dp
     val DashboardCardPadding = 10.dp
     val CardRadius = 16.dp

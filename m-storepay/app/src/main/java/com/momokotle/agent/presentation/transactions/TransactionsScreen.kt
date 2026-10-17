@@ -1,5 +1,7 @@
 package com.momokotle.agent.presentation.transactions
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,30 +12,35 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.momokotle.agent.models.CommissionSummary
 import com.momokotle.agent.models.Transaction
 import com.momokotle.agent.models.TransactionStatus
 import com.momokotle.agent.models.TransactionType
-import com.momokotle.agent.ui.components.AppCard
 import com.momokotle.agent.ui.components.AppEmptyState
 import com.momokotle.agent.ui.components.AppFilterChip
 import com.momokotle.agent.ui.components.AppScaffold
 import com.momokotle.agent.ui.components.AppSearchField
-import com.momokotle.agent.ui.components.AppStatusTone
 import com.momokotle.agent.ui.components.AppTransactionCard
 import com.momokotle.agent.ui.components.statusToneForLabel
+import com.momokotle.agent.ui.theme.AppColors
 import com.momokotle.agent.ui.theme.AppDimens
 
 @Composable
@@ -80,11 +87,9 @@ fun TransactionsScreen(
                 onSelect = viewModel::setFilter
             )
 
-            CommissionSummarySection(
+            PeriodTotalsRow(
                 today = uiState.todaySummary,
-                week = uiState.weekSummary,
-                month = uiState.monthSummary,
-                lifetime = uiState.lifetimeSummary
+                week = uiState.weekSummary
             )
 
             if (filtered.isEmpty()) {
@@ -144,74 +149,102 @@ private fun FilterRow(
 }
 
 @Composable
-private fun CommissionSummarySection(
+private fun PeriodTotalsRow(
     today: CommissionSummary,
-    week: CommissionSummary,
-    month: CommissionSummary,
-    lifetime: CommissionSummary
+    week: CommissionSummary
 ) {
-    AppCard(modifier = Modifier.fillMaxWidth()) {
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(
-                "Daily totals",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            SummaryRow("Today", today)
-            SummaryRow("This Week", week)
-            SummaryRow("This Month", month)
-            SummaryRow("Lifetime", lifetime)
-        }
-    }
-}
-
-@Composable
-private fun SummaryRow(label: String, summary: CommissionSummary) {
-    Column(
+    Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(label, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Medium)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            SummaryAmountCell(
-                label = "Cash In",
-                amount = summary.cashInTotal,
-                modifier = Modifier.weight(1f)
-            )
-            SummaryAmountCell(
-                label = "Cash Out",
-                amount = summary.cashOutTotal,
-                modifier = Modifier.weight(1f)
-            )
-        }
-        Text(
-            text = "Commission GHS ${"%.2f".format(summary.totalCommission)}",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+        PeriodTotalsCard(
+            title = "Today",
+            summary = today,
+            modifier = Modifier.weight(1f)
+        )
+        PeriodTotalsCard(
+            title = "This week",
+            summary = week,
+            modifier = Modifier.weight(1f)
         )
     }
 }
 
 @Composable
-private fun SummaryAmountCell(
-    label: String,
-    amount: Double,
+private fun PeriodTotalsCard(
+    title: String,
+    summary: CommissionSummary,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(2.dp)) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp
+    ) {
+        Column(
+            modifier = Modifier.padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            TotalsMetricChip(
+                label = "Cash In",
+                amount = summary.cashInTotal,
+                container = AppColors.SuccessContainer,
+                accent = AppColors.Success
+            )
+            TotalsMetricChip(
+                label = "Cash Out",
+                amount = summary.cashOutTotal,
+                container = AppColors.InfoContainer,
+                accent = AppColors.Info
+            )
+            TotalsMetricChip(
+                label = "Commission",
+                amount = summary.totalCommission,
+                container = AppColors.WarningContainer,
+                accent = AppColors.Warning
+            )
+        }
+    }
+}
+
+@Composable
+private fun TotalsMetricChip(
+    label: String,
+    amount: Double,
+    container: Color,
+    accent: Color
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(container, RoundedCornerShape(8.dp))
+            .padding(horizontal = 8.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Medium,
+            color = accent,
+            maxLines = 1
         )
         Text(
             text = "GHS ${"%.2f".format(amount)}",
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
+            color = AppColors.FormInputText,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }

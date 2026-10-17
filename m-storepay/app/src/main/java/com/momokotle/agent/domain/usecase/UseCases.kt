@@ -75,6 +75,60 @@ class SaveContactUseCase @Inject constructor(
     }
 }
 
+data class ImportDeviceContactsResult(
+    val imported: Int,
+    val skippedDuplicates: Int,
+    val skippedInvalid: Int
+)
+
+class ImportDeviceContactsUseCase @Inject constructor(
+    private val saveContactUseCase: SaveContactUseCase
+) {
+    suspend operator fun invoke(
+        contacts: List<Pair<String, String>>
+    ): ImportDeviceContactsResult {
+        var imported = 0
+        var skippedDuplicates = 0
+        var skippedInvalid = 0
+
+        // Deduplicate within the batch by normalized phone.
+        val unique = LinkedHashMap<String, String>()
+        for ((name, rawPhone) in contacts) {
+            val phone = PhoneNumberFormatter.normalizeGhanaNumber(rawPhone)
+            if (!PhoneNumberFormatter.isValidGhanaNumber(phone)) {
+                skippedInvalid++
+                continue
+            }
+            if (!unique.containsKey(phone)) {
+                unique[phone] = name.trim().ifBlank { phone }
+            }
+        }
+
+        for ((phone, name) in unique) {
+            when (
+                saveContactUseCase(
+                    contactName = name,
+                    phoneNumber = phone,
+                    network = ContactNetwork.UNKNOWN,
+                    isPorted = false
+                )
+            ) {
+                is SaveContactResult.Success -> imported++
+                is SaveContactResult.Error -> {
+                    // Already saved or race — treat as skip.
+                    skippedDuplicates++
+                }
+            }
+        }
+
+        return ImportDeviceContactsResult(
+            imported = imported,
+            skippedDuplicates = skippedDuplicates,
+            skippedInvalid = skippedInvalid
+        )
+    }
+}
+
 class StartUssdFlowUseCase @Inject constructor(
     private val dialHelper: UssdDialHelper,
     private val engine: UssdAutomationEngine,
@@ -183,7 +237,8 @@ class CalculateVendorProfitUseCase @Inject constructor(
 }
 
 class RecordAttemptedTransactionUseCase @Inject constructor(
-    private val transactionRepository: TransactionRepository
+    private val transactionRepository: TransactionRepository,
+    private val promoteFrequentCustomerContactUseCase: PromoteFrequentCustomerContactUseCase
 ) {
     suspend operator fun invoke(
         type: TransactionType,
@@ -191,7 +246,7 @@ class RecordAttemptedTransactionUseCase @Inject constructor(
         amount: Double = 0.0,
         phoneNumber: String? = null
     ): Long {
-        return transactionRepository.insert(
+        val id = transactionRepository.insert(
             Transaction(
                 type = type,
                 amount = amount,
@@ -203,6 +258,9 @@ class RecordAttemptedTransactionUseCase @Inject constructor(
                 status = TransactionStatus.ATTEMPTED
             )
         )
+        // Additive: promote only frequently used customer phones into saved_contacts.
+        promoteFrequentCustomerContactUseCase(phoneNumber)
+        return id
     }
 }
 

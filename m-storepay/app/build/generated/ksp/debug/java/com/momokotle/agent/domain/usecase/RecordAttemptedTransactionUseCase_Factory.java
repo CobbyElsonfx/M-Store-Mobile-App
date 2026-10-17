@@ -25,23 +25,29 @@ import javax.inject.Provider;
 public final class RecordAttemptedTransactionUseCase_Factory implements Factory<RecordAttemptedTransactionUseCase> {
   private final Provider<TransactionRepository> transactionRepositoryProvider;
 
+  private final Provider<PromoteFrequentCustomerContactUseCase> promoteFrequentCustomerContactUseCaseProvider;
+
   public RecordAttemptedTransactionUseCase_Factory(
-      Provider<TransactionRepository> transactionRepositoryProvider) {
+      Provider<TransactionRepository> transactionRepositoryProvider,
+      Provider<PromoteFrequentCustomerContactUseCase> promoteFrequentCustomerContactUseCaseProvider) {
     this.transactionRepositoryProvider = transactionRepositoryProvider;
+    this.promoteFrequentCustomerContactUseCaseProvider = promoteFrequentCustomerContactUseCaseProvider;
   }
 
   @Override
   public RecordAttemptedTransactionUseCase get() {
-    return newInstance(transactionRepositoryProvider.get());
+    return newInstance(transactionRepositoryProvider.get(), promoteFrequentCustomerContactUseCaseProvider.get());
   }
 
   public static RecordAttemptedTransactionUseCase_Factory create(
-      Provider<TransactionRepository> transactionRepositoryProvider) {
-    return new RecordAttemptedTransactionUseCase_Factory(transactionRepositoryProvider);
+      Provider<TransactionRepository> transactionRepositoryProvider,
+      Provider<PromoteFrequentCustomerContactUseCase> promoteFrequentCustomerContactUseCaseProvider) {
+    return new RecordAttemptedTransactionUseCase_Factory(transactionRepositoryProvider, promoteFrequentCustomerContactUseCaseProvider);
   }
 
   public static RecordAttemptedTransactionUseCase newInstance(
-      TransactionRepository transactionRepository) {
-    return new RecordAttemptedTransactionUseCase(transactionRepository);
+      TransactionRepository transactionRepository,
+      PromoteFrequentCustomerContactUseCase promoteFrequentCustomerContactUseCase) {
+    return new RecordAttemptedTransactionUseCase(transactionRepository, promoteFrequentCustomerContactUseCase);
   }
 }

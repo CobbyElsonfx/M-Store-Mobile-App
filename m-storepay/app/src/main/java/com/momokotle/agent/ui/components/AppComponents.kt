@@ -542,9 +542,14 @@ fun AppActionGridButton(
     highlighted: Boolean = false,
     showCustomBadge: Boolean = false,
     compact: Boolean = false,
+    featured: Boolean = false,
     locked: Boolean = false
 ) {
-    val cornerRadius = if (compact) 12.dp else 14.dp
+    val cornerRadius = when {
+        featured -> 16.dp
+        compact -> 12.dp
+        else -> 14.dp
+    }
     val shape = RoundedCornerShape(cornerRadius)
     val containerColor = when {
         !enabled -> MaterialTheme.colorScheme.surfaceVariant
@@ -556,12 +561,36 @@ fun AppActionGridButton(
         highlighted -> MaterialTheme.colorScheme.onPrimary
         else -> MaterialTheme.colorScheme.onBackground
     }
-    val buttonHeight = if (compact) AppDimens.DashboardGridButtonHeight else AppDimens.GridButtonHeight
-    val iconWell = if (compact) 26.dp else 32.dp
-    val iconSize = if (compact) 16.dp else 20.dp
-    val labelSize = if (compact) 10.sp else 11.sp
-    val labelLineHeight = if (compact) 12.sp else 13.sp
-    val contentPadding = if (compact) 6.dp else 8.dp
+    val buttonHeight = when {
+        featured -> AppDimens.DashboardFeaturedButtonHeight
+        compact -> AppDimens.DashboardGridButtonHeight
+        else -> AppDimens.GridButtonHeight
+    }
+    val iconWell = when {
+        featured -> 40.dp
+        compact -> 26.dp
+        else -> 32.dp
+    }
+    val iconSize = when {
+        featured -> 24.dp
+        compact -> 16.dp
+        else -> 20.dp
+    }
+    val labelSize = when {
+        featured -> 13.sp
+        compact -> 10.sp
+        else -> 11.sp
+    }
+    val labelLineHeight = when {
+        featured -> 16.sp
+        compact -> 12.sp
+        else -> 13.sp
+    }
+    val contentPadding = when {
+        featured -> 10.dp
+        compact -> 6.dp
+        else -> 8.dp
+    }
     val badgeTopPadding = if (compact) 12.dp else 14.dp
 
     Button(
@@ -607,7 +636,13 @@ fun AppActionGridButton(
                     .fillMaxWidth()
                     .padding(top = if (showCustomBadge) badgeTopPadding else 0.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(if (compact) 4.dp else 6.dp)
+                verticalArrangement = Arrangement.spacedBy(
+                    when {
+                        featured -> 8.dp
+                        compact -> 4.dp
+                        else -> 6.dp
+                    }
+                )
             ) {
                 icon?.let {
                     Surface(
@@ -636,9 +671,9 @@ fun AppActionGridButton(
                 Text(
                     text = label,
                     fontSize = labelSize,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = if (featured) FontWeight.Bold else FontWeight.SemiBold,
                     textAlign = TextAlign.Center,
-                    maxLines = if (compact) 2 else 3,
+                    maxLines = if (compact && !featured) 2 else 3,
                     lineHeight = labelLineHeight,
                     color = contentColor
                 )

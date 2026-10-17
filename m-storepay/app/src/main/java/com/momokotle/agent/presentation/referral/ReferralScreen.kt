@@ -1,6 +1,5 @@
 package com.momokotle.agent.presentation.referral
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,12 +23,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.momokotle.agent.models.ReferralRecord
 import com.momokotle.agent.ui.components.AppButton
 import com.momokotle.agent.ui.components.AppButtonStyle
 import com.momokotle.agent.ui.components.AppCard
 import com.momokotle.agent.ui.components.AppScaffold
 import com.momokotle.agent.ui.components.AppSectionHeader
 import com.momokotle.agent.ui.theme.AppDimens
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun ReferralScreen(
@@ -106,6 +109,53 @@ fun ReferralScreen(
                 onClick = onNavigateToWallet,
                 style = AppButtonStyle.Outlined
             )
+
+            AppSectionHeader(
+                title = "Your referrals",
+                subtitle = "Agents who joined with your code"
+            )
+            if (uiState.referrals.isEmpty()) {
+                AppCard(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "No referrals yet. Share your code to start earning.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            } else {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    uiState.referrals.forEach { referral ->
+                        ReferralListItem(referral = referral)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ReferralListItem(referral: ReferralRecord) {
+    AppCard(modifier = Modifier.fillMaxWidth()) {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                text = referral.referredUserName.ifBlank { "Agent" },
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = formatReferralDate(referral.registrationDate),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = when {
+                    referral.hasActiveSubscription -> "Subscribed"
+                    referral.isActive -> "Registered"
+                    else -> "Inactive"
+                },
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }
@@ -143,3 +193,8 @@ private fun StatRow(label: String, value: String) {
 }
 
 private fun formatMoney(amount: Double?): String = "GH₵ %.2f".format(amount ?: 0.0)
+
+private fun formatReferralDate(timestampMs: Long): String {
+    if (timestampMs <= 0L) return "—"
+    return SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(timestampMs))
+}

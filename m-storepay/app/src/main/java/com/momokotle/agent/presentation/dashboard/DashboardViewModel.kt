@@ -13,13 +13,13 @@ import com.momokotle.agent.domain.usecase.CheckDuplicateTransactionUseCase
 import com.momokotle.agent.domain.usecase.CommissionPeriod
 import com.momokotle.agent.domain.usecase.ObserveCommissionSummaryUseCase
 import com.momokotle.agent.domain.usecase.CheckUssdAccessUseCase
+import com.momokotle.agent.domain.usecase.PromoteFrequentCustomerContactUseCase
 import com.momokotle.agent.domain.usecase.RecordAttemptedTransactionUseCase
 import com.momokotle.agent.domain.usecase.RefreshUserProfileUseCase
+import com.momokotle.agent.domain.usecase.SearchCustomerSuggestionsUseCase
 import com.momokotle.agent.domain.ussd.LargeTransactionWarning
 import com.momokotle.agent.models.CommissionSummary
 import com.momokotle.agent.models.CustomFlow
-import com.momokotle.agent.domain.usecase.SaveContactResult
-import com.momokotle.agent.domain.usecase.SaveContactUseCase
 import com.momokotle.agent.domain.usecase.StartUssdFlowUseCase
 import com.momokotle.agent.models.BusinessSettings
 import com.momokotle.agent.models.ContactNetwork
@@ -28,7 +28,6 @@ import com.momokotle.agent.models.Transaction
 import com.momokotle.agent.models.TransactionType
 import com.momokotle.agent.presentation.common.BaseUssdViewModel
 import com.momokotle.agent.presentation.transactions.TransactionsViewModel
-import com.momokotle.agent.ui.components.SaveContactFormState
 import com.momokotle.agent.ussd.CustomFlowExecutor
 import com.momokotle.agent.ussd.UssdAutomationEngine
 import com.momokotle.agent.ussd.UssdFlow
@@ -56,10 +55,7 @@ data class DashboardFormState(
 )
 
 data class DashboardContactUiState(
-    val searchSuggestions: List<SavedContact> = emptyList(),
-    val showSaveDialog: Boolean = false,
-    val saveDialogForm: SaveContactFormState = SaveContactFormState(),
-    val saveDialogError: String? = null
+    val searchSuggestions: List<SavedContact> = emptyList()
 )
 
 data class LargeTransactionConfirmState(
@@ -96,7 +92,8 @@ class DashboardViewModel @Inject constructor(
     private val customFlowRepository: CustomFlowRepository,
     private val systemUssdFlowRepository: SystemUssdFlowRepository,
     private val savedContactRepository: SavedContactRepository,
-    private val saveContactUseCase: SaveContactUseCase,
+    private val searchCustomerSuggestionsUseCase: SearchCustomerSuggestionsUseCase,
+    private val promoteFrequentCustomerContactUseCase: PromoteFrequentCustomerContactUseCase,
     private val businessSettingsRepository: BusinessSettingsRepository,
     private val checkDuplicateTransactionUseCase: CheckDuplicateTransactionUseCase
 ) : BaseUssdViewModel(
@@ -159,6 +156,13 @@ class DashboardViewModel @Inject constructor(
         _formState.update { it.copy(amount = value) }
     }
 
+    /** Clears phone and amount (and related form extras) in one tap. */
+    fun clearFormFields() {
+        searchJob?.cancel()
+        _formState.value = DashboardFormState()
+        _contactUiState.update { it.copy(searchSuggestions = emptyList()) }
+    }
+
     fun onPortedNumberChange(checked: Boolean) {
         _formState.update { it.copy(isPortedNumber = checked) }
     }
@@ -169,9 +173,14 @@ class DashboardViewModel @Inject constructor(
 
     fun selectContact(contact: SavedContact) {
         viewModelScope.launch {
-            savedContactRepository.updateContact(
-                contact.copy(updatedAt = System.currentTimeMillis())
-            )
+            if (contact.id == 0L) {
+                // Frequent history suggestion — persist now that the agent picked it.
+                promoteFrequentCustomerContactUseCase(contact.phoneNumber)
+            } else {
+                savedContactRepository.updateContact(
+                    contact.copy(updatedAt = System.currentTimeMillis())
+                )
+            }
         }
         _formState.update {
             it.copy(
@@ -196,93 +205,8 @@ class DashboardViewModel @Inject constructor(
         }
         searchJob = viewModelScope.launch {
             delay(200)
-            val results = savedContactRepository.searchContacts(trimmed)
+            val results = searchCustomerSuggestionsUseCase(trimmed)
             _contactUiState.update { it.copy(searchSuggestions = results) }
-        }
-    }
-
-    fun openSaveContactDialog() {
-        val phone = _formState.value.phoneNumber
-        if (phone.isBlank()) {
-            _uiState.update { it.copy(errorMessage = "Enter a phone number first") }
-            return
-        }
-        _contactUiState.update {
-            it.copy(
-                showSaveDialog = true,
-                saveDialogForm = SaveContactFormState(
-                    phoneNumber = phone,
-                    network = _formState.value.network,
-                    isPorted = _formState.value.isPortedNumber
-                ),
-                saveDialogError = null
-            )
-        }
-    }
-
-    fun dismissSaveDialog() {
-        _contactUiState.update {
-            it.copy(showSaveDialog = false, saveDialogError = null)
-        }
-    }
-
-    fun onSaveDialogNameChange(value: String) {
-        _contactUiState.update { state ->
-            state.copy(saveDialogForm = state.saveDialogForm.copy(contactName = value))
-        }
-    }
-
-    fun onSaveDialogPhoneChange(value: String) {
-        _contactUiState.update { state ->
-            state.copy(
-                saveDialogForm = state.saveDialogForm.copy(
-                    phoneNumber = PhoneNumberFormatter.filterInput(value)
-                )
-            )
-        }
-    }
-
-    fun onSaveDialogNetworkChange(network: ContactNetwork) {
-        _contactUiState.update { state ->
-            state.copy(saveDialogForm = state.saveDialogForm.copy(network = network))
-        }
-    }
-
-    fun onSaveDialogPortedChange(checked: Boolean) {
-        _contactUiState.update { state ->
-            state.copy(saveDialogForm = state.saveDialogForm.copy(isPorted = checked))
-        }
-    }
-
-    fun saveContactFromDialog() {
-        val form = _contactUiState.value.saveDialogForm
-        viewModelScope.launch {
-            when (val result = saveContactUseCase(
-                contactName = form.contactName,
-                phoneNumber = form.phoneNumber,
-                network = form.network,
-                isPorted = form.isPorted
-            )) {
-                is SaveContactResult.Success -> {
-                    _formState.update {
-                        it.copy(
-                            phoneNumber = result.contact.phoneNumber,
-                            isPortedNumber = result.contact.isPorted,
-                            network = result.contact.network
-                        )
-                    }
-                    _contactUiState.update {
-                        it.copy(
-                            showSaveDialog = false,
-                            saveDialogError = null
-                        )
-                    }
-                    _uiState.update { it.copy(infoMessage = "Contact saved") }
-                }
-                is SaveContactResult.Error -> {
-                    _contactUiState.update { it.copy(saveDialogError = result.message) }
-                }
-            }
         }
     }
 
@@ -319,20 +243,58 @@ class DashboardViewModel @Inject constructor(
 
     fun startEvdJust4u() = startAdminFlow(TransactionType.EVD_JUST4U)
 
-    fun runCustomFlowImmediately(flowId: Long) {
+    /**
+     * Runs a custom menu from the dashboard using the phone/amount fields already
+     * on screen (same pattern as Cash In / Cash Out). Does not open the
+     * separate Custom Menu execution screen.
+     */
+    fun runCustomFlowFromDashboard(flowId: Long) {
         viewModelScope.launch {
-            val flow = customFlowRepository.getById(flowId) ?: return@launch
-            if (!CustomFlowExecutor.canRunImmediately(flow)) return@launch
-            val ussdFlow = CustomFlowExecutor.buildUssdFlow(flow, "", "")
-            val txId = recordAttemptedTransactionUseCase(
-                type = TransactionType.CUSTOM,
-                flowName = flow.name,
-                amount = 0.0,
-                phoneNumber = null
+            val custom = customFlowRepository.getById(flowId) ?: return@launch
+            val rawPhone = _formState.value.phoneNumber
+            val rawAmount = _formState.value.amount
+
+            val validationError = CustomFlowExecutor.validateForRun(
+                flow = custom,
+                rawPhone = rawPhone,
+                rawAmount = rawAmount
             )
-            launchUssdFlow(flow = ussdFlow, transactionId = txId)
+            if (validationError != null) {
+                _uiState.update { it.copy(errorMessage = validationError) }
+                return@launch
+            }
+
+            val launchPhone = CustomFlowExecutor.phoneForLaunch(custom, rawPhone)
+            val launchAmount = CustomFlowExecutor.amountForLaunch(custom, rawAmount)
+            val ussdFlow = CustomFlowExecutor.buildUssdFlow(custom, rawPhone, rawAmount)
+            val amountValue = CustomFlowExecutor.amountForTransaction(custom, rawAmount)
+
+            if (CustomFlowExecutor.requiresAmount(custom) &&
+                LargeTransactionWarning.shouldWarn(amountValue, largeTxThresholdGhs())
+            ) {
+                _largeTransactionConfirm.value = LargeTransactionConfirmState(
+                    type = TransactionType.CUSTOM,
+                    phoneNumber = launchPhone,
+                    amount = amountValue,
+                    launchPhone = launchPhone,
+                    launchAmount = launchAmount,
+                    flow = ussdFlow
+                )
+                return@launch
+            }
+
+            maybeWarnDuplicateThenProceed(
+                type = TransactionType.CUSTOM,
+                flow = ussdFlow,
+                launchPhone = launchPhone,
+                launchAmount = launchAmount,
+                amountValue = amountValue
+            )
         }
     }
+
+    /** @deprecated Prefer [runCustomFlowFromDashboard]; kept for any no-input immediate runs. */
+    fun runCustomFlowImmediately(flowId: Long) = runCustomFlowFromDashboard(flowId)
 
     private fun startAdminFlow(type: TransactionType) {
         viewModelScope.launch {
@@ -427,7 +389,8 @@ class DashboardViewModel @Inject constructor(
         launchAmount: String,
         amountValue: Double
     ) {
-        if (flow.requiresPhone && launchPhone.isNotBlank()) {
+        // Use launchPhone (covers DIRECT custom menus where UssdFlow has no phone step).
+        if (launchPhone.isNotBlank()) {
             val prior = checkDuplicateTransactionUseCase(launchPhone)
             if (prior != null) {
                 _duplicateTransactionConfirm.value = DuplicateTransactionConfirmState(

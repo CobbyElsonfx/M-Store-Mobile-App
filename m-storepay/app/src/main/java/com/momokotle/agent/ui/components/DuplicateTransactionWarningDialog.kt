@@ -128,12 +128,15 @@ private fun vibrateStrongWarning(context: Context) {
         } else {
             context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
         } ?: return
+        // Pulsed warning ~2s total (6×250ms buzz + 5×100ms gaps).
+        val pattern = longArrayOf(
+            0,
+            250, 100, 250, 100, 250, 100, 250, 100, 250, 100, 250
+        )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(
-                VibrationEffect.createWaveform(longArrayOf(0, 120, 80, 120), -1)
-            )
+            vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
         } else {
-            vibrator.vibrate(300)
+            vibrator.vibrate(pattern, -1)
         }
     } catch (_: Exception) {
         // Best-effort haptic; never block dial confirmation.

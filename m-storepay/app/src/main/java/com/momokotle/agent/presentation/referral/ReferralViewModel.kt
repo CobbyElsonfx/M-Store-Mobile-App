@@ -50,7 +50,8 @@ class ReferralViewModel @Inject constructor(
                     observeWalletTransactionsUseCase(userId)
                 ) { info, referrals, transactions ->
                     val code = profile.referralCode
-                    val link = buildReferralLink(code, info?.referralLink.orEmpty())
+                    // API summary already returns base + code; do not append again.
+                    val link = resolveReferralLink(code, info?.referralLink.orEmpty())
                     ReferralCenterUiState(
                         referralInfo = info?.copy(referralCode = code, referralLink = link),
                         referrals = referrals,
@@ -82,8 +83,12 @@ class ReferralViewModel @Inject constructor(
         clipboard.setPrimaryClip(ClipData.newPlainText(label, value))
     }
 
-    private fun buildReferralLink(code: String, base: String): String {
-        if (code.isBlank()) return base
-        return if (base.endsWith("/")) "$base$code" else "$base/$code"
+    private fun resolveReferralLink(code: String, apiLink: String): String {
+        if (apiLink.isBlank()) return ""
+        if (code.isBlank()) return apiLink
+        if (apiLink.trimEnd('/').endsWith(code, ignoreCase = true)) {
+            return apiLink
+        }
+        return if (apiLink.endsWith("/")) "$apiLink$code" else "$apiLink/$code"
     }
 }

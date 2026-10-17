@@ -19,10 +19,11 @@ import androidx.compose.ui.unit.dp
 import com.momokotle.agent.models.SavedContact
 
 @Composable
-fun PhoneNumberWithSaveRow(
+fun PhoneNumberWithClearRow(
     phoneValue: String,
     onPhoneChange: (String) -> Unit,
-    onSaveContactClick: () -> Unit,
+    onClearFieldsClick: () -> Unit,
+    clearEnabled: Boolean,
     enabled: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -36,11 +37,11 @@ fun PhoneNumberWithSaveRow(
             modifier = Modifier.fillMaxWidth()
         )
         TextButton(
-            onClick = onSaveContactClick,
-            enabled = enabled && phoneValue.isNotBlank(),
+            onClick = onClearFieldsClick,
+            enabled = enabled && clearEnabled,
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text("Save Contact", style = MaterialTheme.typography.labelMedium)
+            Text("Clear fields", style = MaterialTheme.typography.labelMedium)
         }
     }
 }

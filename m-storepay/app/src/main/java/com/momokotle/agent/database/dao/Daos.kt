@@ -69,6 +69,36 @@ interface TransactionDao {
 
     @Query(
         """
+        SELECT COUNT(*) FROM transactions
+        WHERE phoneNumber IN (:phoneNumbers)
+        """
+    )
+    suspend fun countByPhoneNumbers(phoneNumbers: List<String>): Int
+
+    /**
+     * Phones that appear often in history and match a typed query.
+     * Used to suggest / promote frequently used customer numbers.
+     */
+    @Query(
+        """
+        SELECT phoneNumber FROM transactions
+        WHERE phoneNumber IS NOT NULL
+          AND phoneNumber != ''
+          AND phoneNumber LIKE '%' || :query || '%'
+        GROUP BY phoneNumber
+        HAVING COUNT(*) >= :minCount
+        ORDER BY MAX(timestamp) DESC
+        LIMIT :limit
+        """
+    )
+    suspend fun findFrequentPhonesMatching(
+        query: String,
+        minCount: Int,
+        limit: Int
+    ): List<String>
+
+    @Query(
+        """
         SELECT COALESCE(SUM(commission), 0) FROM transactions
         WHERE status = 'SUCCESSFUL' AND timestamp >= :startMillis AND type = :type
         """

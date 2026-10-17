@@ -33,8 +33,8 @@ android {
         applicationId = "com.momokotle.agent"
         minSdk = 26
         targetSdk = 36
-        versionCode = 15
-        versionName = "1.0.14"
+        versionCode = 18
+        versionName = "1.0.17"
 
         buildConfigField("String", "API_BASE_URL", "\"$productionApiBaseUrl\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

@@ -11,9 +11,10 @@ import com.momokotle.agent.domain.repository.TransactionRepository;
 import com.momokotle.agent.domain.usecase.CheckDuplicateTransactionUseCase;
 import com.momokotle.agent.domain.usecase.CheckUssdAccessUseCase;
 import com.momokotle.agent.domain.usecase.ObserveCommissionSummaryUseCase;
+import com.momokotle.agent.domain.usecase.PromoteFrequentCustomerContactUseCase;
 import com.momokotle.agent.domain.usecase.RecordAttemptedTransactionUseCase;
 import com.momokotle.agent.domain.usecase.RefreshUserProfileUseCase;
-import com.momokotle.agent.domain.usecase.SaveContactUseCase;
+import com.momokotle.agent.domain.usecase.SearchCustomerSuggestionsUseCase;
 import com.momokotle.agent.domain.usecase.StartUssdFlowUseCase;
 import com.momokotle.agent.sms.CashOutSmsWatcher;
 import com.momokotle.agent.ussd.UssdAutomationEngine;
@@ -67,7 +68,9 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
 
   private final Provider<SavedContactRepository> savedContactRepositoryProvider;
 
-  private final Provider<SaveContactUseCase> saveContactUseCaseProvider;
+  private final Provider<SearchCustomerSuggestionsUseCase> searchCustomerSuggestionsUseCaseProvider;
+
+  private final Provider<PromoteFrequentCustomerContactUseCase> promoteFrequentCustomerContactUseCaseProvider;
 
   private final Provider<BusinessSettingsRepository> businessSettingsRepositoryProvider;
 
@@ -87,7 +90,8 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
       Provider<CustomFlowRepository> customFlowRepositoryProvider,
       Provider<SystemUssdFlowRepository> systemUssdFlowRepositoryProvider,
       Provider<SavedContactRepository> savedContactRepositoryProvider,
-      Provider<SaveContactUseCase> saveContactUseCaseProvider,
+      Provider<SearchCustomerSuggestionsUseCase> searchCustomerSuggestionsUseCaseProvider,
+      Provider<PromoteFrequentCustomerContactUseCase> promoteFrequentCustomerContactUseCaseProvider,
       Provider<BusinessSettingsRepository> businessSettingsRepositoryProvider,
       Provider<CheckDuplicateTransactionUseCase> checkDuplicateTransactionUseCaseProvider) {
     this.contextProvider = contextProvider;
@@ -104,14 +108,15 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
     this.customFlowRepositoryProvider = customFlowRepositoryProvider;
     this.systemUssdFlowRepositoryProvider = systemUssdFlowRepositoryProvider;
     this.savedContactRepositoryProvider = savedContactRepositoryProvider;
-    this.saveContactUseCaseProvider = saveContactUseCaseProvider;
+    this.searchCustomerSuggestionsUseCaseProvider = searchCustomerSuggestionsUseCaseProvider;
+    this.promoteFrequentCustomerContactUseCaseProvider = promoteFrequentCustomerContactUseCaseProvider;
     this.businessSettingsRepositoryProvider = businessSettingsRepositoryProvider;
     this.checkDuplicateTransactionUseCaseProvider = checkDuplicateTransactionUseCaseProvider;
   }
 
   @Override
   public DashboardViewModel get() {
-    return newInstance(contextProvider.get(), startUssdFlowUseCaseProvider.get(), automationEngineProvider.get(), settingsDataStoreProvider.get(), accessibilityRepositoryProvider.get(), checkUssdAccessUseCaseProvider.get(), cashOutSmsWatcherProvider.get(), refreshUserProfileUseCaseProvider.get(), recordAttemptedTransactionUseCaseProvider.get(), transactionRepositoryProvider.get(), observeCommissionSummaryUseCaseProvider.get(), customFlowRepositoryProvider.get(), systemUssdFlowRepositoryProvider.get(), savedContactRepositoryProvider.get(), saveContactUseCaseProvider.get(), businessSettingsRepositoryProvider.get(), checkDuplicateTransactionUseCaseProvider.get());
+    return newInstance(contextProvider.get(), startUssdFlowUseCaseProvider.get(), automationEngineProvider.get(), settingsDataStoreProvider.get(), accessibilityRepositoryProvider.get(), checkUssdAccessUseCaseProvider.get(), cashOutSmsWatcherProvider.get(), refreshUserProfileUseCaseProvider.get(), recordAttemptedTransactionUseCaseProvider.get(), transactionRepositoryProvider.get(), observeCommissionSummaryUseCaseProvider.get(), customFlowRepositoryProvider.get(), systemUssdFlowRepositoryProvider.get(), savedContactRepositoryProvider.get(), searchCustomerSuggestionsUseCaseProvider.get(), promoteFrequentCustomerContactUseCaseProvider.get(), businessSettingsRepositoryProvider.get(), checkDuplicateTransactionUseCaseProvider.get());
   }
 
   public static DashboardViewModel_Factory create(Provider<Context> contextProvider,
@@ -128,10 +133,11 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
       Provider<CustomFlowRepository> customFlowRepositoryProvider,
       Provider<SystemUssdFlowRepository> systemUssdFlowRepositoryProvider,
       Provider<SavedContactRepository> savedContactRepositoryProvider,
-      Provider<SaveContactUseCase> saveContactUseCaseProvider,
+      Provider<SearchCustomerSuggestionsUseCase> searchCustomerSuggestionsUseCaseProvider,
+      Provider<PromoteFrequentCustomerContactUseCase> promoteFrequentCustomerContactUseCaseProvider,
       Provider<BusinessSettingsRepository> businessSettingsRepositoryProvider,
       Provider<CheckDuplicateTransactionUseCase> checkDuplicateTransactionUseCaseProvider) {
-    return new DashboardViewModel_Factory(contextProvider, startUssdFlowUseCaseProvider, automationEngineProvider, settingsDataStoreProvider, accessibilityRepositoryProvider, checkUssdAccessUseCaseProvider, cashOutSmsWatcherProvider, refreshUserProfileUseCaseProvider, recordAttemptedTransactionUseCaseProvider, transactionRepositoryProvider, observeCommissionSummaryUseCaseProvider, customFlowRepositoryProvider, systemUssdFlowRepositoryProvider, savedContactRepositoryProvider, saveContactUseCaseProvider, businessSettingsRepositoryProvider, checkDuplicateTransactionUseCaseProvider);
+    return new DashboardViewModel_Factory(contextProvider, startUssdFlowUseCaseProvider, automationEngineProvider, settingsDataStoreProvider, accessibilityRepositoryProvider, checkUssdAccessUseCaseProvider, cashOutSmsWatcherProvider, refreshUserProfileUseCaseProvider, recordAttemptedTransactionUseCaseProvider, transactionRepositoryProvider, observeCommissionSummaryUseCaseProvider, customFlowRepositoryProvider, systemUssdFlowRepositoryProvider, savedContactRepositoryProvider, searchCustomerSuggestionsUseCaseProvider, promoteFrequentCustomerContactUseCaseProvider, businessSettingsRepositoryProvider, checkDuplicateTransactionUseCaseProvider);
   }
 
   public static DashboardViewModel newInstance(Context context,
@@ -143,9 +149,11 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
       TransactionRepository transactionRepository,
       ObserveCommissionSummaryUseCase observeCommissionSummaryUseCase,
       CustomFlowRepository customFlowRepository, SystemUssdFlowRepository systemUssdFlowRepository,
-      SavedContactRepository savedContactRepository, SaveContactUseCase saveContactUseCase,
+      SavedContactRepository savedContactRepository,
+      SearchCustomerSuggestionsUseCase searchCustomerSuggestionsUseCase,
+      PromoteFrequentCustomerContactUseCase promoteFrequentCustomerContactUseCase,
       BusinessSettingsRepository businessSettingsRepository,
       CheckDuplicateTransactionUseCase checkDuplicateTransactionUseCase) {
-    return new DashboardViewModel(context, startUssdFlowUseCase, automationEngine, settingsDataStore, accessibilityRepository, checkUssdAccessUseCase, cashOutSmsWatcher, refreshUserProfileUseCase, recordAttemptedTransactionUseCase, transactionRepository, observeCommissionSummaryUseCase, customFlowRepository, systemUssdFlowRepository, savedContactRepository, saveContactUseCase, businessSettingsRepository, checkDuplicateTransactionUseCase);
+    return new DashboardViewModel(context, startUssdFlowUseCase, automationEngine, settingsDataStore, accessibilityRepository, checkUssdAccessUseCase, cashOutSmsWatcher, refreshUserProfileUseCase, recordAttemptedTransactionUseCase, transactionRepository, observeCommissionSummaryUseCase, customFlowRepository, systemUssdFlowRepository, savedContactRepository, searchCustomerSuggestionsUseCase, promoteFrequentCustomerContactUseCase, businessSettingsRepository, checkDuplicateTransactionUseCase);
   }
 }

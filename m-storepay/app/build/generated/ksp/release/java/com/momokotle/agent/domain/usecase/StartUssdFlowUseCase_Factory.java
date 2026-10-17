@@ -2,6 +2,7 @@ package com.momokotle.agent.domain.usecase;
 
 import com.momokotle.agent.data.datastore.SettingsDataStore;
 import com.momokotle.agent.domain.repository.SystemUssdFlowRepository;
+import com.momokotle.agent.sms.CashOutSmsWatcher;
 import com.momokotle.agent.ussd.UssdAutomationEngine;
 import com.momokotle.agent.ussd.UssdDialHelper;
 import dagger.internal.DaggerGenerated;
@@ -34,31 +35,36 @@ public final class StartUssdFlowUseCase_Factory implements Factory<StartUssdFlow
 
   private final Provider<SystemUssdFlowRepository> systemUssdFlowRepositoryProvider;
 
+  private final Provider<CashOutSmsWatcher> cashOutSmsWatcherProvider;
+
   public StartUssdFlowUseCase_Factory(Provider<UssdDialHelper> dialHelperProvider,
       Provider<UssdAutomationEngine> engineProvider,
       Provider<SettingsDataStore> settingsDataStoreProvider,
-      Provider<SystemUssdFlowRepository> systemUssdFlowRepositoryProvider) {
+      Provider<SystemUssdFlowRepository> systemUssdFlowRepositoryProvider,
+      Provider<CashOutSmsWatcher> cashOutSmsWatcherProvider) {
     this.dialHelperProvider = dialHelperProvider;
     this.engineProvider = engineProvider;
     this.settingsDataStoreProvider = settingsDataStoreProvider;
     this.systemUssdFlowRepositoryProvider = systemUssdFlowRepositoryProvider;
+    this.cashOutSmsWatcherProvider = cashOutSmsWatcherProvider;
   }
 
   @Override
   public StartUssdFlowUseCase get() {
-    return newInstance(dialHelperProvider.get(), engineProvider.get(), settingsDataStoreProvider.get(), systemUssdFlowRepositoryProvider.get());
+    return newInstance(dialHelperProvider.get(), engineProvider.get(), settingsDataStoreProvider.get(), systemUssdFlowRepositoryProvider.get(), cashOutSmsWatcherProvider.get());
   }
 
   public static StartUssdFlowUseCase_Factory create(Provider<UssdDialHelper> dialHelperProvider,
       Provider<UssdAutomationEngine> engineProvider,
       Provider<SettingsDataStore> settingsDataStoreProvider,
-      Provider<SystemUssdFlowRepository> systemUssdFlowRepositoryProvider) {
-    return new StartUssdFlowUseCase_Factory(dialHelperProvider, engineProvider, settingsDataStoreProvider, systemUssdFlowRepositoryProvider);
+      Provider<SystemUssdFlowRepository> systemUssdFlowRepositoryProvider,
+      Provider<CashOutSmsWatcher> cashOutSmsWatcherProvider) {
+    return new StartUssdFlowUseCase_Factory(dialHelperProvider, engineProvider, settingsDataStoreProvider, systemUssdFlowRepositoryProvider, cashOutSmsWatcherProvider);
   }
 
   public static StartUssdFlowUseCase newInstance(UssdDialHelper dialHelper,
       UssdAutomationEngine engine, SettingsDataStore settingsDataStore,
-      SystemUssdFlowRepository systemUssdFlowRepository) {
-    return new StartUssdFlowUseCase(dialHelper, engine, settingsDataStore, systemUssdFlowRepository);
+      SystemUssdFlowRepository systemUssdFlowRepository, CashOutSmsWatcher cashOutSmsWatcher) {
+    return new StartUssdFlowUseCase(dialHelper, engine, settingsDataStore, systemUssdFlowRepository, cashOutSmsWatcher);
   }
 }

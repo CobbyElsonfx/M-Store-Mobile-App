@@ -1,8 +1,8 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="com.momokotle.agent"
-4    android:versionCode="15"
-5    android:versionName="1.0.14" >
+4    android:versionCode="18"
+5    android:versionName="1.0.17" >
 6
 7    <uses-sdk
 8        android:minSdkVersion="26"
@@ -20,199 +20,206 @@
 14    <uses-permission android:name="android.permission.READ_SMS" />
 14-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:8:5-67
 14-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:8:22-64
-15    <uses-permission android:name="android.permission.INTERNET" />
-15-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:9:5-67
-15-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:9:22-64
-16    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-16-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:10:5-79
-16-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:10:22-76
-17
-18    <uses-feature
-18-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:12:5-14:35
-19        android:name="android.hardware.telephony"
-19-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:13:9-50
-20        android:required="true" />
-20-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:14:9-32
-21
-22    <permission
-22-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:22:5-24:47
-23        android:name="com.momokotle.agent.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-23-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:23:9-81
-24        android:protectionLevel="signature" />
-24-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:24:9-44
-25
-26    <uses-permission android:name="com.momokotle.agent.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-26-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:26:5-97
-26-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:26:22-94
+15    <uses-permission android:name="android.permission.READ_CONTACTS" />
+15-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:9:5-72
+15-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:9:22-69
+16    <uses-permission android:name="android.permission.INTERNET" />
+16-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:10:5-67
+16-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:10:22-64
+17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+17-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:11:5-79
+17-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:11:22-76
+18    <uses-permission android:name="android.permission.VIBRATE" />
+18-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:12:5-66
+18-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:12:22-63
+19
+20    <uses-feature
+20-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:14:5-16:35
+21        android:name="android.hardware.telephony"
+21-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:15:9-50
+22        android:required="true" />
+22-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:16:9-32
+23
+24    <permission
+24-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:22:5-24:47
+25        android:name="com.momokotle.agent.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+25-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:23:9-81
+26        android:protectionLevel="signature" />
+26-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:24:9-44
 27
-28    <application
-28-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:16:5-59:19
-29        android:name="com.momokotle.agent.MomoAgentApplication"
-29-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:17:9-45
-30        android:allowBackup="false"
-30-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:18:9-36
-31        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-31-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:28:18-86
-32        android:dataExtractionRules="@xml/data_extraction_rules"
-32-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:19:9-65
-33        android:debuggable="true"
-34        android:extractNativeLibs="false"
-35        android:fullBackupContent="false"
-35-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:20:9-42
-36        android:icon="@drawable/ic_launcher"
-36-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:23:9-45
-37        android:label="@string/app_name"
-37-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:24:9-41
-38        android:networkSecurityConfig="@xml/network_security_config"
-38-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:25:9-69
-39        android:roundIcon="@drawable/ic_launcher"
-39-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:26:9-50
-40        android:supportsRtl="true"
-40-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:27:9-35
-41        android:theme="@style/Theme.MomoKotle"
-41-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:28:9-47
-42        android:usesCleartextTraffic="false" >
-42-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:21:9-45
-43        <activity
-43-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:30:9-39:20
-44            android:name="com.momokotle.agent.presentation.MainActivity"
-44-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:31:13-54
-45            android:exported="true"
-45-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:32:13-36
-46            android:theme="@style/Theme.MomoKotle"
-46-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:33:13-51
-47            android:windowSoftInputMode="adjustResize" >
-47-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:34:13-55
-48            <intent-filter>
-48-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:35:13-38:29
-49                <action android:name="android.intent.action.MAIN" />
-49-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:36:17-69
-49-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:36:25-66
-50
-51                <category android:name="android.intent.category.LAUNCHER" />
-51-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:37:17-77
-51-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:37:27-74
-52            </intent-filter>
-53        </activity>
-54        <activity
-54-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:41:9-44:63
-55            android:name="com.momokotle.agent.presentation.subscription.PaystackCheckoutActivity"
-55-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:42:13-79
-56            android:exported="false"
-56-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:43:13-37
-57            android:theme="@style/Theme.MomoKotle.Paystack" />
-57-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:44:13-60
-58
-59        <service
-59-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:46:9-57:19
-60            android:name="com.momokotle.agent.accessibility.MomoAccessibilityService"
-60-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:47:13-67
-61            android:exported="false"
-61-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:48:13-37
-62            android:label="@string/accessibility_service_label"
-62-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:49:13-64
-63            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
-63-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:50:13-79
-64            <intent-filter>
-64-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:51:13-53:29
-65                <action android:name="android.accessibilityservice.AccessibilityService" />
-65-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:52:17-92
-65-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:52:25-89
-66            </intent-filter>
-67
-68            <meta-data
-68-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:54:13-56:72
-69                android:name="android.accessibilityservice"
-69-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:55:17-60
-70                android:resource="@xml/accessibility_service_config" />
-70-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:56:17-69
-71        </service>
-72
-73        <activity
-73-->[com.paystack.android:paystack-ui:0.0.11] C:\Users\Francis Andoh\.gradle\caches\transforms-4\175a3fb8ebc3f9d57293050ec5f47bbf\transformed\paystack-ui-0.0.11\AndroidManifest.xml:10:9-14:58
-74            android:name="com.paystack.android.ui.paymentsheet.PaymentSheetActivity"
-74-->[com.paystack.android:paystack-ui:0.0.11] C:\Users\Francis Andoh\.gradle\caches\transforms-4\175a3fb8ebc3f9d57293050ec5f47bbf\transformed\paystack-ui-0.0.11\AndroidManifest.xml:11:13-85
-75            android:exported="false"
-75-->[com.paystack.android:paystack-ui:0.0.11] C:\Users\Francis Andoh\.gradle\caches\transforms-4\175a3fb8ebc3f9d57293050ec5f47bbf\transformed\paystack-ui-0.0.11\AndroidManifest.xml:12:13-37
-76            android:theme="@style/Theme.PaystackSdk"
-76-->[com.paystack.android:paystack-ui:0.0.11] C:\Users\Francis Andoh\.gradle\caches\transforms-4\175a3fb8ebc3f9d57293050ec5f47bbf\transformed\paystack-ui-0.0.11\AndroidManifest.xml:13:13-53
-77            android:windowSoftInputMode="adjustResize" />
-77-->[com.paystack.android:paystack-ui:0.0.11] C:\Users\Francis Andoh\.gradle\caches\transforms-4\175a3fb8ebc3f9d57293050ec5f47bbf\transformed\paystack-ui-0.0.11\AndroidManifest.xml:14:13-55
-78
-79        <provider
-79-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-80            android:name="androidx.startup.InitializationProvider"
-80-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
-81            android:authorities="com.momokotle.agent.androidx-startup"
-81-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
-82            android:exported="false" >
-82-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
-83            <meta-data
-83-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-84                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-84-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
-85                android:value="androidx.startup" />
-85-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+28    <uses-permission android:name="com.momokotle.agent.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+28-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:26:5-97
+28-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:26:22-94
+29
+30    <application
+30-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:18:5-61:19
+31        android:name="com.momokotle.agent.MomoAgentApplication"
+31-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:19:9-45
+32        android:allowBackup="false"
+32-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:20:9-36
+33        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+33-->[androidx.core:core:1.15.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\057dbc06b884bca38e8fd8fbb7615e64\transformed\core-1.15.0\AndroidManifest.xml:28:18-86
+34        android:dataExtractionRules="@xml/data_extraction_rules"
+34-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:21:9-65
+35        android:debuggable="true"
+36        android:extractNativeLibs="false"
+37        android:fullBackupContent="false"
+37-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:22:9-42
+38        android:icon="@drawable/ic_launcher"
+38-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:25:9-45
+39        android:label="@string/app_name"
+39-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:26:9-41
+40        android:networkSecurityConfig="@xml/network_security_config"
+40-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:27:9-69
+41        android:roundIcon="@drawable/ic_launcher"
+41-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:28:9-50
+42        android:supportsRtl="true"
+42-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:29:9-35
+43        android:testOnly="true"
+44        android:theme="@style/Theme.MomoKotle"
+44-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:30:9-47
+45        android:usesCleartextTraffic="false" >
+45-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:23:9-45
+46        <activity
+46-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:32:9-41:20
+47            android:name="com.momokotle.agent.presentation.MainActivity"
+47-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:33:13-54
+48            android:exported="true"
+48-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:34:13-36
+49            android:theme="@style/Theme.MomoKotle"
+49-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:35:13-51
+50            android:windowSoftInputMode="adjustResize" >
+50-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:36:13-55
+51            <intent-filter>
+51-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:37:13-40:29
+52                <action android:name="android.intent.action.MAIN" />
+52-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:38:17-69
+52-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:38:25-66
+53
+54                <category android:name="android.intent.category.LAUNCHER" />
+54-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:39:17-77
+54-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:39:27-74
+55            </intent-filter>
+56        </activity>
+57        <activity
+57-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:43:9-46:63
+58            android:name="com.momokotle.agent.presentation.subscription.PaystackCheckoutActivity"
+58-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:44:13-79
+59            android:exported="false"
+59-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:45:13-37
+60            android:theme="@style/Theme.MomoKotle.Paystack" />
+60-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:46:13-60
+61
+62        <service
+62-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:48:9-59:19
+63            android:name="com.momokotle.agent.accessibility.MomoAccessibilityService"
+63-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:49:13-67
+64            android:exported="false"
+64-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:50:13-37
+65            android:label="@string/accessibility_service_label"
+65-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:51:13-64
+66            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
+66-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:52:13-79
+67            <intent-filter>
+67-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:53:13-55:29
+68                <action android:name="android.accessibilityservice.AccessibilityService" />
+68-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:54:17-92
+68-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:54:25-89
+69            </intent-filter>
+70
+71            <meta-data
+71-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:56:13-58:72
+72                android:name="android.accessibilityservice"
+72-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:57:17-60
+73                android:resource="@xml/accessibility_service_config" />
+73-->H:\Projects\momo-kotle\m-storepay\app\src\main\AndroidManifest.xml:58:17-69
+74        </service>
+75
+76        <activity
+76-->[com.paystack.android:paystack-ui:0.0.11] C:\Users\Francis Andoh\.gradle\caches\transforms-4\175a3fb8ebc3f9d57293050ec5f47bbf\transformed\paystack-ui-0.0.11\AndroidManifest.xml:10:9-14:58
+77            android:name="com.paystack.android.ui.paymentsheet.PaymentSheetActivity"
+77-->[com.paystack.android:paystack-ui:0.0.11] C:\Users\Francis Andoh\.gradle\caches\transforms-4\175a3fb8ebc3f9d57293050ec5f47bbf\transformed\paystack-ui-0.0.11\AndroidManifest.xml:11:13-85
+78            android:exported="false"
+78-->[com.paystack.android:paystack-ui:0.0.11] C:\Users\Francis Andoh\.gradle\caches\transforms-4\175a3fb8ebc3f9d57293050ec5f47bbf\transformed\paystack-ui-0.0.11\AndroidManifest.xml:12:13-37
+79            android:theme="@style/Theme.PaystackSdk"
+79-->[com.paystack.android:paystack-ui:0.0.11] C:\Users\Francis Andoh\.gradle\caches\transforms-4\175a3fb8ebc3f9d57293050ec5f47bbf\transformed\paystack-ui-0.0.11\AndroidManifest.xml:13:13-53
+80            android:windowSoftInputMode="adjustResize" />
+80-->[com.paystack.android:paystack-ui:0.0.11] C:\Users\Francis Andoh\.gradle\caches\transforms-4\175a3fb8ebc3f9d57293050ec5f47bbf\transformed\paystack-ui-0.0.11\AndroidManifest.xml:14:13-55
+81
+82        <provider
+82-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+83            android:name="androidx.startup.InitializationProvider"
+83-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+84            android:authorities="com.momokotle.agent.androidx-startup"
+84-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+85            android:exported="false" >
+85-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
 86            <meta-data
-86-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Francis Andoh\.gradle\caches\transforms-4\6f5ef4d81d5501eec43d03d4f569f9ad\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
-87                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-87-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Francis Andoh\.gradle\caches\transforms-4\6f5ef4d81d5501eec43d03d4f569f9ad\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
+86-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+87                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+87-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
 88                android:value="androidx.startup" />
-88-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Francis Andoh\.gradle\caches\transforms-4\6f5ef4d81d5501eec43d03d4f569f9ad\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
+88-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Francis Andoh\.gradle\caches\transforms-4\84ea459f58da0931294b939a8ff5b66b\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
 89            <meta-data
-89-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
-90                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-90-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+89-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Francis Andoh\.gradle\caches\transforms-4\6f5ef4d81d5501eec43d03d4f569f9ad\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
+90                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+90-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Francis Andoh\.gradle\caches\transforms-4\6f5ef4d81d5501eec43d03d4f569f9ad\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
 91                android:value="androidx.startup" />
-91-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
-92        </provider>
-93
-94        <service
-94-->[androidx.room:room-runtime:2.6.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\7f8e9854d1e9d5e58669b6235e809499\transformed\room-runtime-2.6.1\AndroidManifest.xml:24:9-28:63
-95            android:name="androidx.room.MultiInstanceInvalidationService"
-95-->[androidx.room:room-runtime:2.6.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\7f8e9854d1e9d5e58669b6235e809499\transformed\room-runtime-2.6.1\AndroidManifest.xml:25:13-74
-96            android:directBootAware="true"
-96-->[androidx.room:room-runtime:2.6.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\7f8e9854d1e9d5e58669b6235e809499\transformed\room-runtime-2.6.1\AndroidManifest.xml:26:13-43
-97            android:exported="false" />
-97-->[androidx.room:room-runtime:2.6.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\7f8e9854d1e9d5e58669b6235e809499\transformed\room-runtime-2.6.1\AndroidManifest.xml:27:13-37
-98
-99        <receiver
-99-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
-100            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-100-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
-101            android:directBootAware="false"
-101-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
-102            android:enabled="true"
-102-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
-103            android:exported="true"
-103-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
-104            android:permission="android.permission.DUMP" >
-104-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
-105            <intent-filter>
-105-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
-106                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-106-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
-106-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
-107            </intent-filter>
+91-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Francis Andoh\.gradle\caches\transforms-4\6f5ef4d81d5501eec43d03d4f569f9ad\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
+92            <meta-data
+92-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+93                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+93-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+94                android:value="androidx.startup" />
+94-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+95        </provider>
+96
+97        <service
+97-->[androidx.room:room-runtime:2.6.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\7f8e9854d1e9d5e58669b6235e809499\transformed\room-runtime-2.6.1\AndroidManifest.xml:24:9-28:63
+98            android:name="androidx.room.MultiInstanceInvalidationService"
+98-->[androidx.room:room-runtime:2.6.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\7f8e9854d1e9d5e58669b6235e809499\transformed\room-runtime-2.6.1\AndroidManifest.xml:25:13-74
+99            android:directBootAware="true"
+99-->[androidx.room:room-runtime:2.6.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\7f8e9854d1e9d5e58669b6235e809499\transformed\room-runtime-2.6.1\AndroidManifest.xml:26:13-43
+100            android:exported="false" />
+100-->[androidx.room:room-runtime:2.6.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\7f8e9854d1e9d5e58669b6235e809499\transformed\room-runtime-2.6.1\AndroidManifest.xml:27:13-37
+101
+102        <receiver
+102-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+103            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+103-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+104            android:directBootAware="false"
+104-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+105            android:enabled="true"
+105-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+106            android:exported="true"
+106-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+107            android:permission="android.permission.DUMP" >
+107-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
 108            <intent-filter>
-108-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
-109                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
-109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+108-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+109                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
 110            </intent-filter>
 111            <intent-filter>
-111-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
-112                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-112-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
-112-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+111-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+112                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+112-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+112-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
 113            </intent-filter>
 114            <intent-filter>
-114-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
-115                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-115-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
-115-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+114-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+115                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+115-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+115-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
 116            </intent-filter>
-117        </receiver>
-118    </application>
-119
-120</manifest>
+117            <intent-filter>
+117-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+118                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+118-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+118-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Francis Andoh\.gradle\caches\transforms-4\79a0b8402d7c07a5056973848be990ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+119            </intent-filter>
+120        </receiver>
+121    </application>
+122
+123</manifest>

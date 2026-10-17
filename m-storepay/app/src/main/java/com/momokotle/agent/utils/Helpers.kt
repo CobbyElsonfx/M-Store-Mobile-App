@@ -45,6 +45,14 @@ object PermissionHelper {
     )
 
     val cashOutPermissions: Array<String> = dialPermissions + smsPermissions
+
+    fun hasContactsPermission(context: Context): Boolean =
+        ContextCompat.checkSelfPermission(
+            context,
+            android.Manifest.permission.READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
+
+    const val CONTACTS_PERMISSION: String = android.Manifest.permission.READ_CONTACTS
 }
 
 object AccessibilityHelper {

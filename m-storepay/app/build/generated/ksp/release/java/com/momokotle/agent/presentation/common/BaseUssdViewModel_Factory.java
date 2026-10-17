@@ -5,6 +5,7 @@ import com.momokotle.agent.data.datastore.SettingsDataStore;
 import com.momokotle.agent.domain.repository.AccessibilityRepository;
 import com.momokotle.agent.domain.usecase.CheckUssdAccessUseCase;
 import com.momokotle.agent.domain.usecase.StartUssdFlowUseCase;
+import com.momokotle.agent.sms.CashOutSmsWatcher;
 import com.momokotle.agent.ussd.UssdAutomationEngine;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
@@ -40,23 +41,27 @@ public final class BaseUssdViewModel_Factory implements Factory<BaseUssdViewMode
 
   private final Provider<CheckUssdAccessUseCase> checkUssdAccessUseCaseProvider;
 
+  private final Provider<CashOutSmsWatcher> cashOutSmsWatcherProvider;
+
   public BaseUssdViewModel_Factory(Provider<Context> contextProvider,
       Provider<StartUssdFlowUseCase> startUssdFlowUseCaseProvider,
       Provider<UssdAutomationEngine> automationEngineProvider,
       Provider<SettingsDataStore> settingsDataStoreProvider,
       Provider<AccessibilityRepository> accessibilityRepositoryProvider,
-      Provider<CheckUssdAccessUseCase> checkUssdAccessUseCaseProvider) {
+      Provider<CheckUssdAccessUseCase> checkUssdAccessUseCaseProvider,
+      Provider<CashOutSmsWatcher> cashOutSmsWatcherProvider) {
     this.contextProvider = contextProvider;
     this.startUssdFlowUseCaseProvider = startUssdFlowUseCaseProvider;
     this.automationEngineProvider = automationEngineProvider;
     this.settingsDataStoreProvider = settingsDataStoreProvider;
     this.accessibilityRepositoryProvider = accessibilityRepositoryProvider;
     this.checkUssdAccessUseCaseProvider = checkUssdAccessUseCaseProvider;
+    this.cashOutSmsWatcherProvider = cashOutSmsWatcherProvider;
   }
 
   @Override
   public BaseUssdViewModel get() {
-    return newInstance(contextProvider.get(), startUssdFlowUseCaseProvider.get(), automationEngineProvider.get(), settingsDataStoreProvider.get(), accessibilityRepositoryProvider.get(), checkUssdAccessUseCaseProvider.get());
+    return newInstance(contextProvider.get(), startUssdFlowUseCaseProvider.get(), automationEngineProvider.get(), settingsDataStoreProvider.get(), accessibilityRepositoryProvider.get(), checkUssdAccessUseCaseProvider.get(), cashOutSmsWatcherProvider.get());
   }
 
   public static BaseUssdViewModel_Factory create(Provider<Context> contextProvider,
@@ -64,14 +69,15 @@ public final class BaseUssdViewModel_Factory implements Factory<BaseUssdViewMode
       Provider<UssdAutomationEngine> automationEngineProvider,
       Provider<SettingsDataStore> settingsDataStoreProvider,
       Provider<AccessibilityRepository> accessibilityRepositoryProvider,
-      Provider<CheckUssdAccessUseCase> checkUssdAccessUseCaseProvider) {
-    return new BaseUssdViewModel_Factory(contextProvider, startUssdFlowUseCaseProvider, automationEngineProvider, settingsDataStoreProvider, accessibilityRepositoryProvider, checkUssdAccessUseCaseProvider);
+      Provider<CheckUssdAccessUseCase> checkUssdAccessUseCaseProvider,
+      Provider<CashOutSmsWatcher> cashOutSmsWatcherProvider) {
+    return new BaseUssdViewModel_Factory(contextProvider, startUssdFlowUseCaseProvider, automationEngineProvider, settingsDataStoreProvider, accessibilityRepositoryProvider, checkUssdAccessUseCaseProvider, cashOutSmsWatcherProvider);
   }
 
   public static BaseUssdViewModel newInstance(Context context,
       StartUssdFlowUseCase startUssdFlowUseCase, UssdAutomationEngine automationEngine,
       SettingsDataStore settingsDataStore, AccessibilityRepository accessibilityRepository,
-      CheckUssdAccessUseCase checkUssdAccessUseCase) {
-    return new BaseUssdViewModel(context, startUssdFlowUseCase, automationEngine, settingsDataStore, accessibilityRepository, checkUssdAccessUseCase);
+      CheckUssdAccessUseCase checkUssdAccessUseCase, CashOutSmsWatcher cashOutSmsWatcher) {
+    return new BaseUssdViewModel(context, startUssdFlowUseCase, automationEngine, settingsDataStore, accessibilityRepository, checkUssdAccessUseCase, cashOutSmsWatcher);
   }
 }

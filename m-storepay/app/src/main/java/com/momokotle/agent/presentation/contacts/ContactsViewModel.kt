@@ -2,7 +2,10 @@ package com.momokotle.agent.presentation.contacts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.momokotle.agent.data.contacts.DeviceContact
+import com.momokotle.agent.data.contacts.DeviceContactReader
 import com.momokotle.agent.domain.repository.SavedContactRepository
+import com.momokotle.agent.domain.usecase.ImportDeviceContactsUseCase
 import com.momokotle.agent.domain.usecase.SaveContactResult
 import com.momokotle.agent.domain.usecase.SaveContactUseCase
 import com.momokotle.agent.models.ContactNetwork
@@ -24,13 +27,20 @@ data class ContactsUiState(
     val showAddDialog: Boolean = false,
     val dialogForm: SaveContactFormState = SaveContactFormState(),
     val dialogError: String? = null,
-    val snackMessage: String? = null
+    val snackMessage: String? = null,
+    val showImportPicker: Boolean = false,
+    val deviceContacts: List<DeviceContact> = emptyList(),
+    val selectedDeviceContactIds: Set<String> = emptySet(),
+    val isLoadingDeviceContacts: Boolean = false,
+    val isImporting: Boolean = false
 )
 
 @HiltViewModel
 class ContactsViewModel @Inject constructor(
     private val savedContactRepository: SavedContactRepository,
-    private val saveContactUseCase: SaveContactUseCase
+    private val saveContactUseCase: SaveContactUseCase,
+    private val deviceContactReader: DeviceContactReader,
+    private val importDeviceContactsUseCase: ImportDeviceContactsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ContactsUiState())
@@ -127,6 +137,102 @@ class ContactsViewModel @Inject constructor(
         viewModelScope.launch {
             savedContactRepository.deleteContact(id)
             _uiState.update { it.copy(snackMessage = "Contact deleted") }
+        }
+    }
+
+    fun onContactsPermissionDenied() {
+        _uiState.update {
+            it.copy(snackMessage = "Contacts permission is needed to import")
+        }
+    }
+
+    fun loadDeviceContactsForImport() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLoadingDeviceContacts = true,
+                    showImportPicker = true,
+                    deviceContacts = emptyList(),
+                    selectedDeviceContactIds = emptySet()
+                )
+            }
+            val contacts = runCatching { deviceContactReader.readImportableContacts() }
+                .getOrDefault(emptyList())
+            val alreadySaved = _uiState.value.allContacts.map { it.phoneNumber }.toSet()
+            val selectable = contacts.filter { it.phoneNumber !in alreadySaved }
+            _uiState.update {
+                it.copy(
+                    isLoadingDeviceContacts = false,
+                    deviceContacts = selectable,
+                    selectedDeviceContactIds = selectable.map { c -> c.id }.toSet(),
+                    snackMessage = when {
+                        contacts.isEmpty() -> "No Ghana phone numbers found in contacts"
+                        selectable.isEmpty() -> "All matching contacts are already saved"
+                        else -> null
+                    },
+                    showImportPicker = selectable.isNotEmpty()
+                )
+            }
+        }
+    }
+
+    fun dismissImportPicker() {
+        _uiState.update {
+            it.copy(
+                showImportPicker = false,
+                deviceContacts = emptyList(),
+                selectedDeviceContactIds = emptySet(),
+                isLoadingDeviceContacts = false,
+                isImporting = false
+            )
+        }
+    }
+
+    fun toggleDeviceContact(id: String) {
+        _uiState.update { state ->
+            val next = state.selectedDeviceContactIds.toMutableSet()
+            if (!next.add(id)) next.remove(id)
+            state.copy(selectedDeviceContactIds = next)
+        }
+    }
+
+    fun selectAllDeviceContacts() {
+        _uiState.update { state ->
+            state.copy(selectedDeviceContactIds = state.deviceContacts.map { it.id }.toSet())
+        }
+    }
+
+    fun clearDeviceContactSelection() {
+        _uiState.update { it.copy(selectedDeviceContactIds = emptySet()) }
+    }
+
+    fun importSelectedDeviceContacts() {
+        val state = _uiState.value
+        val selected = state.deviceContacts.filter { it.id in state.selectedDeviceContactIds }
+        if (selected.isEmpty()) {
+            _uiState.update { it.copy(snackMessage = "Select at least one contact") }
+            return
+        }
+        viewModelScope.launch {
+            _uiState.update { it.copy(isImporting = true) }
+            val result = importDeviceContactsUseCase(
+                selected.map { it.displayName to it.phoneNumber }
+            )
+            val message = buildString {
+                append("Imported ${result.imported}")
+                if (result.skippedDuplicates > 0) {
+                    append(" · skipped ${result.skippedDuplicates} already saved")
+                }
+            }
+            _uiState.update {
+                it.copy(
+                    isImporting = false,
+                    showImportPicker = false,
+                    deviceContacts = emptyList(),
+                    selectedDeviceContactIds = emptySet(),
+                    snackMessage = message
+                )
+            }
         }
     }
 

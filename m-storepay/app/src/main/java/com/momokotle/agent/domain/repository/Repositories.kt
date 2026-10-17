@@ -26,6 +26,12 @@ interface TransactionRepository {
         phoneNumbers: List<String>,
         cutoffTime: Long
     ): Transaction?
+    suspend fun countByPhoneNumbers(phoneNumbers: List<String>): Int
+    suspend fun findFrequentPhonesMatching(
+        query: String,
+        minCount: Int,
+        limit: Int
+    ): List<String>
     suspend fun delete(id: Long)
 }
 

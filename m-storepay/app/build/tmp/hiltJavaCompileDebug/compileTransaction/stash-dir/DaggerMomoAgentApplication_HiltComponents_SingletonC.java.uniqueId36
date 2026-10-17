@@ -54,6 +54,7 @@ import com.momokotle.agent.di.NetworkModule_ProvideRetrofitFactory;
 import com.momokotle.agent.domain.engine.AgentCommissionEngine;
 import com.momokotle.agent.domain.repository.AccessibilityRepository;
 import com.momokotle.agent.domain.usecase.CalculateVendorProfitUseCase;
+import com.momokotle.agent.domain.usecase.CheckDuplicateTransactionUseCase;
 import com.momokotle.agent.domain.usecase.CheckSubscriptionPaymentStatusUseCase;
 import com.momokotle.agent.domain.usecase.CheckUssdAccessUseCase;
 import com.momokotle.agent.domain.usecase.GetAuthenticatedUserUseCase;
@@ -73,12 +74,14 @@ import com.momokotle.agent.domain.usecase.ObserveSubscriptionPlansUseCase;
 import com.momokotle.agent.domain.usecase.ObserveWalletTransactionsUseCase;
 import com.momokotle.agent.domain.usecase.ObserveWalletUseCase;
 import com.momokotle.agent.domain.usecase.ObserveWithdrawalsUseCase;
+import com.momokotle.agent.domain.usecase.PromoteFrequentCustomerContactUseCase;
 import com.momokotle.agent.domain.usecase.RecordAttemptedTransactionUseCase;
 import com.momokotle.agent.domain.usecase.RefreshUserProfileUseCase;
 import com.momokotle.agent.domain.usecase.RegisterUseCase;
 import com.momokotle.agent.domain.usecase.RequestWithdrawalUseCase;
 import com.momokotle.agent.domain.usecase.ResendRegistrationOtpUseCase;
 import com.momokotle.agent.domain.usecase.SaveContactUseCase;
+import com.momokotle.agent.domain.usecase.SearchCustomerSuggestionsUseCase;
 import com.momokotle.agent.domain.usecase.StartUssdFlowUseCase;
 import com.momokotle.agent.domain.usecase.UpdateTransactionStatusUseCase;
 import com.momokotle.agent.domain.usecase.VerifyRegistrationOtpUseCase;
@@ -539,127 +542,127 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_momokotle_agent_presentation_orders_OrderDetailViewModel = "com.momokotle.agent.presentation.orders.OrderDetailViewModel";
-
-      static String com_momokotle_agent_presentation_custommenu_CustomFlowViewModel = "com.momokotle.agent.presentation.custommenu.CustomFlowViewModel";
-
-      static String com_momokotle_agent_presentation_profit_ProfitCalculationViewModel = "com.momokotle.agent.presentation.profit.ProfitCalculationViewModel";
-
-      static String com_momokotle_agent_presentation_settings_SettingsHomeViewModel = "com.momokotle.agent.presentation.settings.SettingsHomeViewModel";
-
-      static String com_momokotle_agent_presentation_settings_AppSettingsViewModel = "com.momokotle.agent.presentation.settings.AppSettingsViewModel";
-
-      static String com_momokotle_agent_presentation_orders_MyOrdersViewModel = "com.momokotle.agent.presentation.orders.MyOrdersViewModel";
-
-      static String com_momokotle_agent_presentation_registration_AgentFormViewModel = "com.momokotle.agent.presentation.registration.AgentFormViewModel";
-
-      static String com_momokotle_agent_presentation_dashboard_DashboardViewModel = "com.momokotle.agent.presentation.dashboard.DashboardViewModel";
-
-      static String com_momokotle_agent_presentation_settings_AccountProfileViewModel = "com.momokotle.agent.presentation.settings.AccountProfileViewModel";
+      static String com_momokotle_agent_presentation_profit_CashOutSettingsViewModel = "com.momokotle.agent.presentation.profit.CashOutSettingsViewModel";
 
       static String com_momokotle_agent_presentation_notifications_NotificationsViewModel = "com.momokotle.agent.presentation.notifications.NotificationsViewModel";
 
-      static String com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel = "com.momokotle.agent.presentation.submissions.SubmissionDetailViewModel";
-
-      static String com_momokotle_agent_presentation_auth_LoginViewModel = "com.momokotle.agent.presentation.auth.LoginViewModel";
-
-      static String com_momokotle_agent_presentation_auth_RegisterViewModel = "com.momokotle.agent.presentation.auth.RegisterViewModel";
-
-      static String com_momokotle_agent_presentation_profit_CashOutSettingsViewModel = "com.momokotle.agent.presentation.profit.CashOutSettingsViewModel";
-
-      static String com_momokotle_agent_presentation_auth_SessionViewModel = "com.momokotle.agent.presentation.auth.SessionViewModel";
-
-      static String com_momokotle_agent_presentation_transactions_TransactionsViewModel = "com.momokotle.agent.presentation.transactions.TransactionsViewModel";
-
-      static String com_momokotle_agent_presentation_settings_HelpCenterViewModel = "com.momokotle.agent.presentation.settings.HelpCenterViewModel";
-
-      static String com_momokotle_agent_presentation_referral_ReferralViewModel = "com.momokotle.agent.presentation.referral.ReferralViewModel";
+      static String com_momokotle_agent_presentation_submissions_MySubmissionsViewModel = "com.momokotle.agent.presentation.submissions.MySubmissionsViewModel";
 
       static String com_momokotle_agent_presentation_subscription_ManualPaymentViewModel = "com.momokotle.agent.presentation.subscription.ManualPaymentViewModel";
 
-      static String com_momokotle_agent_presentation_contacts_ContactsViewModel = "com.momokotle.agent.presentation.contacts.ContactsViewModel";
+      static String com_momokotle_agent_presentation_registration_AgentFormViewModel = "com.momokotle.agent.presentation.registration.AgentFormViewModel";
 
-      static String com_momokotle_agent_presentation_submissions_MySubmissionsViewModel = "com.momokotle.agent.presentation.submissions.MySubmissionsViewModel";
+      static String com_momokotle_agent_presentation_settings_HelpCenterViewModel = "com.momokotle.agent.presentation.settings.HelpCenterViewModel";
 
-      static String com_momokotle_agent_presentation_subscription_SubscriptionViewModel = "com.momokotle.agent.presentation.subscription.SubscriptionViewModel";
+      static String com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel = "com.momokotle.agent.presentation.submissions.SubmissionDetailViewModel";
+
+      static String com_momokotle_agent_presentation_orders_OrderDetailViewModel = "com.momokotle.agent.presentation.orders.OrderDetailViewModel";
+
+      static String com_momokotle_agent_presentation_settings_SettingsHomeViewModel = "com.momokotle.agent.presentation.settings.SettingsHomeViewModel";
+
+      static String com_momokotle_agent_presentation_auth_RegisterViewModel = "com.momokotle.agent.presentation.auth.RegisterViewModel";
+
+      static String com_momokotle_agent_presentation_transactions_TransactionsViewModel = "com.momokotle.agent.presentation.transactions.TransactionsViewModel";
+
+      static String com_momokotle_agent_presentation_custommenu_CustomFlowViewModel = "com.momokotle.agent.presentation.custommenu.CustomFlowViewModel";
+
+      static String com_momokotle_agent_presentation_auth_SessionViewModel = "com.momokotle.agent.presentation.auth.SessionViewModel";
+
+      static String com_momokotle_agent_presentation_settings_AccountProfileViewModel = "com.momokotle.agent.presentation.settings.AccountProfileViewModel";
+
+      static String com_momokotle_agent_presentation_orders_MyOrdersViewModel = "com.momokotle.agent.presentation.orders.MyOrdersViewModel";
 
       static String com_momokotle_agent_presentation_store_StoreViewModel = "com.momokotle.agent.presentation.store.StoreViewModel";
 
+      static String com_momokotle_agent_presentation_profit_ProfitCalculationViewModel = "com.momokotle.agent.presentation.profit.ProfitCalculationViewModel";
+
+      static String com_momokotle_agent_presentation_subscription_SubscriptionViewModel = "com.momokotle.agent.presentation.subscription.SubscriptionViewModel";
+
+      static String com_momokotle_agent_presentation_auth_LoginViewModel = "com.momokotle.agent.presentation.auth.LoginViewModel";
+
+      static String com_momokotle_agent_presentation_contacts_ContactsViewModel = "com.momokotle.agent.presentation.contacts.ContactsViewModel";
+
+      static String com_momokotle_agent_presentation_settings_AppSettingsViewModel = "com.momokotle.agent.presentation.settings.AppSettingsViewModel";
+
+      static String com_momokotle_agent_presentation_dashboard_DashboardViewModel = "com.momokotle.agent.presentation.dashboard.DashboardViewModel";
+
       static String com_momokotle_agent_presentation_profit_CashInSettingsViewModel = "com.momokotle.agent.presentation.profit.CashInSettingsViewModel";
 
+      static String com_momokotle_agent_presentation_referral_ReferralViewModel = "com.momokotle.agent.presentation.referral.ReferralViewModel";
+
       static String com_momokotle_agent_presentation_wallet_WalletViewModel = "com.momokotle.agent.presentation.wallet.WalletViewModel";
-
-      @KeepFieldType
-      OrderDetailViewModel com_momokotle_agent_presentation_orders_OrderDetailViewModel2;
-
-      @KeepFieldType
-      CustomFlowViewModel com_momokotle_agent_presentation_custommenu_CustomFlowViewModel2;
-
-      @KeepFieldType
-      ProfitCalculationViewModel com_momokotle_agent_presentation_profit_ProfitCalculationViewModel2;
-
-      @KeepFieldType
-      SettingsHomeViewModel com_momokotle_agent_presentation_settings_SettingsHomeViewModel2;
-
-      @KeepFieldType
-      AppSettingsViewModel com_momokotle_agent_presentation_settings_AppSettingsViewModel2;
-
-      @KeepFieldType
-      MyOrdersViewModel com_momokotle_agent_presentation_orders_MyOrdersViewModel2;
-
-      @KeepFieldType
-      AgentFormViewModel com_momokotle_agent_presentation_registration_AgentFormViewModel2;
-
-      @KeepFieldType
-      DashboardViewModel com_momokotle_agent_presentation_dashboard_DashboardViewModel2;
-
-      @KeepFieldType
-      AccountProfileViewModel com_momokotle_agent_presentation_settings_AccountProfileViewModel2;
-
-      @KeepFieldType
-      NotificationsViewModel com_momokotle_agent_presentation_notifications_NotificationsViewModel2;
-
-      @KeepFieldType
-      SubmissionDetailViewModel com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel2;
-
-      @KeepFieldType
-      LoginViewModel com_momokotle_agent_presentation_auth_LoginViewModel2;
-
-      @KeepFieldType
-      RegisterViewModel com_momokotle_agent_presentation_auth_RegisterViewModel2;
 
       @KeepFieldType
       CashOutSettingsViewModel com_momokotle_agent_presentation_profit_CashOutSettingsViewModel2;
 
       @KeepFieldType
-      SessionViewModel com_momokotle_agent_presentation_auth_SessionViewModel2;
-
-      @KeepFieldType
-      TransactionsViewModel com_momokotle_agent_presentation_transactions_TransactionsViewModel2;
-
-      @KeepFieldType
-      HelpCenterViewModel com_momokotle_agent_presentation_settings_HelpCenterViewModel2;
-
-      @KeepFieldType
-      ReferralViewModel com_momokotle_agent_presentation_referral_ReferralViewModel2;
-
-      @KeepFieldType
-      ManualPaymentViewModel com_momokotle_agent_presentation_subscription_ManualPaymentViewModel2;
-
-      @KeepFieldType
-      ContactsViewModel com_momokotle_agent_presentation_contacts_ContactsViewModel2;
+      NotificationsViewModel com_momokotle_agent_presentation_notifications_NotificationsViewModel2;
 
       @KeepFieldType
       MySubmissionsViewModel com_momokotle_agent_presentation_submissions_MySubmissionsViewModel2;
 
       @KeepFieldType
-      SubscriptionViewModel com_momokotle_agent_presentation_subscription_SubscriptionViewModel2;
+      ManualPaymentViewModel com_momokotle_agent_presentation_subscription_ManualPaymentViewModel2;
+
+      @KeepFieldType
+      AgentFormViewModel com_momokotle_agent_presentation_registration_AgentFormViewModel2;
+
+      @KeepFieldType
+      HelpCenterViewModel com_momokotle_agent_presentation_settings_HelpCenterViewModel2;
+
+      @KeepFieldType
+      SubmissionDetailViewModel com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel2;
+
+      @KeepFieldType
+      OrderDetailViewModel com_momokotle_agent_presentation_orders_OrderDetailViewModel2;
+
+      @KeepFieldType
+      SettingsHomeViewModel com_momokotle_agent_presentation_settings_SettingsHomeViewModel2;
+
+      @KeepFieldType
+      RegisterViewModel com_momokotle_agent_presentation_auth_RegisterViewModel2;
+
+      @KeepFieldType
+      TransactionsViewModel com_momokotle_agent_presentation_transactions_TransactionsViewModel2;
+
+      @KeepFieldType
+      CustomFlowViewModel com_momokotle_agent_presentation_custommenu_CustomFlowViewModel2;
+
+      @KeepFieldType
+      SessionViewModel com_momokotle_agent_presentation_auth_SessionViewModel2;
+
+      @KeepFieldType
+      AccountProfileViewModel com_momokotle_agent_presentation_settings_AccountProfileViewModel2;
+
+      @KeepFieldType
+      MyOrdersViewModel com_momokotle_agent_presentation_orders_MyOrdersViewModel2;
 
       @KeepFieldType
       StoreViewModel com_momokotle_agent_presentation_store_StoreViewModel2;
 
       @KeepFieldType
+      ProfitCalculationViewModel com_momokotle_agent_presentation_profit_ProfitCalculationViewModel2;
+
+      @KeepFieldType
+      SubscriptionViewModel com_momokotle_agent_presentation_subscription_SubscriptionViewModel2;
+
+      @KeepFieldType
+      LoginViewModel com_momokotle_agent_presentation_auth_LoginViewModel2;
+
+      @KeepFieldType
+      ContactsViewModel com_momokotle_agent_presentation_contacts_ContactsViewModel2;
+
+      @KeepFieldType
+      AppSettingsViewModel com_momokotle_agent_presentation_settings_AppSettingsViewModel2;
+
+      @KeepFieldType
+      DashboardViewModel com_momokotle_agent_presentation_dashboard_DashboardViewModel2;
+
+      @KeepFieldType
       CashInSettingsViewModel com_momokotle_agent_presentation_profit_CashInSettingsViewModel2;
+
+      @KeepFieldType
+      ReferralViewModel com_momokotle_agent_presentation_referral_ReferralViewModel2;
 
       @KeepFieldType
       WalletViewModel com_momokotle_agent_presentation_wallet_WalletViewModel2;
@@ -751,8 +754,16 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
       return new CheckUssdAccessUseCase(singletonCImpl.userAccountDataStoreProvider.get(), singletonCImpl.entitlementClockProvider.get());
     }
 
+    private PromoteFrequentCustomerContactUseCase promoteFrequentCustomerContactUseCase() {
+      return new PromoteFrequentCustomerContactUseCase(singletonCImpl.transactionRepositoryImplProvider.get(), singletonCImpl.savedContactRepositoryImplProvider.get());
+    }
+
     private RecordAttemptedTransactionUseCase recordAttemptedTransactionUseCase() {
-      return new RecordAttemptedTransactionUseCase(singletonCImpl.transactionRepositoryImplProvider.get());
+      return new RecordAttemptedTransactionUseCase(singletonCImpl.transactionRepositoryImplProvider.get(), promoteFrequentCustomerContactUseCase());
+    }
+
+    private CheckDuplicateTransactionUseCase checkDuplicateTransactionUseCase() {
+      return new CheckDuplicateTransactionUseCase(singletonCImpl.transactionRepositoryImplProvider.get(), singletonCImpl.settingsDataStoreProvider.get());
     }
 
     private RefreshUserProfileUseCase refreshUserProfileUseCase() {
@@ -761,6 +772,10 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
 
     private ObserveCommissionSummaryUseCase observeCommissionSummaryUseCase() {
       return new ObserveCommissionSummaryUseCase(singletonCImpl.transactionRepositoryImplProvider.get());
+    }
+
+    private SearchCustomerSuggestionsUseCase searchCustomerSuggestionsUseCase() {
+      return new SearchCustomerSuggestionsUseCase(singletonCImpl.savedContactRepositoryImplProvider.get(), singletonCImpl.transactionRepositoryImplProvider.get());
     }
 
     private ObserveBusinessSettingsUseCase observeBusinessSettingsUseCase() {
@@ -886,61 +901,88 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_momokotle_agent_presentation_profit_CashInSettingsViewModel = "com.momokotle.agent.presentation.profit.CashInSettingsViewModel";
+      static String com_momokotle_agent_presentation_subscription_SubscriptionViewModel = "com.momokotle.agent.presentation.subscription.SubscriptionViewModel";
 
-      static String com_momokotle_agent_presentation_transactions_TransactionsViewModel = "com.momokotle.agent.presentation.transactions.TransactionsViewModel";
+      static String com_momokotle_agent_presentation_profit_CashOutSettingsViewModel = "com.momokotle.agent.presentation.profit.CashOutSettingsViewModel";
+
+      static String com_momokotle_agent_presentation_orders_MyOrdersViewModel = "com.momokotle.agent.presentation.orders.MyOrdersViewModel";
+
+      static String com_momokotle_agent_presentation_auth_LoginViewModel = "com.momokotle.agent.presentation.auth.LoginViewModel";
+
+      static String com_momokotle_agent_presentation_profit_ProfitCalculationViewModel = "com.momokotle.agent.presentation.profit.ProfitCalculationViewModel";
+
+      static String com_momokotle_agent_presentation_submissions_MySubmissionsViewModel = "com.momokotle.agent.presentation.submissions.MySubmissionsViewModel";
+
+      static String com_momokotle_agent_presentation_settings_AppSettingsViewModel = "com.momokotle.agent.presentation.settings.AppSettingsViewModel";
+
+      static String com_momokotle_agent_presentation_settings_AccountProfileViewModel = "com.momokotle.agent.presentation.settings.AccountProfileViewModel";
+
+      static String com_momokotle_agent_presentation_settings_HelpCenterViewModel = "com.momokotle.agent.presentation.settings.HelpCenterViewModel";
+
+      static String com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel = "com.momokotle.agent.presentation.submissions.SubmissionDetailViewModel";
+
+      static String com_momokotle_agent_presentation_contacts_ContactsViewModel = "com.momokotle.agent.presentation.contacts.ContactsViewModel";
 
       static String com_momokotle_agent_presentation_dashboard_DashboardViewModel = "com.momokotle.agent.presentation.dashboard.DashboardViewModel";
 
       static String com_momokotle_agent_presentation_referral_ReferralViewModel = "com.momokotle.agent.presentation.referral.ReferralViewModel";
 
-      static String com_momokotle_agent_presentation_custommenu_CustomFlowViewModel = "com.momokotle.agent.presentation.custommenu.CustomFlowViewModel";
+      static String com_momokotle_agent_presentation_settings_SettingsHomeViewModel = "com.momokotle.agent.presentation.settings.SettingsHomeViewModel";
 
-      static String com_momokotle_agent_presentation_subscription_SubscriptionViewModel = "com.momokotle.agent.presentation.subscription.SubscriptionViewModel";
-
-      static String com_momokotle_agent_presentation_auth_SessionViewModel = "com.momokotle.agent.presentation.auth.SessionViewModel";
-
-      static String com_momokotle_agent_presentation_notifications_NotificationsViewModel = "com.momokotle.agent.presentation.notifications.NotificationsViewModel";
-
-      static String com_momokotle_agent_presentation_registration_AgentFormViewModel = "com.momokotle.agent.presentation.registration.AgentFormViewModel";
-
-      static String com_momokotle_agent_presentation_settings_AppSettingsViewModel = "com.momokotle.agent.presentation.settings.AppSettingsViewModel";
-
-      static String com_momokotle_agent_presentation_contacts_ContactsViewModel = "com.momokotle.agent.presentation.contacts.ContactsViewModel";
-
-      static String com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel = "com.momokotle.agent.presentation.submissions.SubmissionDetailViewModel";
-
-      static String com_momokotle_agent_presentation_submissions_MySubmissionsViewModel = "com.momokotle.agent.presentation.submissions.MySubmissionsViewModel";
-
-      static String com_momokotle_agent_presentation_subscription_ManualPaymentViewModel = "com.momokotle.agent.presentation.subscription.ManualPaymentViewModel";
-
-      static String com_momokotle_agent_presentation_orders_MyOrdersViewModel = "com.momokotle.agent.presentation.orders.MyOrdersViewModel";
-
-      static String com_momokotle_agent_presentation_wallet_WalletViewModel = "com.momokotle.agent.presentation.wallet.WalletViewModel";
-
-      static String com_momokotle_agent_presentation_settings_HelpCenterViewModel = "com.momokotle.agent.presentation.settings.HelpCenterViewModel";
-
-      static String com_momokotle_agent_presentation_profit_ProfitCalculationViewModel = "com.momokotle.agent.presentation.profit.ProfitCalculationViewModel";
-
-      static String com_momokotle_agent_presentation_settings_AccountProfileViewModel = "com.momokotle.agent.presentation.settings.AccountProfileViewModel";
+      static String com_momokotle_agent_presentation_profit_CashInSettingsViewModel = "com.momokotle.agent.presentation.profit.CashInSettingsViewModel";
 
       static String com_momokotle_agent_presentation_auth_RegisterViewModel = "com.momokotle.agent.presentation.auth.RegisterViewModel";
 
-      static String com_momokotle_agent_presentation_auth_LoginViewModel = "com.momokotle.agent.presentation.auth.LoginViewModel";
-
-      static String com_momokotle_agent_presentation_settings_SettingsHomeViewModel = "com.momokotle.agent.presentation.settings.SettingsHomeViewModel";
-
-      static String com_momokotle_agent_presentation_orders_OrderDetailViewModel = "com.momokotle.agent.presentation.orders.OrderDetailViewModel";
+      static String com_momokotle_agent_presentation_registration_AgentFormViewModel = "com.momokotle.agent.presentation.registration.AgentFormViewModel";
 
       static String com_momokotle_agent_presentation_store_StoreViewModel = "com.momokotle.agent.presentation.store.StoreViewModel";
 
-      static String com_momokotle_agent_presentation_profit_CashOutSettingsViewModel = "com.momokotle.agent.presentation.profit.CashOutSettingsViewModel";
+      static String com_momokotle_agent_presentation_custommenu_CustomFlowViewModel = "com.momokotle.agent.presentation.custommenu.CustomFlowViewModel";
+
+      static String com_momokotle_agent_presentation_notifications_NotificationsViewModel = "com.momokotle.agent.presentation.notifications.NotificationsViewModel";
+
+      static String com_momokotle_agent_presentation_subscription_ManualPaymentViewModel = "com.momokotle.agent.presentation.subscription.ManualPaymentViewModel";
+
+      static String com_momokotle_agent_presentation_orders_OrderDetailViewModel = "com.momokotle.agent.presentation.orders.OrderDetailViewModel";
+
+      static String com_momokotle_agent_presentation_auth_SessionViewModel = "com.momokotle.agent.presentation.auth.SessionViewModel";
+
+      static String com_momokotle_agent_presentation_transactions_TransactionsViewModel = "com.momokotle.agent.presentation.transactions.TransactionsViewModel";
+
+      static String com_momokotle_agent_presentation_wallet_WalletViewModel = "com.momokotle.agent.presentation.wallet.WalletViewModel";
 
       @KeepFieldType
-      CashInSettingsViewModel com_momokotle_agent_presentation_profit_CashInSettingsViewModel2;
+      SubscriptionViewModel com_momokotle_agent_presentation_subscription_SubscriptionViewModel2;
 
       @KeepFieldType
-      TransactionsViewModel com_momokotle_agent_presentation_transactions_TransactionsViewModel2;
+      CashOutSettingsViewModel com_momokotle_agent_presentation_profit_CashOutSettingsViewModel2;
+
+      @KeepFieldType
+      MyOrdersViewModel com_momokotle_agent_presentation_orders_MyOrdersViewModel2;
+
+      @KeepFieldType
+      LoginViewModel com_momokotle_agent_presentation_auth_LoginViewModel2;
+
+      @KeepFieldType
+      ProfitCalculationViewModel com_momokotle_agent_presentation_profit_ProfitCalculationViewModel2;
+
+      @KeepFieldType
+      MySubmissionsViewModel com_momokotle_agent_presentation_submissions_MySubmissionsViewModel2;
+
+      @KeepFieldType
+      AppSettingsViewModel com_momokotle_agent_presentation_settings_AppSettingsViewModel2;
+
+      @KeepFieldType
+      AccountProfileViewModel com_momokotle_agent_presentation_settings_AccountProfileViewModel2;
+
+      @KeepFieldType
+      HelpCenterViewModel com_momokotle_agent_presentation_settings_HelpCenterViewModel2;
+
+      @KeepFieldType
+      SubmissionDetailViewModel com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel2;
+
+      @KeepFieldType
+      ContactsViewModel com_momokotle_agent_presentation_contacts_ContactsViewModel2;
 
       @KeepFieldType
       DashboardViewModel com_momokotle_agent_presentation_dashboard_DashboardViewModel2;
@@ -949,67 +991,40 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
       ReferralViewModel com_momokotle_agent_presentation_referral_ReferralViewModel2;
 
       @KeepFieldType
-      CustomFlowViewModel com_momokotle_agent_presentation_custommenu_CustomFlowViewModel2;
+      SettingsHomeViewModel com_momokotle_agent_presentation_settings_SettingsHomeViewModel2;
 
       @KeepFieldType
-      SubscriptionViewModel com_momokotle_agent_presentation_subscription_SubscriptionViewModel2;
-
-      @KeepFieldType
-      SessionViewModel com_momokotle_agent_presentation_auth_SessionViewModel2;
-
-      @KeepFieldType
-      NotificationsViewModel com_momokotle_agent_presentation_notifications_NotificationsViewModel2;
-
-      @KeepFieldType
-      AgentFormViewModel com_momokotle_agent_presentation_registration_AgentFormViewModel2;
-
-      @KeepFieldType
-      AppSettingsViewModel com_momokotle_agent_presentation_settings_AppSettingsViewModel2;
-
-      @KeepFieldType
-      ContactsViewModel com_momokotle_agent_presentation_contacts_ContactsViewModel2;
-
-      @KeepFieldType
-      SubmissionDetailViewModel com_momokotle_agent_presentation_submissions_SubmissionDetailViewModel2;
-
-      @KeepFieldType
-      MySubmissionsViewModel com_momokotle_agent_presentation_submissions_MySubmissionsViewModel2;
-
-      @KeepFieldType
-      ManualPaymentViewModel com_momokotle_agent_presentation_subscription_ManualPaymentViewModel2;
-
-      @KeepFieldType
-      MyOrdersViewModel com_momokotle_agent_presentation_orders_MyOrdersViewModel2;
-
-      @KeepFieldType
-      WalletViewModel com_momokotle_agent_presentation_wallet_WalletViewModel2;
-
-      @KeepFieldType
-      HelpCenterViewModel com_momokotle_agent_presentation_settings_HelpCenterViewModel2;
-
-      @KeepFieldType
-      ProfitCalculationViewModel com_momokotle_agent_presentation_profit_ProfitCalculationViewModel2;
-
-      @KeepFieldType
-      AccountProfileViewModel com_momokotle_agent_presentation_settings_AccountProfileViewModel2;
+      CashInSettingsViewModel com_momokotle_agent_presentation_profit_CashInSettingsViewModel2;
 
       @KeepFieldType
       RegisterViewModel com_momokotle_agent_presentation_auth_RegisterViewModel2;
 
       @KeepFieldType
-      LoginViewModel com_momokotle_agent_presentation_auth_LoginViewModel2;
-
-      @KeepFieldType
-      SettingsHomeViewModel com_momokotle_agent_presentation_settings_SettingsHomeViewModel2;
-
-      @KeepFieldType
-      OrderDetailViewModel com_momokotle_agent_presentation_orders_OrderDetailViewModel2;
+      AgentFormViewModel com_momokotle_agent_presentation_registration_AgentFormViewModel2;
 
       @KeepFieldType
       StoreViewModel com_momokotle_agent_presentation_store_StoreViewModel2;
 
       @KeepFieldType
-      CashOutSettingsViewModel com_momokotle_agent_presentation_profit_CashOutSettingsViewModel2;
+      CustomFlowViewModel com_momokotle_agent_presentation_custommenu_CustomFlowViewModel2;
+
+      @KeepFieldType
+      NotificationsViewModel com_momokotle_agent_presentation_notifications_NotificationsViewModel2;
+
+      @KeepFieldType
+      ManualPaymentViewModel com_momokotle_agent_presentation_subscription_ManualPaymentViewModel2;
+
+      @KeepFieldType
+      OrderDetailViewModel com_momokotle_agent_presentation_orders_OrderDetailViewModel2;
+
+      @KeepFieldType
+      SessionViewModel com_momokotle_agent_presentation_auth_SessionViewModel2;
+
+      @KeepFieldType
+      TransactionsViewModel com_momokotle_agent_presentation_transactions_TransactionsViewModel2;
+
+      @KeepFieldType
+      WalletViewModel com_momokotle_agent_presentation_wallet_WalletViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -1052,10 +1067,10 @@ public final class DaggerMomoAgentApplication_HiltComponents_SingletonC {
           return (T) new ContactsViewModel(singletonCImpl.savedContactRepositoryImplProvider.get(), viewModelCImpl.saveContactUseCase());
 
           case 6: // com.momokotle.agent.presentation.custommenu.CustomFlowViewModel 
-          return (T) new CustomFlowViewModel(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), viewModelCImpl.startUssdFlowUseCase(), singletonCImpl.provideUssdAutomationEngineProvider.get(), singletonCImpl.settingsDataStoreProvider.get(), singletonCImpl.provideAccessibilityRepositoryProvider.get(), viewModelCImpl.checkUssdAccessUseCase(), singletonCImpl.cashOutSmsWatcherProvider.get(), singletonCImpl.customFlowRepositoryImplProvider.get(), viewModelCImpl.recordAttemptedTransactionUseCase(), singletonCImpl.businessSettingsRepositoryImplProvider.get());
+          return (T) new CustomFlowViewModel(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), viewModelCImpl.startUssdFlowUseCase(), singletonCImpl.provideUssdAutomationEngineProvider.get(), singletonCImpl.settingsDataStoreProvider.get(), singletonCImpl.provideAccessibilityRepositoryProvider.get(), viewModelCImpl.checkUssdAccessUseCase(), singletonCImpl.cashOutSmsWatcherProvider.get(), singletonCImpl.customFlowRepositoryImplProvider.get(), viewModelCImpl.recordAttemptedTransactionUseCase(), singletonCImpl.businessSettingsRepositoryImplProvider.get(), viewModelCImpl.checkDuplicateTransactionUseCase());
 
           case 7: // com.momokotle.agent.presentation.dashboard.DashboardViewModel 
-          return (T) new DashboardViewModel(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), viewModelCImpl.startUssdFlowUseCase(), singletonCImpl.provideUssdAutomationEngineProvider.get(), singletonCImpl.settingsDataStoreProvider.get(), singletonCImpl.provideAccessibilityRepositoryProvider.get(), viewModelCImpl.checkUssdAccessUseCase(), singletonCImpl.cashOutSmsWatcherProvider.get(), viewModelCImpl.refreshUserProfileUseCase(), viewModelCImpl.recordAttemptedTransactionUseCase(), singletonCImpl.transactionRepositoryImplProvider.get(), viewModelCImpl.observeCommissionSummaryUseCase(), singletonCImpl.customFlowRepositoryImplProvider.get(), singletonCImpl.systemUssdFlowRepositoryImplProvider.get(), singletonCImpl.savedContactRepositoryImplProvider.get(), viewModelCImpl.saveContactUseCase(), singletonCImpl.businessSettingsRepositoryImplProvider.get());
+          return (T) new DashboardViewModel(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), viewModelCImpl.startUssdFlowUseCase(), singletonCImpl.provideUssdAutomationEngineProvider.get(), singletonCImpl.settingsDataStoreProvider.get(), singletonCImpl.provideAccessibilityRepositoryProvider.get(), viewModelCImpl.checkUssdAccessUseCase(), singletonCImpl.cashOutSmsWatcherProvider.get(), viewModelCImpl.refreshUserProfileUseCase(), viewModelCImpl.recordAttemptedTransactionUseCase(), singletonCImpl.transactionRepositoryImplProvider.get(), viewModelCImpl.observeCommissionSummaryUseCase(), singletonCImpl.customFlowRepositoryImplProvider.get(), singletonCImpl.systemUssdFlowRepositoryImplProvider.get(), singletonCImpl.savedContactRepositoryImplProvider.get(), viewModelCImpl.saveContactUseCase(), viewModelCImpl.searchCustomerSuggestionsUseCase(), viewModelCImpl.promoteFrequentCustomerContactUseCase(), singletonCImpl.businessSettingsRepositoryImplProvider.get(), viewModelCImpl.checkDuplicateTransactionUseCase());
 
           case 8: // com.momokotle.agent.presentation.settings.HelpCenterViewModel 
           return (T) new HelpCenterViewModel(viewModelCImpl.observeBusinessSettingsUseCase());

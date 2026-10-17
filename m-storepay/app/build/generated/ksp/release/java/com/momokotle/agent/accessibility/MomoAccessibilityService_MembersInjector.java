@@ -2,6 +2,7 @@ package com.momokotle.agent.accessibility;
 
 import com.momokotle.agent.domain.repository.AccessibilityRepository;
 import com.momokotle.agent.domain.usecase.UpdateTransactionStatusUseCase;
+import com.momokotle.agent.sms.CashOutSmsWatcher;
 import com.momokotle.agent.ussd.UssdAutomationEngine;
 import com.momokotle.agent.utils.AutomationLogger;
 import dagger.MembersInjector;
@@ -33,21 +34,26 @@ public final class MomoAccessibilityService_MembersInjector implements MembersIn
 
   private final Provider<AccessibilityRepository> accessibilityRepositoryProvider;
 
+  private final Provider<CashOutSmsWatcher> cashOutSmsWatcherProvider;
+
   public MomoAccessibilityService_MembersInjector(Provider<UssdAutomationEngine> engineProvider,
       Provider<AutomationLogger> loggerProvider,
       Provider<UpdateTransactionStatusUseCase> updateTransactionStatusUseCaseProvider,
-      Provider<AccessibilityRepository> accessibilityRepositoryProvider) {
+      Provider<AccessibilityRepository> accessibilityRepositoryProvider,
+      Provider<CashOutSmsWatcher> cashOutSmsWatcherProvider) {
     this.engineProvider = engineProvider;
     this.loggerProvider = loggerProvider;
     this.updateTransactionStatusUseCaseProvider = updateTransactionStatusUseCaseProvider;
     this.accessibilityRepositoryProvider = accessibilityRepositoryProvider;
+    this.cashOutSmsWatcherProvider = cashOutSmsWatcherProvider;
   }
 
   public static MembersInjector<MomoAccessibilityService> create(
       Provider<UssdAutomationEngine> engineProvider, Provider<AutomationLogger> loggerProvider,
       Provider<UpdateTransactionStatusUseCase> updateTransactionStatusUseCaseProvider,
-      Provider<AccessibilityRepository> accessibilityRepositoryProvider) {
-    return new MomoAccessibilityService_MembersInjector(engineProvider, loggerProvider, updateTransactionStatusUseCaseProvider, accessibilityRepositoryProvider);
+      Provider<AccessibilityRepository> accessibilityRepositoryProvider,
+      Provider<CashOutSmsWatcher> cashOutSmsWatcherProvider) {
+    return new MomoAccessibilityService_MembersInjector(engineProvider, loggerProvider, updateTransactionStatusUseCaseProvider, accessibilityRepositoryProvider, cashOutSmsWatcherProvider);
   }
 
   @Override
@@ -56,6 +62,7 @@ public final class MomoAccessibilityService_MembersInjector implements MembersIn
     injectLogger(instance, loggerProvider.get());
     injectUpdateTransactionStatusUseCase(instance, updateTransactionStatusUseCaseProvider.get());
     injectAccessibilityRepository(instance, accessibilityRepositoryProvider.get());
+    injectCashOutSmsWatcher(instance, cashOutSmsWatcherProvider.get());
   }
 
   @InjectedFieldSignature("com.momokotle.agent.accessibility.MomoAccessibilityService.engine")
@@ -78,5 +85,11 @@ public final class MomoAccessibilityService_MembersInjector implements MembersIn
   public static void injectAccessibilityRepository(MomoAccessibilityService instance,
       AccessibilityRepository accessibilityRepository) {
     instance.accessibilityRepository = accessibilityRepository;
+  }
+
+  @InjectedFieldSignature("com.momokotle.agent.accessibility.MomoAccessibilityService.cashOutSmsWatcher")
+  public static void injectCashOutSmsWatcher(MomoAccessibilityService instance,
+      CashOutSmsWatcher cashOutSmsWatcher) {
+    instance.cashOutSmsWatcher = cashOutSmsWatcher;
   }
 }

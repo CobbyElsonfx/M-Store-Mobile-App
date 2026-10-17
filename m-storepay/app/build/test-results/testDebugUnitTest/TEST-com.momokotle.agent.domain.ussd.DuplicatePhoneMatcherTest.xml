@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.momokotle.agent.domain.ussd.DuplicatePhoneMatcherTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-06T22:28:22" hostname="FRANCIS-ANDOH" time="0.116">
+<testsuite name="com.momokotle.agent.domain.ussd.DuplicatePhoneMatcherTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-08T09:27:54" hostname="FRANCIS-ANDOH" time="0.002">
   <properties/>
-  <testcase name="candidates_normalizePlus233Input" classname="com.momokotle.agent.domain.ussd.DuplicatePhoneMatcherTest" time="0.11"/>
-  <testcase name="invalidPhone_returnsEmpty" classname="com.momokotle.agent.domain.ussd.DuplicatePhoneMatcherTest" time="0.002"/>
-  <testcase name="candidates_includeLocalAndInternationalForms" classname="com.momokotle.agent.domain.ussd.DuplicatePhoneMatcherTest" time="0.002"/>
+  <testcase name="candidates_normalizePlus233Input" classname="com.momokotle.agent.domain.ussd.DuplicatePhoneMatcherTest" time="0.001"/>
+  <testcase name="invalidPhone_returnsEmpty" classname="com.momokotle.agent.domain.ussd.DuplicatePhoneMatcherTest" time="0.0"/>
+  <testcase name="candidates_includeLocalAndInternationalForms" classname="com.momokotle.agent.domain.ussd.DuplicatePhoneMatcherTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
